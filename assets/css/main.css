@@ -3449,10 +3449,10 @@ input, select, textarea {
 			-webkit-transition-delay: 0.65s;
 			-ms-transition-delay: 0.65s;
 			transition-delay: 0.65s; */
-			-moz-filter: blur(0);
+			/* -moz-filter: blur(0);
 			-webkit-filter: blur(0);
 			-ms-filter: blur(0);
-			filter: blur(0);
+			filter: blur(0); */
 			opacity: 1;
 			border-bottom: solid 2px rgba(255, 255, 255, 0.125);
 			font-size: 2.25em;
@@ -3473,10 +3473,10 @@ input, select, textarea {
 			-webkit-transition-delay: 0.8s;
 			-ms-transition-delay: 0.8s; */
 			/* transition-delay: 0.8s; */
-			-moz-filter: blur(0);
+			/* -moz-filter: blur(0);
 			-webkit-filter: blur(0);
 			-ms-filter: blur(0);
-			filter: blur(0);
+			filter: blur(0); */
 			opacity: 1;
 			font-family: Raleway, Helvetica, sans-serif;
 			font-size: 1em;
@@ -3491,7 +3491,7 @@ input, select, textarea {
 			#banner {
 				padding: 7em 0 8.25em 0 ;
 				background-color: #2e3141;
-				background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)), url("../../images/f3.gif");
+				/* background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)), url("../../images/f3.gif"); */
 				background-size: auto,
  cover;
 				background-position: center,
@@ -3539,15 +3539,15 @@ input, select, textarea {
 
 		}
 
-		body.is-preload #banner .logo {
+		/* body.is-preload #banner .logo {
 			-moz-transform: translateY(0.5em);
 			-webkit-transform: translateY(0.5em);
 			-ms-transform: translateY(0.5em);
 			transform: translateY(0.5em);
 			opacity: 0;
-		}
+		} */
 
-		body.is-preload #banner h2 {
+		/* body.is-preload #banner h2 {
 			opacity: 0;
 			-moz-transform: translateX(0.25em);
 			-webkit-transform: translateX(0.25em);
@@ -3557,9 +3557,9 @@ input, select, textarea {
 			-webkit-filter: blur(2px);
 			-ms-filter: blur(2px);
 			filter: blur(2px);
-		}
+		} */
 
-		body.is-preload #banner p {
+		/* body.is-preload #banner p {
 			opacity: 0;
 			-moz-transform: translateX(0.5em);
 			-webkit-transform: translateX(0.5em);
@@ -3569,7 +3569,7 @@ input, select, textarea {
 			-webkit-filter: blur(2px);
 			-ms-filter: blur(2px);
 			filter: blur(2px);
-		}
+		} */
 
 /* Wrapper */
 
@@ -3603,7 +3603,7 @@ input, select, textarea {
 		#wrapper > header {
 			padding: 9em 0 6.25em 0 ;
 			background-color: #2e3141;
-			background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)), url("../../images/f3.gif");
+			/* background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)), url("../../images/f3.gif"); */
 			background-size: auto,
  cover;
 			background-position: center,
@@ -4111,7 +4111,7 @@ input, select, textarea {
 
 		#footer {
 			background-color: #2e3141;
-			background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)), url("../../images/f3.gif");
+			/* background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)), url("../../images/f3.gif"); */
 			background-size: auto,
  cover;
 			background-position: center,
