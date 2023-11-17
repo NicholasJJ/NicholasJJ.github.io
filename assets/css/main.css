@@ -34,7 +34,7 @@
 	margin: 0;
     overflow: hidden;
 	border-color: #191b24;
-	background: url("../../assets/video/f6.mp4") repeat;
+	/* background: url("../../assets/video/f6.mp4") repeat; */
 }
 
 .fullscreen-bg__video {
@@ -163,6 +163,7 @@ input, select, textarea {
 	body {
 		background-color: #000000;
 		/* background: url("../../assets/video/f6.mp4") repeat; */
+		background-image: url("../../images/f3.gif");
 		background-size: auto,
  cover;
 		background-attachment: fixed,
