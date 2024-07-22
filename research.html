@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nicholas Jennings - Research</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body id="research">
+
+
+        <div class="flower-mask" style="transform: translate(-90%, -80%) rotate(115deg); width: 1000px; height: 1000px;"></div>
+        <div class="flower-mask" style="transform: translate(-8%, -20%) rotate(-9deg); width: 1500px; height: 1500px;"></div>
+        <!-- <div class="flower-mask" style="transform: translate(0%, 0%) rotate(-5deg); width: 2000px; height: 2000px;"></div> -->
+
+    <header class="navBar">
+        <h1>Nicholas Jennings</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="research.html" class="current">Research</a>
+            <a href="projects.html">Projects</a>
+        </nav>
+    </header>
+    <section id="research">
+        <h2 class="section-title">Research</h2>
+        <p>
+            Here's all my research projects.
+        </p>
+
+        <div class="project">
+            <div class="project-photo-container">
+                <img src="images/RIT.png" alt="Pseudo-Isochromatic dot plate" class="project-photo" style="border-radius: 8%;">
+            </div>
+            
+            <div class="project-content">
+                <h3 class="project-title">What's the Game, then? Opportunities and Challenges for Runtime Behavior Generation</h3>
+                <p class="project-description">
+                    Procedural content generation (PCG), the process of algorithmically creating game components instead of manually, has been a common tool of game development for decades. Recent advances in large language models (LLMs) enable the generation of game behaviors based on player input at runtime. Such code generation brings with it the possibility of entirely new gameplay interactions that may be difficult to integrate with typical game development workflows. We explore these implications through GROMIT, a novel LLM-based runtime behavior generation system for Unity. When triggered by a player action, GROMIT generates a relevant behavior which is compiled without developer intervention and incorporated into the game. We create three demonstration scenarios with GROMIT to investigate how such a technology might be used in game development. In a system evaluation we find that our implementation is able to produce behaviors that result in significant downstream impacts to gameplay. We then conduct an interview study with n=13 game developers using GROMIT as a probe to elicit their current opinion on runtime behavior generation tools, and enumerate the specific themes curtailing the wider use of such tools. 
+                </p>
+                <!-- <a href="https://imjal.github.io/theory-of-tetrachromacy/" class="project-link">Read More</a> -->
+            </div>
+        </div>
+
+        <div class="project">
+            <div class="project-photo-container">
+                <img src="images/Isochromatic.png" alt="Pseudo-Isochromatic dot plate" class="project-photo">
+            </div>
+            
+            <div class="project-content">
+                <h3 class="project-title">Theory of Human Tetrachromatic Color Experience and Printing</h3>
+                <p class="project-description">
+                Genetic studies indicate that more than 50% of women are genetically tetrachromatic, expressing four distinct types of color photoreceptors (cone cells) in the retina. At least one functional tetrachromat has been identified in laboratory tests. We hypothesize that there is a large latent group in the population capable of fundamentally richer color experience, but we are not yet aware of this group because of a lack of tetrachromatic colors in the visual environment. This paper develops theory and engineering practice for fabricating tetrachromatic colors and potentially identifying tetrachromatic color vision in the wild.                </p>
+                <a href="https://imjal.github.io/theory-of-tetrachromacy/" class="project-link">Paper</a>
+            </div>
+        </div>
+
+        <div class="project">
+            <div class="project-photo-container">
+                <img src="images/wimim.gif" alt="World-in-Miniature-in-Miniature" class="project-photo">
+            </div>
+            
+            <div class="project-content">
+                <h3 class="project-title">Beyond-Real interactions in VR</h3>
+                <p class="project-description">
+                    I'm working on several projects related to beyond-real interactions in virtual reality. 
+                    I tend to focus on interaction signifiers, and on multi-body interactions (where the user controls both their 1st person virtual body and 1+ 3rd person bodies at the same time). The gif (and the linked video)
+                    shows an example where 2 additional bodies (one small, one big) are used to enable interacting with an enviroment at multiple scales.
+                </p>
+                <a href="https://youtu.be/UztPLQAi9xw" class="project-link">Video Link</a>
+            </div>
+        </div>
+
+        <div class="project">
+            <div class="project-photo-container">
+                <img src="images/Figure-1a-update.png" class="project-photo" style="border-radius: 8%;">
+            </div>
+            
+            <div class="project-content">
+                <h3 class="project-title">GeneratiVR</h3>
+                <p class="project-description">
+                    Computational design tools can automatically generate large quantities of viable designs for a given design problem. This raises the challenge of how to enable designers to efficiently and effectively evaluate and select preferred designs from a large set of alternatives. In GeneratiVR, we present two novel interaction techniques to address this challenge, by leveraging Virtual Reality for rich, spatial user input. With these interaction methods, users can directly manipulate designs or demonstrate desired design functionality. The interactions allow users to rapidly filter through an expansive design space to specify or find their preferred designs.
+                </p>
+                <a href="https://dl.acm.org/doi/abs/10.1145/3491101.3519616" class="project-link">GeneratiVR Paper</a>
+                <a href="https://www.cambridge.org/core/journals/proceedings-of-the-design-society/article/vr-or-not-investigating-interface-type-and-user-strategies-for-interactive-design-space-exploration/BFA6CE13915DD825D04B70806CCB70A3" class="project-link">VR or Not? Paper</a>
+                <a href="https://www.youtube.com/watch?v=qHSx5f6fRts" class="project-link">Video</a>
+            </div>
+        </div>
+
+        <div class="project">
+            <div class="project-photo-container">
+                <img src="images/android2.png" class="project-photo">
+            </div>
+            
+            <div class="project-content">
+                <h3 class="project-title">Anti-Virtualization</h3>
+                <p class="project-description">
+                    Android virtualization software can be a powerful tool for app development, but it can also be exploited for malicious purposes. During my time on the Anti-Virtualization research project led by <a href="https://www.math.unipd.it/~elosiouk/">Eleonora Losiouk</a>, I conducted a review of prior work to create a taxonomy of known virtualization-based malwares and attacks for Android,
+                    built Gradle scripts for virtualizing malwares and assessing their detectability by commercial antivirus apps, and used Bash, Gradle, and Python scripts to create an semi-automated system for identifying virtualization-based malwares from virus databases, allowing for more in-depth analysis.
+                </p>
+            </div>
+        </div>
+        
+
+        <h2>Publications</h2>
+        <ul>
+            <li>Jessica Lee, Nicholas Jennings, Varun Srivastava, Ren Ng.<a href="https://imjal.github.io/theory-of-tetrachromacy/">Theory of Human Tetrachromatic Color Experience and Printing</a> SIGGRAPH 2024</li>
+            <li>Ananya Nandy, James Smith, Nicholas Jennings, Mike Kuniavsky, Bjoern Hartmann. <a href="https://www.cambridge.org/core/journals/proceedings-of-the-design-society/article/vr-or-not-investigating-interface-type-and-user-strategies-for-interactive-design-space-exploration/BFA6CE13915DD825D04B70806CCB70A3">VR or Not? Investigating Interface Type and User Strategies for Interactive Design Space Exploration</a> ICED 23</li>
+            <li>Nicholas Jennings, Ananya Nandy, Xinyi Zhu, Yuting Wang, Fanping Sui, James Smith, Bjoern Hartmann. <a href="https://dl.acm.org/doi/abs/10.1145/3491101.3519616">GeneratiVR: Spatial Interactions in Virtual Reality to Explore Generative Design Spaces</a> CHI 2022 EA</li>
+        </ul>
+
+        
+    </section>
+
+    
+</body>
+</html>
