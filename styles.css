@@ -296,3 +296,28 @@ a:hover {
     pointer-events: none; /* Prevent interaction with the image */
 }
 
+.homePage{
+    display: grid;
+    grid-template-columns: 25em 1fr;
+    gap: 15px;
+    justify-content: center;
+}
+
+.homeImage{
+    display: flex;
+    justify-content: center;
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 50%;
+}
+
+.homeImageWrapper{
+    display: flex;
+    justify-content: center;
+}
+
+@media (max-width: 900px) {
+    .homePage {
+        grid-template-columns: 1fr; /* Stack image and text vertically */
+    }
+}
