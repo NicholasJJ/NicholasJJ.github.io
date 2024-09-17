@@ -10,48 +10,51 @@
 
     <div class="flower-container">
         <div class="flower-mask" style="transform: translate(0%, -80%) rotate(15deg); width: 1000px; height: 1000px;"></div>
-        <div class="flower-mask" id="rotate" style="transform: translate(-80%, -20%) rotate(-39deg); width: 2000px; height: 2000px;"></div>
+        <div class="flower-mask" id="rotate"></div>
+        <!-- <div class="flower-mask" style="background-color: red; transform: translate(-66%, -34.8%) rotate(51deg); width: 3910px; height: 3910px;"></div> -->
     </div>
     
 
     <header>
         <h1>Nicholas Jennings</h1>
+        <img src="images/faces/faceClean.png" class = "face">
         <nav>
             <a href="index.html" class="current">Home</a>
             <a href="research.html">Research</a>
             <a href="projects.html">Projects</a>
         </nav>
     </header>
+    <script src="script.js"></script>
     <section id="home">
-        <div class="homePage">
-            <div class="homeImageWrapper">
-                <img src="images/me.jpg" class="homeImage">
-            </div>
-            
-            <div>
-                <h2 class="section-title">Hi, I'm Nicholas!</h2>
-                <p>I'm a Master's student studying Computer Science at UC Berkeley, advised by professor <a href="https://people.eecs.berkeley.edu/~bjoern/">Björn Hartmann</a>.
-                    I previously completed a double major of Computer Science and Applied Mathematics at UC Berkeley.
-                    I'm interested in Virtual Reality, Computer Graphics, and applications of Generative AI in virtual worlds.
-                </p>
-                <p>
-                    During my MS I spent took part in a research exchange program at KTH Royal Institue of Technology where I worked with <a href="https://www.kth.se/profile/amatvi">Andrii Matviienko</a>.
-                    As an undergraduate researcher my mentor was <a href="https://jamesdsmith.net/">James Smith</a>.
-                </p>
-                <p>
-                    I have a 
-                    <a href="https://www.linkedin.com/in/nicholasjohnjennings/">Linkedin</a>,
-                    <a href="Resume.pdf">Resume</a>, 
-                    <a href="https://github.com/NicholasJJ">Github</a>, and an 
-                    <a href="mailto:nicholasjohnjennings@gmail.com">Email</a>
-                    that you can reach out to me through.
-                </p>
-                <p>
-                    I was previously an SWE intern at AWS where I did full stack mobile development. 
-                    During my undergrad I also worked as a grader for the <a href="https://mathcircle.berkeley.edu/math-taught-right-way-program">Math Taught the Right Way</a> program.
-                </p>
-            </div>
-        </div>
+        
+        
     </section>
+    <h2 class="section-title">Hi, I'm Nicholas!</h2>
+    <div class="project" style="background-color: #00000000; border: #00000000;">
+        <div class="project-photo-container">
+            <img src="images/me.jpg" alt="me" class="project-photo" style="border-radius: 50%;">
+        </div>
+        
+        <div class="project-content">
+            <p>
+                I'm an incoming computer scientist at Sandia National Labs.
+                I'm interested in Applications of Generative AI in virtual worlds, Virtual Reality, and Computer Graphics.
+            </p>
+            <p>
+                I have a 
+                <a href="https://www.linkedin.com/in/nicholasjohnjennings/">Linkedin</a>,
+                <a href="Resume.pdf">Resume</a>, 
+                <a href="https://github.com/NicholasJJ">Github</a>, and
+                an <a href="mailto:nicholasjohnjennings@gmail.com">Email</a>
+                that you can reach out to me through.
+            </p>
+            <p>
+                I have a MS in Computer Science at UC Berkeley, where I was advised by professor <a href="https://people.eecs.berkeley.edu/~bjoern/">Björn Hartmann</a>.
+                My undergrad was also at Berkeley, where I completed a double major of Computer Science and Applied Mathematics.
+                I was previously an SWE intern at Amazon Web Services where I did full stack mobile development projects related to error handling and gamification. 
+                During my undergrad I also worked as a grader for the <a href="https://mathcircle.berkeley.edu/math-taught-right-way-program">Math Taught the Right Way</a> program.
+            </p>
+        </div>
+    </div>
 </body>
 </html>

@@ -1,5 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+:root {
+    --blue: #90D7FF;
+    --red: #FFA799;
+    --SatRed: #FF6047;
+    --green: #6AF0BF;
+    --SatGreen: #16DF95;
+    --purple: #C090E0;
+    --SatPurple: #9B50CE;
+    --select: #5400A3;
+}
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: Ubuntu, sans-serif;
     align-items: center;
     margin: 0 10%;
     padding: 0;
@@ -9,7 +22,7 @@ body {
 }
 
 header {
-    background-color: #a8d5e2;
+    background-color: var(--blue);
     padding: 20px;
     padding-bottom: 60px;
     display: flex;
@@ -68,6 +81,14 @@ header h1 {
     color: #333;
 }
 
+.face {
+    width: auto;
+    height: 80px; /* Adjust the height based on your header size */
+    object-fit: contain; /* Ensure the image keeps its aspect ratio */
+    margin: 0 20px; /* Add margin for spacing */
+    flex-shrink: 0; /* Prevent the image from shrinking */
+}
+
 nav {
     display: flex;
     gap: 15px;
@@ -87,7 +108,7 @@ nav a:hover {
 }
 
 nav a.current {
-    color : #ff17f0
+    color : var(--select)
 }
 
 section {
@@ -296,28 +317,28 @@ a:hover {
     pointer-events: none; /* Prevent interaction with the image */
 }
 
-.homePage{
-    display: grid;
-    grid-template-columns: 25em 1fr;
-    gap: 15px;
-    justify-content: center;
+#rotate {
+    transform: translate(-80%, -20%) rotate(-39deg);
+    width: 2000px;
+    height: 2000px;
 }
 
-.homeImage{
-    display: flex;
-    justify-content: center;
-    max-width: 100%;
-    max-height: 300px;
-    border-radius: 50%;
-}
-
-.homeImageWrapper{
-    display: flex;
-    justify-content: center;
-}
-
-@media (max-width: 900px) {
-    .homePage {
-        grid-template-columns: 1fr; /* Stack image and text vertically */
+@keyframes animateFlower {
+    0% {
+        transform: translate(-80%, -20%) rotate(-39deg) scale(1);
+    }
+    25% {
+        transform: translate(-50%, -10%) rotate(0deg) scale(1.2);
+    }
+    50% {
+        transform: translate(0%, 0%) rotate(39deg) scale(1.5);
+    }
+    75% {
+        transform: translate(50%, 10%) rotate(78deg) scale(1.2);
+    }
+    100% {
+        transform: translate(-80%, -20%) rotate(-39deg) scale(1);
     }
 }
+
+
