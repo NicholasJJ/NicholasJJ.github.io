@@ -90,7 +90,7 @@ header h1 {
 }
 
 nav {
-    display: flex;
+    /* display: flex; */
     gap: 15px;
 }
 
