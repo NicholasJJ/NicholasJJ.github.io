@@ -21,6 +21,7 @@ body {
     overflow-x: hidden;
 }
 
+/* Base header styles for larger screens */
 header {
     background-color: var(--blue);
     padding: 20px;
@@ -33,6 +34,7 @@ header {
     top: 0;
     left: 0;
     box-sizing: border-box;
+    flex-wrap: wrap; /* Allows content to wrap to a new line if needed */
     clip-path: polygon(
         0 0, 
         100% 0, 
@@ -48,7 +50,19 @@ header {
         15% 80%, 
         5% 60%, 
         0 70%
-    );}
+    );
+}
+
+html::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px; /* Height of the area above the header, you can adjust this */
+    background-color: var(--blue); /* The blue color you want above the header */
+    z-index: -1; /* Ensure it stays behind everything else */
+}
 
 header::after {
     content: '';
@@ -70,8 +84,8 @@ header::after {
         35% 10%, 
         25% 30%, 
         15% 10%, 
-        5% 30%, 
-        0 20%
+        5% 70%, 
+        0 70%
     );
 }
 
@@ -79,6 +93,8 @@ header h1 {
     margin: 0;
     font-size: 24px;
     color: #333;
+    flex-grow: 1; /* Allows the name to take available space */
+    text-align: center;
 }
 
 .face {
@@ -89,8 +105,14 @@ header h1 {
     flex-shrink: 0; /* Prevent the image from shrinking */
 }
 
+.faceHead {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
 nav {
-    /* display: flex; */
+    display: flex;
     gap: 15px;
 }
 
@@ -108,8 +130,72 @@ nav a:hover {
 }
 
 nav a.current {
-    color : var(--select)
+    color : var(--select);
 }
+
+/* Responsive styles for smaller screens */
+@media (max-width: 768px) {
+    header {
+        flex-direction: row;
+        justify-content: center;
+        /* align-items: flex-start; Aligns content to the top */
+        clip-path: polygon(
+        0 0, 
+        100% 0, 
+        100% 75%, 
+        95% 80%, 
+        85% 70%, 
+        75% 80%, 
+        65% 70%, 
+        55% 80%, 
+        45% 70%, 
+        35% 80%, 
+        25% 70%, 
+        15% 80%, 
+        5% 70%, 
+        0 75%
+    );
+    }
+
+    body {
+        margin: 0 1%;
+    }
+
+    .section-title{
+        text-align: center;
+    }
+
+    /* Ensure the name and face stay on the same row */
+    header h1,
+    .face {
+        flex: 1 1 auto; /* Allows these elements to shrink and stay on one row */
+    }
+
+    /* Adjust nav for smaller screens */
+    nav {
+        flex-direction: row; /* Default is row until the screen is too narrow */
+        width: 100%; /* Forces the nav to take the full width when wrapping */
+        justify-content: center; /* Centers the nav items when they move below */
+        margin-top: 10px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+    }
+
+    /* Stack nav items on small screens */
+    nav a {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 600px) {
+    /* Force the nav to stack below the name and face on very small screens */
+    nav {
+        flex-direction: row;
+        align-items: center;
+    }
+}
+
+
 
 section {
     padding: 40px;
@@ -139,6 +225,7 @@ body#projects .flower-mask{
 .section-title {
     font-size: 28px;
     margin-bottom: 20px;
+    padding-top: 50px;
     color: #444;
 }
 
