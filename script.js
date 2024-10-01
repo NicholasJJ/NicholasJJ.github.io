@@ -1,32 +1,29 @@
+// Select all face images
+const faceImages = document.querySelectorAll('.face');
 
-const faceImages = [
-    'faceClean.png',
-    'faceBeard.png',
-    'faceVR.png',
-    'faceWiz.png'
-    // Add more image filenames here
-];
+// Keep track of the current visible image index
+let currentIndex = 0;
 
-
-const faceImg = document.querySelector('.face');
-
-
-let lastImage = faceImg.src;
-
-function getRandomImage() {
+// Function to switch to a new random image
+function switchRandomImage() {
     let randomIndex;
-    let newImage;
 
+    // Ensure we don't pick the same image as the current one
     do {
         randomIndex = Math.floor(Math.random() * faceImages.length);
-        newImage = `images/faces/${faceImages[randomIndex]}`;
-    } while (newImage === lastImage);
+    } while (randomIndex === currentIndex);
 
-    return newImage;
+    // Hide the current image
+    faceImages[currentIndex].classList.remove('active');
+
+    // Show the new random image
+    faceImages[randomIndex].classList.add('active');
+
+    // Update the current index
+    currentIndex = randomIndex;
 }
 
-faceImg.addEventListener('click', function() {
-    const newImage = getRandomImage();
-    faceImg.src = newImage;
-    lastImage = newImage;  
+// Event listener for clicking on the face container
+document.querySelector('.face-container').addEventListener('click', function() {
+    switchRandomImage();
 });

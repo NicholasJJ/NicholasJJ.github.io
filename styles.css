@@ -97,13 +97,35 @@ header h1 {
     text-align: center;
 }
 
-.face {
+/* .face {
     width: auto;
-    height: 80px; /* Adjust the height based on your header size */
-    object-fit: contain; /* Ensure the image keeps its aspect ratio */
-    margin: 0 20px; /* Add margin for spacing */
-    flex-shrink: 0; /* Prevent the image from shrinking */
+    height: 80px; 
+    object-fit: contain;
+    margin: 0 20px; 
+    flex-shrink: 0;
+} */
+
+/* Positioning the face images */
+.face-container {
+    position: relative;
+    width: 142px; /* Adjust this to your image width */
+    height: 80px; /* Adjust this to your image height */
 }
+
+.face {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0; /* Hide all images initially */
+    transition: opacity 0.5s ease; /* Smooth transition for visibility change */
+}
+
+.face.active {
+    opacity: 1; /* Make the active image visible */
+}
+
 
 .faceHead {
     display: flex;
