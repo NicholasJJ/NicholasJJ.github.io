@@ -407,7 +407,8 @@ a:hover {
     width: 100vw;
     height: 100vh;
     pointer-events: none; /* Prevent interaction with the container */
-    overflow: hidden; /* Hide overflow of flowers */
+    overflow-x: clip; /* Hide overflow of flowers */
+    overflow-y: visible;
     z-index: -1; /* Ensure it stays behind the main content but in front of the background */
 }
 

@@ -13,8 +13,12 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
 
 </head>
-<body id="index">
+<body id="index" style="height: 100%; overflow: hidden;">
+<!-- <body id="index" > -->
 
+    <div style="height: 100vh; overflow-y: auto;">
+
+    
     <div class="flower-container">
         <div class="flower-mask" style="transform: translate(0%, -80%) rotate(15deg); width: 1000px; height: 1000px;"></div>
         <div class="flower-mask" id="rotate"></div>
@@ -49,7 +53,7 @@
             <img src="images/me.jpg" alt="me" class="project-photo" style="border-radius: 50%;">
         </div>
         
-        <div class="project-content">
+        <div class="project-content" style="padding-bottom: 10vh;">
             <p>
                 I'm an incoming computer scientist at Sandia National Labs.
                 I'm interested in Applications of Generative AI in virtual worlds, Virtual Reality, and Computer Graphics.
@@ -69,6 +73,7 @@
                 During my undergrad I also worked as a grader for the <a href="https://mathcircle.berkeley.edu/math-taught-right-way-program">Math Taught the Right Way</a> program.
             </p>
         </div>
+    </div>
     </div>
 </body>
 </html>
