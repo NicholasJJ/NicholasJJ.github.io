@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Nicholas Jennings - Space Station Fractal</title>
+	<link rel="stylesheet" href="styles.css">
+	<meta name="theme-color" content="#90D7FF">
+	<meta name="apple-mobile-web-app-status-bar-style" content="default">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<style>
+		body#fractal {
+			background: linear-gradient(180deg, #eef7ff 0%, #dff6f8 100%);
+		}
+
+		body#fractal .flower-mask {
+			background-color: #cce8ff;
+		}
+
+		.fractal-shell {
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: 2rem 0 4rem;
+		}
+
+		.fractal-card {
+			background: rgba(255, 255, 255, 0.85);
+			border: 1px solid rgba(23, 84, 118, 0.16);
+			border-radius: 24px;
+			box-shadow: 0 18px 50px rgba(35, 82, 114, 0.12);
+			backdrop-filter: blur(6px);
+			padding: 1.5rem;
+		}
+
+		.fractal-intro {
+			display: grid;
+			grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+			gap: 1.5rem;
+			align-items: start;
+		}
+
+		.fractal-title {
+			font-size: clamp(2rem, 4vw, 3.6rem);
+			line-height: 0.95;
+			margin: 0 0 1rem;
+			color: #113b54;
+		}
+
+		.fractal-lead {
+			font-size: 1.05rem;
+			line-height: 1.7;
+			color: #33576a;
+			margin: 0;
+		}
+
+		.fractal-meta {
+			display: grid;
+			gap: 0.9rem;
+		}
+
+		.fractal-stat {
+			padding: 1rem 1.1rem;
+			border-radius: 18px;
+			background: linear-gradient(135deg, rgba(144, 215, 255, 0.32), rgba(106, 240, 191, 0.22));
+			border: 1px solid rgba(21, 88, 121, 0.14);
+		}
+
+		.fractal-stat strong,
+		.fractal-stat span {
+			display: block;
+		}
+
+		.fractal-stat strong {
+			color: #0f425e;
+			font-size: 0.92rem;
+			text-transform: uppercase;
+			letter-spacing: 0.08em;
+			margin-bottom: 0.3rem;
+		}
+
+		.fractal-stat span {
+			color: #224d61;
+			font-size: 1rem;
+			line-height: 1.5;
+		}
+
+		.fractal-controls {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+			gap: 1rem;
+			margin: 1.5rem 0;
+		}
+
+		.fractal-control {
+			display: grid;
+			gap: 0.55rem;
+			background: rgba(239, 248, 252, 0.92);
+			border: 1px solid rgba(17, 59, 84, 0.12);
+			border-radius: 18px;
+			padding: 1rem;
+		}
+
+		.fractal-control label {
+			display: flex;
+			justify-content: space-between;
+			gap: 1rem;
+			font-weight: 700;
+			color: #113b54;
+		}
+
+		.fractal-control output {
+			font-variant-numeric: tabular-nums;
+			color: #00607d;
+		}
+
+		.fractal-control input[type="range"] {
+			width: 100%;
+			accent-color: #16a6a6;
+		}
+
+		.fractal-control input[type="number"] {
+			width: 100%;
+			border: 1px solid rgba(17, 59, 84, 0.18);
+			border-radius: 12px;
+			padding: 0.7rem 0.8rem;
+			font: inherit;
+			color: #113b54;
+			box-sizing: border-box;
+			background: #fff;
+		}
+
+		.fractal-button {
+			border: 0;
+			border-radius: 999px;
+			padding: 0.8rem 1rem;
+			font: inherit;
+			font-weight: 700;
+			color: #ffffff;
+			background: linear-gradient(135deg, #0f5b7a, #169a9f);
+			cursor: pointer;
+			transition: transform 0.2s ease, box-shadow 0.2s ease;
+			box-shadow: 0 10px 24px rgba(15, 91, 122, 0.18);
+		}
+
+		.fractal-button:hover {
+			transform: translateY(-1px);
+			box-shadow: 0 14px 26px rgba(15, 91, 122, 0.22);
+		}
+
+		.fractal-canvasWrap {
+			position: relative;
+			border-radius: 28px;
+			overflow: hidden;
+			background:
+				radial-gradient(circle at top left, rgba(255, 255, 255, 0.95), rgba(239, 249, 255, 0.78) 38%, rgba(207, 236, 255, 0.72) 100%),
+				linear-gradient(135deg, rgba(144, 215, 255, 0.18), rgba(106, 240, 191, 0.18));
+			border: 1px solid rgba(17, 59, 84, 0.14);
+			min-height: 460px;
+		}
+
+		.fractal-canvas {
+			display: block;
+			width: 100%;
+			height: min(72vh, 820px);
+		}
+
+		.fractal-caption {
+			display: flex;
+			justify-content: space-between;
+			gap: 1rem;
+			align-items: center;
+			color: #24556f;
+			font-size: 0.95rem;
+			margin-top: 0.9rem;
+			flex-wrap: wrap;
+		}
+
+		.fractal-status {
+			font-weight: 700;
+		}
+
+		.fractal-caption code {
+			font-family: "Roboto Mono", "SFMono-Regular", Consolas, monospace;
+			background: rgba(17, 59, 84, 0.08);
+			border-radius: 999px;
+			padding: 0.2rem 0.6rem;
+		}
+
+		@media (max-width: 960px) {
+			.fractal-intro,
+			.fractal-controls {
+				grid-template-columns: 1fr;
+			}
+
+			.fractal-shell {
+				padding-top: 1rem;
+			}
+
+			.fractal-canvas {
+				height: min(62vh, 620px);
+			}
+		}
+
+		@media (max-width: 600px) {
+			.fractal-card {
+				padding: 1rem;
+				border-radius: 18px;
+			}
+
+			.fractal-canvasWrap {
+				min-height: 340px;
+				border-radius: 20px;
+			}
+		}
+	</style>
+</head>
+<body id="fractal">
+	<div class="flower-container">
+		<div class="flower-mask" style="transform: translate(-8%, -76%) rotate(12deg); width: 920px; height: 920px;"></div>
+		<div class="flower-mask" style="transform: translate(-68%, -2%) rotate(-28deg); width: 1700px; height: 1700px;"></div>
+	</div>
+
+	<header>
+		<div class="faceHead">
+			<h1>Nicholas Jennings</h1>
+			<div class="face-container">
+				<img src="images/faces/faceClean.png" class="face">
+				<img src="images/faces/faceBeard.png" class="face active">
+				<img src="images/faces/faceVR.png" class="face">
+				<img src="images/faces/faceWiz.png" class="face">
+			</div>
+		</div>
+		<nav>
+			<a href="index.html">Home</a>
+			<a href="research.html">Research</a>
+			<a href="projects.html">Projects</a>
+			<a href="fractal.html" class="current">Fractal</a>
+		</nav>
+	</header>
+
+	<main class="fractal-shell">
+		<section class="fractal-card">
+			<div class="fractal-intro">
+				<div>
+					<p class="section-title" style="padding-top: 0; margin-bottom: 0.5rem;">Generative Geometry</p>
+					<h2 class="fractal-title">Space Station Fractal</h2>
+					<p class="fractal-lead">
+						Start with one horizontal segment of length <strong>L</strong>. Bisect it with a perpendicular segment of length <strong>F L</strong>, then recurse on the four resulting half-segments. The canvas below redraws that rule directly, with depth and scale controls so you can explore how the structure grows.
+					</p>
+				</div>
+
+				<div class="fractal-meta">
+					<div class="fractal-stat">
+						<strong>Rule</strong>
+						<span>Each segment spawns a centered perpendicular cross and four smaller child segments.</span>
+					</div>
+					<div class="fractal-stat">
+						<strong>Default Ratio</strong>
+						<span>The perpendicular branch uses <strong>F = 0.5</strong>, so a segment of length <strong>L</strong> produces vertical children of length <strong>F L / 2</strong>.</span>
+					</div>
+					<div class="fractal-stat">
+						<strong>Rendering</strong>
+						<span>The drawing auto-fits the viewport and rescales when you change parameters or resize the page.</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="fractal-controls" aria-label="Fractal controls">
+				<div class="fractal-control">
+					<label for="depthRange">Iterations <output id="depthValue">6</output></label>
+					<input id="depthRange" type="range" min="0" max="9" step="1" value="6">
+				</div>
+
+				<div class="fractal-control">
+					<label for="initialZoomRange">Initial Zoom <output id="initialZoomValue">1.35x</output></label>
+					<input id="initialZoomRange" type="range" min="1" max="4" step="0.05" value="1.35">
+				</div>
+
+				<div class="fractal-control">
+					<label for="ratioRange">Scale Factor F <output id="ratioValue">0.50</output></label>
+					<input id="ratioRange" type="range" min="0.2" max="1.2" step="0.01" value="0.5">
+				</div>
+
+				<div class="fractal-control">
+					<label for="baseLengthInput">Base Length</label>
+					<input id="baseLengthInput" type="number" min="200" max="1600" step="10" value="720">
+				</div>
+
+				<div class="fractal-control">
+					<label for="speedRange">Animation Speed <output id="speedValue">1.00x</output></label>
+					<input id="speedRange" type="range" min="0.25" max="2.5" step="0.05" value="1">
+				</div>
+
+				<div class="fractal-control">
+					<label for="rotationToggle">Rotation Direction</label>
+					<button id="rotationToggle" class="fractal-button" type="button">Clockwise</button>
+				</div>
+
+				<div class="fractal-control">
+					<label for="centerToggle">Target Center</label>
+					<button id="centerToggle" class="fractal-button" type="button">Left</button>
+				</div>
+
+				<div class="fractal-control">
+					<label for="playToggle">Recursive Camera</label>
+					<button id="playToggle" class="fractal-button" type="button">Pause motion</button>
+				</div>
+			</div>
+
+			<div class="fractal-canvasWrap">
+				<canvas id="fractalCanvas" class="fractal-canvas" aria-label="Space Station fractal visualization"></canvas>
+			</div>
+
+			<div class="fractal-caption">
+				<span id="segmentCount">Segments drawn: 0</span>
+				<span id="animationStatus" class="fractal-status">Cycle 1 of 6</span>
+				<span>Starting rule: <code>horizontal(L) -> perpendicular(F * L) -> recurse on 4 half-segments</code></span>
+			</div>
+		</section>
+	</main>
+
+	<script src="script.js"></script>
+	<script>
+		const depthRange = document.getElementById('depthRange');
+		const initialZoomRange = document.getElementById('initialZoomRange');
+		const ratioRange = document.getElementById('ratioRange');
+		const baseLengthInput = document.getElementById('baseLengthInput');
+		const speedRange = document.getElementById('speedRange');
+		const depthValue = document.getElementById('depthValue');
+		const initialZoomValue = document.getElementById('initialZoomValue');
+		const ratioValue = document.getElementById('ratioValue');
+		const speedValue = document.getElementById('speedValue');
+		const segmentCount = document.getElementById('segmentCount');
+		const animationStatus = document.getElementById('animationStatus');
+		const rotationToggle = document.getElementById('rotationToggle');
+		const centerToggle = document.getElementById('centerToggle');
+		const playToggle = document.getElementById('playToggle');
+		const canvas = document.getElementById('fractalCanvas');
+		const context = canvas.getContext('2d');
+		const ROTATE_ZOOM_PORTION = 0.74;
+		const CYCLE_DURATION_MS = 3200;
+		let animationFrameId = null;
+		let lastTimestamp = null;
+		let animationProgress = 0;
+		let isAnimating = true;
+		let rotationSign = -1;
+		let centerSideSign = 1;
+		let cachedScene = null;
+
+		function buildSegments(length, ratio, iterations) {
+			const segments = [];
+			const seenSegments = new Set();
+			const bounds = {
+				minX: 0,
+				maxX: 0,
+				minY: 0,
+				maxY: 0
+			};
+
+			function trackPoint(x, y) {
+				bounds.minX = Math.min(bounds.minX, x);
+				bounds.maxX = Math.max(bounds.maxX, x);
+				bounds.minY = Math.min(bounds.minY, y);
+				bounds.maxY = Math.max(bounds.maxY, y);
+			}
+
+			function addSegment(x1, y1, x2, y2) {
+				const ordered = x1 < x2 || (x1 === x2 && y1 <= y2)
+					? [x1, y1, x2, y2]
+					: [x2, y2, x1, y1];
+				const key = ordered.map((value) => value.toFixed(6)).join(':');
+
+				if (seenSegments.has(key)) {
+					return;
+				}
+
+				seenSegments.add(key);
+				segments.push({ x1, y1, x2, y2 });
+				trackPoint(x1, y1);
+				trackPoint(x2, y2);
+			}
+
+			function recurse(cx, cy, segmentLength, horizontal, depth) {
+				const half = segmentLength / 2;
+				const branchHalf = segmentLength * ratio / 2;
+
+				if (horizontal) {
+					addSegment(cx - half, cy, cx + half, cy);
+					addSegment(cx, cy - branchHalf, cx, cy + branchHalf);
+				} else {
+					addSegment(cx, cy - half, cx, cy + half);
+					addSegment(cx - branchHalf, cy, cx + branchHalf, cy);
+				}
+
+				if (depth === 0) {
+					return;
+				}
+
+				if (horizontal) {
+					recurse(cx - half / 2, cy, half, true, depth - 1);
+					recurse(cx + half / 2, cy, half, true, depth - 1);
+					recurse(cx, cy - branchHalf / 2, branchHalf, false, depth - 1);
+					recurse(cx, cy + branchHalf / 2, branchHalf, false, depth - 1);
+					return;
+				}
+
+				recurse(cx, cy - half / 2, half, false, depth - 1);
+				recurse(cx, cy + half / 2, half, false, depth - 1);
+				recurse(cx - branchHalf / 2, cy, branchHalf, true, depth - 1);
+				recurse(cx + branchHalf / 2, cy, branchHalf, true, depth - 1);
+			}
+
+			recurse(0, 0, length, true, iterations);
+			return { segments, bounds };
+		}
+
+		function resizeCanvas() {
+			const deviceRatio = window.devicePixelRatio || 1;
+			const rect = canvas.getBoundingClientRect();
+
+			canvas.width = Math.round(rect.width * deviceRatio);
+			canvas.height = Math.round(rect.height * deviceRatio);
+			context.setTransform(deviceRatio, 0, 0, deviceRatio, 0, 0);
+		}
+
+		function rotatePoint(x, y, angle) {
+			const cosine = Math.cos(angle);
+			const sine = Math.sin(angle);
+			return {
+				x: x * cosine - y * sine,
+				y: x * sine + y * cosine
+			};
+		}
+
+		function getAnimationTransform(baseLength, ratio, initialZoom, progress, directionSign, sideSign) {
+			if (progress <= 0) {
+				return { angle: 0, zoom: initialZoom, translateX: 0, translateY: 0 };
+			}
+
+			const targetZoom = 2 / ratio;
+			const fullZoom = initialZoom * targetZoom;
+			const childOffset = (ratio * baseLength) / 4;
+			const childCenter = { x: 0, y: -sideSign * directionSign * childOffset };
+			const fullAngle = directionSign * Math.PI / 2;
+			const rotatedCenter = rotatePoint(childCenter.x, childCenter.y, fullAngle);
+			const targetCenter = {
+				x: rotatedCenter.x * fullZoom,
+				y: rotatedCenter.y * fullZoom
+			};
+			const phase = progress;
+
+			return {
+				angle: fullAngle * phase,
+				zoom: Math.exp(Math.log(fullZoom / initialZoom) * phase) * initialZoom,
+				translateX: targetCenter.x * phase,
+				translateY: targetCenter.y * phase
+			};
+		}
+
+		function updateCachedScene() {
+			const iterations = Number(depthRange.value);
+			const ratio = Number(ratioRange.value);
+			const baseLength = Math.max(40, Number(baseLengthInput.value) || 720);
+			const width = canvas.clientWidth;
+			const height = canvas.clientHeight;
+			const padding = 36;
+			const { segments, bounds } = buildSegments(baseLength, ratio, iterations + 1);
+			const fractalWidth = Math.max(bounds.maxX - bounds.minX, 1);
+			const fractalHeight = Math.max(bounds.maxY - bounds.minY, 1);
+			const scale = Math.min((width - padding * 2) / fractalWidth, (height - padding * 2) / fractalHeight);
+			const offsetX = (width - fractalWidth * scale) / 2 - bounds.minX * scale;
+			const offsetY = (height - fractalHeight * scale) / 2 - bounds.minY * scale;
+
+			cachedScene = {
+				segments,
+				iterations,
+				ratio,
+				baseLength,
+				width,
+				height,
+				scale,
+				offsetX,
+				offsetY
+			};
+		}
+
+		function drawFractal() {
+			const baseIterations = Number(depthRange.value);
+
+			if (
+				!cachedScene ||
+				cachedScene.iterations !== baseIterations ||
+				cachedScene.ratio !== Number(ratioRange.value) ||
+				cachedScene.baseLength !== Math.max(40, Number(baseLengthInput.value) || 720) ||
+				cachedScene.width !== canvas.clientWidth ||
+				cachedScene.height !== canvas.clientHeight
+			) {
+				updateCachedScene();
+			}
+
+			const {
+				segments,
+				iterations,
+				ratio,
+				baseLength,
+				width,
+				height,
+				scale,
+				offsetX,
+				offsetY
+			} = cachedScene;
+			const initialZoom = Number(initialZoomRange.value);
+			const animation = iterations === 0 || !isAnimating
+				? { angle: 0, zoom: initialZoom, translateX: 0, translateY: 0 }
+				: getAnimationTransform(baseLength, ratio, initialZoom, animationProgress, rotationSign, centerSideSign);
+
+			context.clearRect(0, 0, width, height);
+			context.lineCap = 'round';
+			context.lineJoin = 'round';
+			context.lineWidth = Math.max(0.8, 2.2 - iterations * 0.12);
+			context.strokeStyle = '#123c54';
+			context.shadowColor = 'rgba(22, 102, 135, 0.18)';
+			context.shadowBlur = 12;
+
+			context.beginPath();
+			for (const segment of segments) {
+				const animatedStart = rotatePoint(segment.x1, segment.y1, animation.angle);
+				const animatedEnd = rotatePoint(segment.x2, segment.y2, animation.angle);
+
+				const screenStartX = offsetX + (animatedStart.x * animation.zoom - animation.translateX) * scale;
+				const screenStartY = offsetY + (animatedStart.y * animation.zoom - animation.translateY) * scale;
+				const screenEndX = offsetX + (animatedEnd.x * animation.zoom - animation.translateX) * scale;
+				const screenEndY = offsetY + (animatedEnd.y * animation.zoom - animation.translateY) * scale;
+
+				context.moveTo(screenStartX, screenStartY);
+				context.lineTo(screenEndX, screenEndY);
+			}
+			context.stroke();
+
+			depthValue.textContent = String(iterations);
+			initialZoomValue.textContent = `${initialZoom.toFixed(2)}x`;
+			ratioValue.textContent = ratio.toFixed(2);
+			speedValue.textContent = `${Number(speedRange.value).toFixed(2)}x`;
+			segmentCount.textContent = `Segments drawn: ${segments.length.toLocaleString()}`;
+			animationStatus.textContent = iterations === 0
+				? 'Cycle 0 of 0'
+				: 'Looping one-step self-similar zoom';
+			rotationToggle.textContent = rotationSign < 0 ? 'Clockwise' : 'Counterclockwise';
+			centerToggle.textContent = centerSideSign < 0 ? 'Left' : 'Right';
+			playToggle.textContent = isAnimating && iterations > 0 ? 'Pause motion' : 'Resume motion';
+		}
+
+		function animateFrame(timestamp) {
+			if (lastTimestamp === null) {
+				lastTimestamp = timestamp;
+			}
+
+			const delta = timestamp - lastTimestamp;
+			lastTimestamp = timestamp;
+			const iterations = Number(depthRange.value);
+			const speed = Number(speedRange.value);
+
+			if (isAnimating && iterations > 0) {
+				animationProgress += (delta * speed) / CYCLE_DURATION_MS;
+
+				while (animationProgress >= 1) {
+					animationProgress -= 1;
+				}
+			}
+
+			drawFractal();
+			animationFrameId = window.requestAnimationFrame(animateFrame);
+		}
+
+		function redraw() {
+			resizeCanvas();
+			updateCachedScene();
+			drawFractal();
+		}
+
+		function resetAnimation() {
+			animationProgress = 0;
+			lastTimestamp = null;
+			updateCachedScene();
+			drawFractal();
+		}
+
+		depthRange.addEventListener('input', resetAnimation);
+		initialZoomRange.addEventListener('input', drawFractal);
+		ratioRange.addEventListener('input', resetAnimation);
+		baseLengthInput.addEventListener('input', resetAnimation);
+		speedRange.addEventListener('input', drawFractal);
+		rotationToggle.addEventListener('click', () => {
+			rotationSign *= -1;
+			resetAnimation();
+		});
+		centerToggle.addEventListener('click', () => {
+			centerSideSign *= -1;
+			resetAnimation();
+		});
+		playToggle.addEventListener('click', () => {
+			isAnimating = !isAnimating;
+			lastTimestamp = null;
+			drawFractal();
+		});
+		window.addEventListener('resize', redraw);
+
+		redraw();
+		animationFrameId = window.requestAnimationFrame(animateFrame);
+	</script>
+</body>
+</html>
