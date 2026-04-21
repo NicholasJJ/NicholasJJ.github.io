@@ -206,30 +206,96 @@
 
 		.progress-dots {
 			position: fixed;
-			right: 1.5rem;
+			right: 1rem;
 			top: 50%;
 			transform: translateY(-50%);
 			z-index: 5;
 			display: flex;
 			flex-direction: column;
-			gap: 0.5rem;
 			pointer-events: auto;
+			max-height: 78vh;
+			overflow-y: auto;
+			max-width: 200px;
+			padding: 0.4rem 0.3rem;
+			background: rgba(255, 255, 255, 0.78);
+			backdrop-filter: blur(6px);
+			border: 1px solid rgba(60, 60, 90, 0.14);
+			border-radius: 12px;
+			font-size: 0.75rem;
+			scrollbar-width: thin;
 		}
 
-		.progress-dot {
-			width: 10px;
-			height: 10px;
-			border-radius: 50%;
-			border: 2px solid rgba(60, 60, 90, 0.5);
-			background: transparent;
+		.progress-dots::-webkit-scrollbar {
+			width: 4px;
+		}
+
+		.progress-dots::-webkit-scrollbar-thumb {
+			background: rgba(60, 60, 90, 0.25);
+			border-radius: 2px;
+		}
+
+		.progress-section-label {
+			padding: 0.4rem 0.55rem 0.15rem;
+			text-transform: uppercase;
+			letter-spacing: 0.1em;
+			font-weight: 700;
+			color: #666;
+			font-size: 0.62rem;
+			border-top: 1px solid rgba(60, 60, 90, 0.12);
+		}
+
+		.progress-section-label:first-child {
+			border-top: none;
+		}
+
+		.progress-item {
+			display: flex;
+			align-items: center;
+			gap: 0.45rem;
+			padding: 0.22rem 0.55rem;
 			cursor: pointer;
-			transition: background 0.3s, transform 0.3s;
-			padding: 0;
+			border: 0;
+			background: transparent;
+			text-align: left;
+			border-radius: 5px;
+			color: #444;
+			font: inherit;
+			line-height: 1.25;
+			transition: background 0.15s, color 0.15s;
+			white-space: nowrap;
+			overflow: hidden;
+			max-width: 100%;
 		}
 
-		.progress-dot.active {
-			background: rgba(60, 60, 90, 0.8);
-			transform: scale(1.35);
+		.progress-item:hover {
+			background: rgba(60, 60, 90, 0.08);
+			color: #111;
+		}
+
+		.progress-item.active {
+			background: rgba(60, 60, 90, 0.14);
+			color: #111;
+			font-weight: 600;
+		}
+
+		.progress-item::before {
+			content: '';
+			display: inline-block;
+			width: 5px;
+			height: 5px;
+			border-radius: 50%;
+			background: currentColor;
+			opacity: 0.45;
+			flex-shrink: 0;
+		}
+
+		.progress-item.active::before {
+			opacity: 1;
+		}
+
+		.progress-item-title {
+			overflow: hidden;
+			text-overflow: ellipsis;
 		}
 
 		@media (max-width: 768px) {
@@ -243,7 +309,7 @@
 			}
 
 			.progress-dots {
-				right: 0.6rem;
+				display: none;
 			}
 		}
 	</style>
@@ -785,14 +851,46 @@
 
 			function createProgressDots() {
 				progressDots.innerHTML = '';
-				['home', 'research', 'projects'].forEach((section) => {
+				let currentSection = null;
+				CONTENT.forEach((item, idx) => {
+					if (item.section !== currentSection) {
+						currentSection = item.section;
+						const label = document.createElement('div');
+						label.className = 'progress-section-label';
+						label.textContent = item.section;
+						progressDots.appendChild(label);
+					}
 					const btn = document.createElement('button');
-					btn.className = 'progress-dot';
-					btn.dataset.section = section;
-					btn.setAttribute('aria-label', `Jump to ${section}`);
-					btn.addEventListener('click', () => scrollToSection(section));
+					btn.className = 'progress-item';
+					btn.dataset.step = String(idx);
+					btn.dataset.section = item.section;
+					btn.setAttribute('aria-label', `Jump to ${item.title}`);
+					btn.addEventListener('click', () => scrollToStep(idx));
+					const title = document.createElement('span');
+					title.className = 'progress-item-title';
+					title.textContent = item.title;
+					btn.appendChild(title);
 					progressDots.appendChild(btn);
 				});
+			}
+
+			function scrollToStep(step) {
+				window.scrollTo({
+					top: step * stepHeight,
+					behavior: 'smooth'
+				});
+			}
+
+			function scrollMiniListIntoView(el) {
+				const cTop = progressDots.scrollTop;
+				const cBottom = cTop + progressDots.clientHeight;
+				const elTop = el.offsetTop;
+				const elBottom = elTop + el.offsetHeight;
+				if (elTop < cTop) {
+					progressDots.scrollTop = elTop - 8;
+				} else if (elBottom > cBottom) {
+					progressDots.scrollTop = elBottom - progressDots.clientHeight + 8;
+				}
 			}
 
 			function cardOpacity(d) {
@@ -851,8 +949,14 @@
 				document.querySelectorAll('nav a[data-section]').forEach((a) => {
 					a.classList.toggle('current', a.dataset.section === activeSection);
 				});
-				document.querySelectorAll('.progress-dot').forEach((d) => {
-					d.classList.toggle('active', d.dataset.section === activeSection);
+				const activeStep = Math.round(t);
+				document.querySelectorAll('.progress-item').forEach((el) => {
+					const wasActive = el.classList.contains('active');
+					const isActive = Number(el.dataset.step) === activeStep;
+					if (isActive !== wasActive) {
+						el.classList.toggle('active', isActive);
+						if (isActive) scrollMiniListIntoView(el);
+					}
 				});
 			}
 
