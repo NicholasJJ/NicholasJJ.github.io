@@ -1,82 +1,937 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nicholas Jennings - Home</title>
-    <link rel="stylesheet" href="styles.css">
-    <!-- For Android (Chrome) -->
-    <meta name="theme-color" content="#90D7FF"> <!-- Set this to the blue color of your header -->
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Nicholas Jennings</title>
+	<link rel="stylesheet" href="styles.css">
+	<meta name="theme-color" content="#90D7FF">
+	<meta name="apple-mobile-web-app-status-bar-style" content="default">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<style>
+		html, body {
+			margin: 0;
+			padding: 0;
+			overflow-x: hidden;
+		}
 
-    <!-- For iOS (Safari) -->
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+		html::before {
+			display: none;
+		}
 
+		body#index {
+			background: transparent;
+			padding-top: 0;
+			margin: 0;
+		}
+
+		.bg-layer {
+			position: fixed;
+			inset: 0;
+			z-index: -3;
+			background-color: #f0e7db;
+			transition: background-color 0.6s ease-out;
+		}
+
+		.bg-flower {
+			position: fixed;
+			inset: 0;
+			z-index: -2;
+			pointer-events: none;
+			overflow: hidden;
+		}
+
+		.bg-flower .flower-mask {
+			position: absolute;
+			mask: url('images/fb.png') no-repeat center;
+			mask-size: contain;
+			-webkit-mask: url('images/fb.png') no-repeat center;
+			-webkit-mask-size: contain;
+			background-color: #eed7b8;
+			transition: background-color 0.6s ease-out;
+			opacity: 0.8;
+			will-change: transform;
+		}
+
+		.fractal-bg {
+			position: fixed;
+			inset: 0;
+			z-index: -1;
+			width: 100vw;
+			height: 100vh;
+			pointer-events: none;
+		}
+
+		header {
+			z-index: 10;
+		}
+
+		.card-layer {
+			position: fixed;
+			inset: 0;
+			z-index: 2;
+			pointer-events: none;
+			overflow: hidden;
+		}
+
+		.fractal-card {
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			width: min(460px, 78vw);
+			max-height: 70vh;
+			padding: 1.25rem 1.5rem;
+			box-sizing: border-box;
+			background: rgba(255, 255, 255, 0.92);
+			border: 1px solid rgba(60, 60, 90, 0.14);
+			border-radius: 20px;
+			box-shadow: 0 18px 50px rgba(30, 40, 60, 0.18);
+			backdrop-filter: blur(8px);
+			pointer-events: auto;
+			transform: translate(-50%, -50%);
+			transform-origin: center;
+			opacity: 0;
+			will-change: transform, opacity;
+			display: flex;
+			flex-direction: column;
+			gap: 0.75rem;
+			overflow: auto;
+		}
+
+		.fractal-card h2 {
+			margin: 0;
+			font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+			color: #223;
+			line-height: 1.15;
+		}
+
+		.fractal-card .card-eyebrow {
+			font-size: 0.8rem;
+			text-transform: uppercase;
+			letter-spacing: 0.12em;
+			font-weight: 700;
+			color: #6a6a80;
+			margin: 0;
+		}
+
+		.fractal-card p {
+			margin: 0;
+			font-size: 0.95rem;
+			line-height: 1.55;
+			color: #333;
+		}
+
+		.fractal-card img {
+			width: 100%;
+			max-height: 220px;
+			object-fit: cover;
+			border-radius: 12px;
+			display: block;
+		}
+
+		.fractal-card .card-links {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.5rem;
+			margin-top: 0.3rem;
+		}
+
+		.fractal-card .card-links a {
+			display: inline-block;
+			padding: 0.35rem 0.8rem;
+			border-radius: 999px;
+			background: rgba(60, 60, 90, 0.08);
+			color: #008185;
+			font-weight: 600;
+			font-size: 0.9rem;
+			transition: background 0.2s;
+		}
+
+		.fractal-card .card-links a:hover {
+			background: rgba(60, 60, 90, 0.16);
+		}
+
+		.fractal-card ul {
+			margin: 0;
+			padding-left: 1.1rem;
+			font-size: 0.9rem;
+			color: #333;
+			line-height: 1.5;
+		}
+
+		.fractal-card ul li {
+			margin-bottom: 0.3rem;
+		}
+
+		.scroll-track {
+			position: relative;
+			width: 100%;
+			pointer-events: none;
+		}
+
+		.scroll-hint {
+			position: fixed;
+			bottom: 2rem;
+			left: 50%;
+			transform: translateX(-50%);
+			color: #4a4a60;
+			font-size: 0.85rem;
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+			opacity: 0.7;
+			pointer-events: none;
+			transition: opacity 0.4s;
+			z-index: 5;
+		}
+
+		.scroll-hint.hidden {
+			opacity: 0;
+		}
+
+		.scroll-hint::after {
+			content: '';
+			display: block;
+			width: 2px;
+			height: 28px;
+			margin: 0.4rem auto 0;
+			background: currentColor;
+			animation: scrollPulse 1.8s ease-in-out infinite;
+		}
+
+		@keyframes scrollPulse {
+			0% { transform: scaleY(0.2); transform-origin: top; opacity: 0.2; }
+			50% { transform: scaleY(1); opacity: 1; }
+			100% { transform: scaleY(0.2); transform-origin: bottom; opacity: 0.2; }
+		}
+
+		.progress-dots {
+			position: fixed;
+			right: 1.5rem;
+			top: 50%;
+			transform: translateY(-50%);
+			z-index: 5;
+			display: flex;
+			flex-direction: column;
+			gap: 0.5rem;
+			pointer-events: auto;
+		}
+
+		.progress-dot {
+			width: 10px;
+			height: 10px;
+			border-radius: 50%;
+			border: 2px solid rgba(60, 60, 90, 0.5);
+			background: transparent;
+			cursor: pointer;
+			transition: background 0.3s, transform 0.3s;
+			padding: 0;
+		}
+
+		.progress-dot.active {
+			background: rgba(60, 60, 90, 0.8);
+			transform: scale(1.35);
+		}
+
+		@media (max-width: 768px) {
+			.fractal-card {
+				width: min(420px, 88vw);
+				padding: 1rem 1.1rem;
+			}
+
+			.fractal-card img {
+				max-height: 180px;
+			}
+
+			.progress-dots {
+				right: 0.6rem;
+			}
+		}
+	</style>
 </head>
-<body id="index" style="height: 100%; overflow: hidden;">
-<!-- <body id="index" > -->
+<body id="index">
+	<div class="bg-layer" id="bgLayer"></div>
+	<div class="bg-flower" id="bgFlower">
+		<div class="flower-mask" id="flowerA" style="width: 1200px; height: 1200px;"></div>
+		<div class="flower-mask" id="flowerB" style="width: 1800px; height: 1800px;"></div>
+	</div>
+	<canvas id="fractalBg" class="fractal-bg" aria-hidden="true"></canvas>
 
-    <div style="height: 100vh; overflow-y: auto;">
+	<header>
+		<div class="faceHead">
+			<h1>Nicholas Jennings</h1>
+			<div class="face-container">
+				<img src="images/faces/faceClean.png" class="face">
+				<img src="images/faces/faceBeard.png" class="face active">
+				<img src="images/faces/faceVR.png" class="face">
+				<img src="images/faces/faceWiz.png" class="face">
+			</div>
+		</div>
+		<nav>
+			<a href="#home" data-section="home" class="current">Home</a>
+			<a href="#research" data-section="research">Research</a>
+			<a href="#projects" data-section="projects">Projects</a>
+		</nav>
+	</header>
 
-    
-    <div class="flower-container">
-        <div class="flower-mask" style="transform: translate(0%, -80%) rotate(15deg); width: 1000px; height: 1000px;"></div>
-        <div class="flower-mask" id="rotate"></div>
-        <!-- <div class="flower-mask" style="background-color: red; transform: translate(-66%, -34.8%) rotate(51deg); width: 3910px; height: 3910px;"></div> -->
-    </div>
-    
+	<div class="card-layer" id="cardLayer" aria-live="polite"></div>
 
-    <header>
-        <div class="faceHead">
-            <h1>Nicholas Jennings</h1>
-            <div class="face-container">
-                <img src="images/faces/faceClean.png" class = "face">
-                <img src="images/faces/faceBeard.png" class = "face active">
-                <img src="images/faces/faceVR.png" class = "face">
-                <img src="images/faces/faceWiz.png" class = "face">
-            </div>
-        </div>
-        <nav>
-            <a href="index.html" class="current">Home</a>
-            <a href="research.html">Research</a>
-            <a href="projects.html">Projects</a>
-        </nav>
-    </header>
-    <script src="script.js"></script>
-    <section id="home">
-        
-        
-    </section>
-    <h2 class="section-title">Hi, I'm Nicholas!</h2>
-    <div class="project" style="background-color: #00000000; border: #00000000;">
-        <div class="project-photo-container">
-            <img src="images/me.jpg" alt="me" class="project-photo" style="border-radius: 50%;">
-        </div>
-        
-        <div class="project-content" style="padding-bottom: 10vh;">
-            <p>
-                I'm an incoming PhD student in Computer Science at Stanford University.
-                I'm interested in generative runtime adaptations of application behaviors based on user action, how this generation
-                can be controlled, and what all that means for the ecosystems and communities that form around generative apps. 
-                I'm also interested in Games, Computer Graphics, and Extended Reality.
-            </p>
-            <p>
-                I have a 
-                <a href="https://www.linkedin.com/in/nicholasjohnjennings/">Linkedin</a>,
-                <a href="CV.pdf">CV</a>, 
-                <a href="https://github.com/NicholasJJ">Github</a>, and
-                an <a href="mailto:njjenn@stanford.edu">Email</a>
-                that you can reach out to me through.
-            </p>
-            <p>
-                I have a MS in Computer Science from UC Berkeley, where I was advised by professor <a href="https://people.eecs.berkeley.edu/~bjoern/">Björn Hartmann</a>.
-                My undergrad was also at Berkeley, where I completed a double major of Computer Science and Applied Mathematics.
-                Previously, I worked as a computer scientist at Sandia National Labs.
-                I was also an SWE intern at Amazon Web Services where I did full stack mobile development projects related to error handling and gamification. 
-                During my undergrad I also worked as a grader for the <a href="https://mathcircle.berkeley.edu/math-taught-right-way-program">Math Taught the Right Way</a> program.
-            </p>
-        </div>
-    </div>
-    </div>
+	<div class="progress-dots" id="progressDots"></div>
+
+	<div class="scroll-hint" id="scrollHint">Scroll to spiral in</div>
+
+	<div class="scroll-track" id="scrollTrack"></div>
+
+	<script src="script.js"></script>
+	<script>
+		(function () {
+			const RATIO = 0.5;
+			const BASE_LENGTH = 720;
+			const ITERATIONS = 6;
+			const INITIAL_ZOOM = 1.25;
+			const STEP_ZOOM = 2 / RATIO;
+			const CHILD_OFFSET = (RATIO * BASE_LENGTH) / 4;
+			const ROTATION_DIR = -1;
+			const CHILD_SIDE = 1;
+			const CARD_ANCHOR = { x: 0, y: 0 };
+
+			const SECTION_COLORS = {
+				home: { bg: '#f0e7db', flower: '#eed7b8', stroke: '#4a3a2a' },
+				research: { bg: '#e6e6fa', flower: '#c8c8f8', stroke: '#3a3055' },
+				projects: { bg: '#e0ffff', flower: '#b3f8f8', stroke: '#1f5a5c' }
+			};
+
+			const CONTENT = [
+				{
+					section: 'home',
+					eyebrow: 'Hi, I\'m',
+					title: 'Nicholas Jennings',
+					image: 'images/me.jpg',
+					body: 'I\'m an incoming PhD student in Computer Science at Stanford. I work on generative runtime adaptations of application behaviors, Games, Computer Graphics, and Extended Reality.',
+					links: [
+						{ href: 'https://www.linkedin.com/in/nicholasjohnjennings/', label: 'LinkedIn' },
+						{ href: 'CV.pdf', label: 'CV' },
+						{ href: 'https://github.com/NicholasJJ', label: 'GitHub' },
+						{ href: 'mailto:njjenn@stanford.edu', label: 'Email' }
+					]
+				},
+				{
+					section: 'home',
+					eyebrow: 'Background',
+					title: 'Berkeley → Stanford',
+					body: 'I have an MS in Computer Science from UC Berkeley, where I was advised by Björn Hartmann. My undergrad was also at Berkeley (CS + Applied Math double major). Previously I was a computer scientist at Sandia National Labs, and a SWE intern at AWS working on full-stack mobile dev for error handling and gamification.'
+				},
+				{
+					section: 'home',
+					eyebrow: 'Also',
+					title: 'Teaching & Side Work',
+					body: 'During undergrad I graded for the Math Taught the Right Way program. I still spend a lot of cycles on games, shader experiments, and VR toys — most of which end up on the Projects side of this spiral.'
+				},
+				{
+					section: 'research',
+					eyebrow: 'VRST \'25',
+					title: 'Reimagining Go-Go: Effects of Signifiers in VR Selection',
+					image: 'images/XRSigTeaser.png',
+					body: 'Decoupling mechanics from signifiers in VR interactions — two new techniques (forward-axis compression, multi-axis compression) with identical mechanics to Go-Go but different signifiers. Usability and illusory-detection studies (N=18).',
+					links: [{ href: 'https://dl.acm.org/doi/10.1145/3756884.3766014', label: 'Paper' }]
+				},
+				{
+					section: 'research',
+					eyebrow: 'UIST \'24 · Best Paper',
+					title: 'What\'s the Game, then? Runtime Behavior Generation',
+					image: 'images/RIT.png',
+					body: 'GROMIT is a novel LLM-based runtime behavior generation system for Unity. When triggered by a player action, it generates and compiles a relevant behavior without developer intervention. System evaluation + interview study with 13 game developers.',
+					links: [
+						{ href: 'https://dl.acm.org/doi/10.1145/3654777.3676358', label: 'Paper' },
+						{ href: 'https://youtu.be/1FzdVNuXT8w?si=mMvhyQvwarU3HHNy', label: 'Talk' },
+						{ href: 'https://github.com/NicholasJJ/GROMIT', label: 'Repo' }
+					]
+				},
+				{
+					section: 'research',
+					eyebrow: 'SIGGRAPH \'24 · Honorable Mention',
+					title: 'Theory of Human Tetrachromatic Color Experience and Printing',
+					image: 'images/Isochromatic.png',
+					body: 'Over 50% of women are genetically tetrachromatic. We develop theory and engineering practice for fabricating tetrachromatic colors and potentially identifying tetrachromatic color vision in the wild.',
+					links: [{ href: 'https://imjal.github.io/theory-of-tetrachromacy/', label: 'Paper' }]
+				},
+				{
+					section: 'research',
+					eyebrow: 'Ongoing',
+					title: 'Beyond-Real Interactions in VR',
+					image: 'images/wimim.gif',
+					body: 'Several projects on interaction signifiers and multi-body interactions (where users control both their 1st person body and 1+ 3rd person bodies at once). The gif shows two additional bodies enabling multi-scale environment interaction.',
+					links: [{ href: 'https://youtu.be/UztPLQAi9xw', label: 'Video' }]
+				},
+				{
+					section: 'research',
+					eyebrow: 'CHI \'22 EA / ICED \'23',
+					title: 'GeneratiVR',
+					image: 'images/Figure-1a-update.png',
+					body: 'Two VR interaction techniques for efficiently evaluating generated design spaces — direct manipulation and demonstration of desired functionality to filter through expansive design options.',
+					links: [
+						{ href: 'https://dl.acm.org/doi/abs/10.1145/3491101.3519616', label: 'Paper' },
+						{ href: 'https://www.cambridge.org/core/journals/proceedings-of-the-design-society/article/vr-or-not-investigating-interface-type-and-user-strategies-for-interactive-design-space-exploration/BFA6CE13915DD825D04B70806CCB70A3', label: 'VR or Not?' },
+						{ href: 'https://www.youtube.com/watch?v=qHSx5f6fRts', label: 'Video' }
+					]
+				},
+				{
+					section: 'research',
+					eyebrow: 'Padova',
+					title: 'Anti-Virtualization',
+					image: 'images/android2.png',
+					body: 'With Eleonora Losiouk\'s group: taxonomy of Android virtualization-based malware, Gradle scripts for virtualizing malware and testing commercial AV detection, semi-automated pipeline for surfacing virtualization-based malware from virus databases.'
+				},
+				{
+					section: 'research',
+					eyebrow: 'Publications',
+					title: 'Full Publication List',
+					body: 'VRST\'25 · UIST\'24 (Best Paper) · SIGGRAPH\'24 (Honorable Mention) · ICED\'23 · CHI\'22 EA.',
+					links: [
+						{ href: 'https://dl.acm.org/doi/10.1145/3756884.3766014', label: 'Go-Go (VRST\'25)' },
+						{ href: 'https://dl.acm.org/doi/10.1145/3654777.3676358', label: 'GROMIT (UIST\'24)' },
+						{ href: 'https://imjal.github.io/theory-of-tetrachromacy/', label: 'Tetrachromacy (SIGGRAPH\'24)' },
+						{ href: 'https://www.cambridge.org/core/journals/proceedings-of-the-design-society/article/vr-or-not-investigating-interface-type-and-user-strategies-for-interactive-design-space-exploration/BFA6CE13915DD825D04B70806CCB70A3', label: 'VR or Not? (ICED\'23)' },
+						{ href: 'https://dl.acm.org/doi/abs/10.1145/3491101.3519616', label: 'GeneratiVR (CHI\'22 EA)' }
+					]
+				},
+				{
+					section: 'projects',
+					eyebrow: 'VR App',
+					title: 'BlossomVR',
+					image: 'images/blossom.png',
+					body: 'A Virtual Reality meditation app that lets users process their emotions through short minigames. On the Meta App Lab.',
+					links: [{ href: 'https://www.oculus.com/experiences/quest/9413401685396701/', label: 'App Lab' }]
+				},
+				{
+					section: 'projects',
+					eyebrow: 'VR System',
+					title: 'TutoriVR',
+					image: 'images/tutori.png',
+					body: 'A robust, deployable VR-embedded tutorial system that supplements video tutorials with 3D and contextual aids directly in the user\'s VR environment.',
+					links: [{ href: 'https://www.youtube.com/watch?v=CB_2tckiPLQ', label: 'Video' }]
+				},
+				{
+					section: 'projects',
+					eyebrow: 'Graphics',
+					title: 'Roman Candles',
+					image: 'images/night_firework002.gif',
+					body: 'Custom raytraced smoke rendering that handles arbitrary light sources. Fireworks are cool. Made for Foundations of Computer Graphics.',
+					links: [{ href: 'https://tcdanielh.github.io/WeaponizedRomanCandles/report.html', label: 'Writeup' }]
+				},
+				{
+					section: 'projects',
+					eyebrow: 'Game',
+					title: 'Minotaur',
+					image: 'images/minotaur.png',
+					body: 'A short adventure game about the myth of Theseus and the Minotaur. Random maze generation, wall-walking, full dialog system, spooky vibes. Made for my Greek and Roman Myths class.',
+					links: [{ href: 'https://frackfrick.itch.io/minotaur', label: 'itch.io' }]
+				},
+				{
+					section: 'projects',
+					eyebrow: 'Game',
+					title: 'Whale Snake',
+					image: 'images/whaleSnake.png',
+					body: 'A simple 3D snake game made for the Berkeley chapter of Upsilon Pi Epsilon. The club mascot is a whale, hence the whales.',
+					links: [{ href: 'https://frackfrick.itch.io/whale-snake', label: 'itch.io' }]
+				},
+				{
+					section: 'projects',
+					eyebrow: 'Game',
+					title: 'Super Mine Sweeper',
+					image: 'images/SMSBall.png',
+					body: 'Changing the topology of the surface you play Minesweeper on has interesting effects on gameplay and strategy — enough to turn this gimmick into an interesting gimmick.',
+					links: [
+						{ href: 'https://www.youtube.com/embed/2nUMbJdhLXQ', label: 'Video' },
+						{ href: 'https://github.com/NicholasJJ/SuperMineSweeper', label: 'GitHub' }
+					]
+				},
+				{
+					section: 'projects',
+					eyebrow: 'Shader',
+					title: 'Kaleidoscope Raymarch',
+					image: 'images/keleidoscope.png',
+					body: 'A custom raymarching shader and collision detection system that lets the user "drag a hole around". My foray into shader development.',
+					links: [{ href: 'https://www.youtube.com/watch?v=shS5dpI74TE', label: 'Video' }]
+				},
+				{
+					section: 'projects',
+					eyebrow: 'Graphics',
+					title: 'ASCII Rasterizer',
+					image: 'images/ascii.png',
+					body: 'I was curious how cameras work in computers. I made this to check I understood. OpenGL is useful but ASCII is aesthetic.',
+					links: [{ href: 'https://www.youtube.com/watch?v=JLC_KMDLvwI', label: 'Video' }]
+				},
+				{
+					section: 'projects',
+					eyebrow: 'VR Game',
+					title: 'Untitled VR Space Game',
+					image: 'images/VRSpace.png',
+					body: 'A space dogfighting game originally built for Google Cardboard, later ported to the Quest. Pew pew.',
+					links: [{ href: 'https://www.youtube.com/watch?v=EJ-vzFiydcM&t=15s', label: 'Video' }]
+				}
+			];
+
+			const SECTIONS = (function () {
+				const map = {};
+				CONTENT.forEach((item, idx) => {
+					if (map[item.section] === undefined) map[item.section] = idx;
+				});
+				return map;
+			})();
+
+			const canvas = document.getElementById('fractalBg');
+			const context = canvas.getContext('2d');
+			const bgLayer = document.getElementById('bgLayer');
+			const flowerA = document.getElementById('flowerA');
+			const flowerB = document.getElementById('flowerB');
+			const cardLayer = document.getElementById('cardLayer');
+			const scrollTrack = document.getElementById('scrollTrack');
+			const scrollHint = document.getElementById('scrollHint');
+			const progressDots = document.getElementById('progressDots');
+
+			let segments = null;
+			let segmentBounds = null;
+			let baseScale = 1;
+			let baseOffsetX = 0;
+			let baseOffsetY = 0;
+			let viewportWidth = 0;
+			let viewportHeight = 0;
+			let stepHeight = 0;
+			let cardElements = [];
+			let currentStep = -1;
+			let rafPending = false;
+			let lastRenderedT = -1;
+
+			function rotatePoint(x, y, angle) {
+				const c = Math.cos(angle);
+				const s = Math.sin(angle);
+				return { x: x * c - y * s, y: x * s + y * c };
+			}
+
+			function buildSegments(length, ratio, iterations) {
+				const segs = [];
+				const seen = new Set();
+				const bounds = { minX: 0, maxX: 0, minY: 0, maxY: 0 };
+
+				function track(x, y) {
+					if (x < bounds.minX) bounds.minX = x;
+					if (x > bounds.maxX) bounds.maxX = x;
+					if (y < bounds.minY) bounds.minY = y;
+					if (y > bounds.maxY) bounds.maxY = y;
+				}
+
+				function add(x1, y1, x2, y2) {
+					const ordered = x1 < x2 || (x1 === x2 && y1 <= y2)
+						? [x1, y1, x2, y2]
+						: [x2, y2, x1, y1];
+					const key = ordered.map((v) => v.toFixed(5)).join(':');
+					if (seen.has(key)) return;
+					seen.add(key);
+					segs.push({ x1, y1, x2, y2 });
+					track(x1, y1); track(x2, y2);
+				}
+
+				function recurse(cx, cy, segLen, horizontal, depth) {
+					const half = segLen / 2;
+					const branchHalf = segLen * ratio / 2;
+					if (horizontal) {
+						add(cx - half, cy, cx + half, cy);
+						add(cx, cy - branchHalf, cx, cy + branchHalf);
+					} else {
+						add(cx, cy - half, cx, cy + half);
+						add(cx - branchHalf, cy, cx + branchHalf, cy);
+					}
+					if (depth === 0) return;
+					if (horizontal) {
+						recurse(cx - half / 2, cy, half, true, depth - 1);
+						recurse(cx + half / 2, cy, half, true, depth - 1);
+						recurse(cx, cy - branchHalf / 2, branchHalf, false, depth - 1);
+						recurse(cx, cy + branchHalf / 2, branchHalf, false, depth - 1);
+						return;
+					}
+					recurse(cx, cy - half / 2, half, false, depth - 1);
+					recurse(cx, cy + half / 2, half, false, depth - 1);
+					recurse(cx - branchHalf / 2, cy, branchHalf, true, depth - 1);
+					recurse(cx + branchHalf / 2, cy, branchHalf, true, depth - 1);
+				}
+
+				recurse(0, 0, length, true, iterations);
+				return { segments: segs, bounds };
+			}
+
+			function resizeCanvas() {
+				const dpr = window.devicePixelRatio || 1;
+				viewportWidth = window.innerWidth;
+				viewportHeight = window.innerHeight;
+				canvas.width = Math.round(viewportWidth * dpr);
+				canvas.height = Math.round(viewportHeight * dpr);
+				canvas.style.width = viewportWidth + 'px';
+				canvas.style.height = viewportHeight + 'px';
+				context.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+				const padding = 30;
+				const fractalWidth = Math.max(segmentBounds.maxX - segmentBounds.minX, 1);
+				const fractalHeight = Math.max(segmentBounds.maxY - segmentBounds.minY, 1);
+				baseScale = Math.min(
+					(viewportWidth - padding * 2) / fractalWidth,
+					(viewportHeight - padding * 2) / fractalHeight
+				);
+				baseOffsetX = (viewportWidth - fractalWidth * baseScale) / 2 - segmentBounds.minX * baseScale;
+				baseOffsetY = (viewportHeight - fractalHeight * baseScale) / 2 - segmentBounds.minY * baseScale;
+
+				stepHeight = viewportHeight;
+				scrollTrack.style.height = ((CONTENT.length + 1) * stepHeight) + 'px';
+
+				positionFlowers();
+			}
+
+			function positionFlowers() {
+				flowerA.style.left = (viewportWidth * 0.1 - 600) + 'px';
+				flowerA.style.top = (viewportHeight * 0.1 - 600) + 'px';
+				flowerA.style.transform = 'rotate(15deg)';
+				flowerB.style.left = (viewportWidth * 0.95 - 900) + 'px';
+				flowerB.style.top = (viewportHeight * 0.65 - 900) + 'px';
+				flowerB.style.transform = 'rotate(-28deg)';
+			}
+
+			function getStepTransform(progress) {
+				if (progress <= 0) {
+					return { angle: 0, zoom: INITIAL_ZOOM, translateX: 0, translateY: 0 };
+				}
+				const childCenter = { x: 0, y: -CHILD_SIDE * ROTATION_DIR * CHILD_OFFSET };
+				const fullAngle = ROTATION_DIR * Math.PI / 2;
+				const fullZoom = INITIAL_ZOOM * STEP_ZOOM;
+				const rotatedCenter = rotatePoint(childCenter.x, childCenter.y, fullAngle);
+				const targetCenter = {
+					x: rotatedCenter.x * fullZoom,
+					y: rotatedCenter.y * fullZoom
+				};
+				return {
+					angle: fullAngle * progress,
+					zoom: Math.exp(Math.log(STEP_ZOOM) * progress) * INITIAL_ZOOM,
+					translateX: targetCenter.x * progress,
+					translateY: targetCenter.y * progress
+				};
+			}
+
+			function applyTransform(x, y, transform) {
+				const rotated = rotatePoint(x, y, transform.angle);
+				return {
+					x: rotated.x * transform.zoom - transform.translateX,
+					y: rotated.y * transform.zoom - transform.translateY
+				};
+			}
+
+			function fractalToScreen(fx, fy) {
+				return {
+					x: baseOffsetX + fx * baseScale,
+					y: baseOffsetY + fy * baseScale
+				};
+			}
+
+			function hexToRgb(hex) {
+				const h = hex.replace('#', '');
+				return {
+					r: parseInt(h.substring(0, 2), 16),
+					g: parseInt(h.substring(2, 4), 16),
+					b: parseInt(h.substring(4, 6), 16)
+				};
+			}
+
+			function rgbToString(c) {
+				return `rgb(${Math.round(c.r)}, ${Math.round(c.g)}, ${Math.round(c.b)})`;
+			}
+
+			function lerp(a, b, t) { return a + (b - a) * t; }
+
+			function lerpColor(a, b, t) {
+				return {
+					r: lerp(a.r, b.r, t),
+					g: lerp(a.g, b.g, t),
+					b: lerp(a.b, b.b, t)
+				};
+			}
+
+			function smoothstep(a, b, t) {
+				const x = Math.max(0, Math.min(1, (t - a) / (b - a)));
+				return x * x * (3 - 2 * x);
+			}
+
+			function getSectionColorAt(t) {
+				const sectionList = ['home', 'research', 'projects'];
+				const starts = sectionList.map((s) => SECTIONS[s]);
+				const colors = sectionList.map((s) => ({
+					bg: hexToRgb(SECTION_COLORS[s].bg),
+					flower: hexToRgb(SECTION_COLORS[s].flower),
+					stroke: hexToRgb(SECTION_COLORS[s].stroke)
+				}));
+
+				let idx = 0;
+				for (let i = 0; i < starts.length; i++) {
+					if (t >= starts[i]) idx = i;
+				}
+				const current = colors[idx];
+				const next = colors[idx + 1];
+				if (!next) return current;
+
+				const nextStart = starts[idx + 1];
+				const transitionWidth = 0.9;
+				if (t > nextStart - transitionWidth) {
+					const f = smoothstep(0, 1, (t - (nextStart - transitionWidth)) / transitionWidth);
+					return {
+						bg: lerpColor(current.bg, next.bg, f),
+						flower: lerpColor(current.flower, next.flower, f),
+						stroke: lerpColor(current.stroke, next.stroke, f)
+					};
+				}
+				return current;
+			}
+
+			function applyColors(colors) {
+				bgLayer.style.backgroundColor = rgbToString(colors.bg);
+				const flowerStr = rgbToString(colors.flower);
+				flowerA.style.backgroundColor = flowerStr;
+				flowerB.style.backgroundColor = flowerStr;
+			}
+
+			function drawFractal(transform, strokeColor) {
+				context.clearRect(0, 0, viewportWidth, viewportHeight);
+				context.lineCap = 'round';
+				context.lineJoin = 'round';
+				context.lineWidth = Math.max(0.7, 1.8 - ITERATIONS * 0.08);
+				context.strokeStyle = rgbToString(strokeColor);
+				context.shadowColor = 'rgba(30, 40, 60, 0.14)';
+				context.shadowBlur = 10;
+
+				context.beginPath();
+				for (let i = 0; i < segments.length; i++) {
+					const seg = segments[i];
+					const a = applyTransform(seg.x1, seg.y1, transform);
+					const b = applyTransform(seg.x2, seg.y2, transform);
+					const sa = fractalToScreen(a.x, a.y);
+					const sb = fractalToScreen(b.x, b.y);
+					context.moveTo(sa.x, sa.y);
+					context.lineTo(sb.x, sb.y);
+				}
+				context.stroke();
+			}
+
+			function createCards() {
+				cardLayer.innerHTML = '';
+				cardElements = CONTENT.map((item, idx) => {
+					const card = document.createElement('article');
+					card.className = 'fractal-card';
+					card.dataset.step = String(idx);
+					card.dataset.section = item.section;
+
+					if (item.eyebrow) {
+						const eyebrow = document.createElement('p');
+						eyebrow.className = 'card-eyebrow';
+						eyebrow.textContent = item.eyebrow;
+						card.appendChild(eyebrow);
+					}
+
+					const title = document.createElement('h2');
+					title.textContent = item.title;
+					card.appendChild(title);
+
+					if (item.image) {
+						const img = document.createElement('img');
+						img.src = item.image;
+						img.alt = item.title;
+						img.loading = 'lazy';
+						card.appendChild(img);
+					}
+
+					if (item.body) {
+						const p = document.createElement('p');
+						p.textContent = item.body;
+						card.appendChild(p);
+					}
+
+					if (item.links && item.links.length) {
+						const links = document.createElement('div');
+						links.className = 'card-links';
+						item.links.forEach((link) => {
+							const a = document.createElement('a');
+							a.href = link.href;
+							a.textContent = link.label;
+							if (/^https?:/.test(link.href)) {
+								a.target = '_blank';
+								a.rel = 'noopener';
+							}
+							links.appendChild(a);
+						});
+						card.appendChild(links);
+					}
+
+					cardLayer.appendChild(card);
+					return card;
+				});
+			}
+
+			function createProgressDots() {
+				progressDots.innerHTML = '';
+				['home', 'research', 'projects'].forEach((section) => {
+					const btn = document.createElement('button');
+					btn.className = 'progress-dot';
+					btn.dataset.section = section;
+					btn.setAttribute('aria-label', `Jump to ${section}`);
+					btn.addEventListener('click', () => scrollToSection(section));
+					progressDots.appendChild(btn);
+				});
+			}
+
+			function cardOpacity(d) {
+				if (d <= -1 || d >= 1) return 0;
+				if (d < 0) return smoothstep(-1, -0.1, d);
+				if (d > 0.75) return 1 - smoothstep(0.75, 1, d);
+				return 1;
+			}
+
+			function updateCards(t) {
+				const currentStep = Math.floor(t);
+				const currentProgress = t - currentStep;
+				const transform = getStepTransform(currentProgress);
+
+				for (let i = 0; i < cardElements.length; i++) {
+					const d = t - i;
+					const card = cardElements[i];
+					const opacity = cardOpacity(d);
+
+					if (opacity <= 0.01) {
+						if (card.style.opacity !== '0') {
+							card.style.opacity = '0';
+							card.style.visibility = 'hidden';
+						}
+						continue;
+					}
+
+					card.style.visibility = 'visible';
+
+					const anchor = d >= 0
+						? CARD_ANCHOR
+						: { x: 0, y: -CHILD_SIDE * ROTATION_DIR * CHILD_OFFSET };
+					const pos = applyTransform(anchor.x, anchor.y, transform);
+					const screen = fractalToScreen(pos.x, pos.y);
+
+					const offsetX = screen.x - viewportWidth / 2;
+					const offsetY = screen.y - viewportHeight / 2;
+
+					const cardZoom = Math.max(0.25, Math.min(1.5, Math.pow(STEP_ZOOM, d)));
+					const cardAngle = ROTATION_DIR * Math.PI / 2 * d;
+
+					card.style.opacity = String(opacity);
+					card.style.transform =
+						`translate(-50%, -50%) translate(${offsetX}px, ${offsetY}px) ` +
+						`rotate(${cardAngle}rad) scale(${cardZoom})`;
+					card.style.zIndex = String(100 - Math.abs(i - currentStep));
+				}
+			}
+
+			function updateNav(t) {
+				const sectionList = ['home', 'research', 'projects'];
+				let activeSection = sectionList[0];
+				for (let i = 0; i < sectionList.length; i++) {
+					if (t + 0.4 >= SECTIONS[sectionList[i]]) activeSection = sectionList[i];
+				}
+				document.querySelectorAll('nav a[data-section]').forEach((a) => {
+					a.classList.toggle('current', a.dataset.section === activeSection);
+				});
+				document.querySelectorAll('.progress-dot').forEach((d) => {
+					d.classList.toggle('active', d.dataset.section === activeSection);
+				});
+			}
+
+			function render() {
+				rafPending = false;
+				const scrollY = window.scrollY || window.pageYOffset;
+				const t = Math.max(0, Math.min(CONTENT.length - 0.001, scrollY / stepHeight));
+				if (t === lastRenderedT) return;
+				lastRenderedT = t;
+
+				const progress = t - Math.floor(t);
+				const transform = getStepTransform(progress);
+				const colors = getSectionColorAt(t);
+
+				drawFractal(transform, colors.stroke);
+				applyColors(colors);
+				updateCards(t);
+				updateNav(t);
+
+				const step = Math.floor(t);
+				if (step !== currentStep) {
+					currentStep = step;
+					if (scrollY > stepHeight * 0.3) {
+						scrollHint.classList.add('hidden');
+					} else {
+						scrollHint.classList.remove('hidden');
+					}
+				}
+			}
+
+			function requestRender() {
+				if (rafPending) return;
+				rafPending = true;
+				requestAnimationFrame(render);
+			}
+
+			function scrollToSection(section) {
+				const step = SECTIONS[section];
+				if (step === undefined) return;
+				window.scrollTo({
+					top: step * stepHeight,
+					behavior: 'smooth'
+				});
+			}
+
+			function handleNavClicks() {
+				document.querySelectorAll('nav a[data-section]').forEach((a) => {
+					a.addEventListener('click', (e) => {
+						e.preventDefault();
+						scrollToSection(a.dataset.section);
+						history.replaceState(null, '', '#' + a.dataset.section);
+					});
+				});
+			}
+
+			function handleInitialHash() {
+				const hash = window.location.hash.replace('#', '');
+				if (SECTIONS[hash] !== undefined) {
+					requestAnimationFrame(() => {
+						window.scrollTo({ top: SECTIONS[hash] * stepHeight, behavior: 'auto' });
+					});
+				}
+			}
+
+			function init() {
+				const built = buildSegments(BASE_LENGTH, RATIO, ITERATIONS + 1);
+				segments = built.segments;
+				segmentBounds = built.bounds;
+				resizeCanvas();
+				createCards();
+				createProgressDots();
+				handleNavClicks();
+				handleInitialHash();
+
+				window.addEventListener('scroll', requestRender, { passive: true });
+				window.addEventListener('resize', () => {
+					const prevT = stepHeight > 0 ? (window.scrollY / stepHeight) : 0;
+					resizeCanvas();
+					window.scrollTo({ top: prevT * stepHeight, behavior: 'auto' });
+					lastRenderedT = -1;
+					requestRender();
+				});
+
+				requestRender();
+			}
+
+			if (document.readyState === 'loading') {
+				document.addEventListener('DOMContentLoaded', init);
+			} else {
+				init();
+			}
+		})();
+	</script>
 </body>
 </html>
