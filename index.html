@@ -594,12 +594,25 @@
 				flowerB.style.transform = 'rotate(-28deg)';
 			}
 
-			function getStepTransform(progress) {
+			function getStepParams(stepIdx) {
+				const sideFlip = stepIdx % 2 === 0 ? 1 : -1;
+				const rotFlip = Math.floor(stepIdx / 2) % 2 === 0 ? 1 : -1;
+				return {
+					rotationDir: ROTATION_DIR * rotFlip,
+					childSide: CHILD_SIDE * sideFlip
+				};
+			}
+
+			function getChildAnchor(params) {
+				return { x: 0, y: -params.childSide * params.rotationDir * CHILD_OFFSET };
+			}
+
+			function getStepTransform(progress, params) {
 				if (progress <= 0) {
 					return { angle: 0, zoom: INITIAL_ZOOM, translateX: 0, translateY: 0 };
 				}
-				const childCenter = { x: 0, y: -CHILD_SIDE * ROTATION_DIR * CHILD_OFFSET };
-				const fullAngle = ROTATION_DIR * Math.PI / 2;
+				const childCenter = getChildAnchor(params);
+				const fullAngle = params.rotationDir * Math.PI / 2;
 				const fullZoom = INITIAL_ZOOM * STEP_ZOOM;
 				const rotatedCenter = rotatePoint(childCenter.x, childCenter.y, fullAngle);
 				const targetCenter = {
@@ -792,7 +805,9 @@
 			function updateCards(t) {
 				const currentStep = Math.floor(t);
 				const currentProgress = t - currentStep;
-				const transform = getStepTransform(currentProgress);
+				const params = getStepParams(currentStep);
+				const transform = getStepTransform(currentProgress, params);
+				const approachAnchor = getChildAnchor(params);
 
 				for (let i = 0; i < cardElements.length; i++) {
 					const d = t - i;
@@ -809,9 +824,7 @@
 
 					card.style.visibility = 'visible';
 
-					const anchor = d >= 0
-						? CARD_ANCHOR
-						: { x: 0, y: -CHILD_SIDE * ROTATION_DIR * CHILD_OFFSET };
+					const anchor = d >= 0 ? CARD_ANCHOR : approachAnchor;
 					const pos = applyTransform(anchor.x, anchor.y, transform);
 					const screen = fractalToScreen(pos.x, pos.y);
 
@@ -819,7 +832,7 @@
 					const offsetY = screen.y - viewportHeight / 2;
 
 					const cardZoom = Math.max(0.25, Math.min(1.5, Math.pow(STEP_ZOOM, d)));
-					const cardAngle = ROTATION_DIR * Math.PI / 2 * d;
+					const cardAngle = params.rotationDir * Math.PI / 2 * d;
 
 					card.style.opacity = String(opacity);
 					card.style.transform =
@@ -850,8 +863,9 @@
 				if (t === lastRenderedT) return;
 				lastRenderedT = t;
 
-				const progress = t - Math.floor(t);
-				const transform = getStepTransform(progress);
+				const step = Math.floor(t);
+				const progress = t - step;
+				const transform = getStepTransform(progress, getStepParams(step));
 				const colors = getSectionColorAt(t);
 
 				drawFractal(transform, colors.stroke);
@@ -859,7 +873,6 @@
 				updateCards(t);
 				updateNav(t);
 
-				const step = Math.floor(t);
 				if (step !== currentStep) {
 					currentStep = step;
 					if (scrollY > stepHeight * 0.3) {
