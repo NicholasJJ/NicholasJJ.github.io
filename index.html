@@ -312,6 +312,153 @@
 				display: none;
 			}
 		}
+
+		body.simple-layout .fractal-bg,
+		body.simple-layout .bg-flower,
+		body.simple-layout .scroll-hint,
+		body.simple-layout .progress-dots {
+			display: none !important;
+		}
+
+		body.simple-layout .card-layer {
+			position: static;
+			inset: auto;
+			overflow: visible;
+			pointer-events: auto;
+			padding: 140px 1rem 4rem;
+			display: flex;
+			flex-direction: column;
+			gap: 1.5rem;
+			min-height: 100vh;
+		}
+
+		body.simple-layout .fractal-card {
+			position: relative;
+			left: auto;
+			top: auto;
+			max-height: none;
+			width: 100%;
+			max-width: 560px;
+			margin: 0 auto;
+			overflow: visible;
+			transform: none !important;
+			opacity: 1 !important;
+			visibility: visible !important;
+			z-index: auto !important;
+		}
+
+		body.simple-layout .scroll-track {
+			display: none;
+		}
+
+		body.simple-layout .bg-layer {
+			transition: background-color 0.5s ease;
+		}
+
+		.section-header {
+			display: none;
+			margin: 0;
+			padding: 1.25rem 0 0.25rem;
+			font-size: clamp(2rem, 5vw, 3.4rem);
+			font-weight: 800;
+			letter-spacing: -0.02em;
+			color: #222;
+			text-transform: capitalize;
+		}
+
+		body.simple-layout .section-header {
+			display: block;
+		}
+
+		@media (min-width: 769px) {
+			body.simple-layout .card-layer {
+				display: grid;
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+				gap: 1.5rem;
+				max-width: 1100px;
+				margin: 0 auto;
+				padding: 160px 2rem 4rem;
+			}
+
+			body.simple-layout .fractal-card {
+				max-width: none;
+				margin: 0;
+			}
+
+			body.simple-layout .section-header {
+				grid-column: 1 / -1;
+				margin-top: 2rem;
+			}
+		}
+
+		.mode-toggle {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.55rem;
+			margin-left: 0.85rem;
+			padding: 0.25rem 0.6rem;
+			border-radius: 999px;
+			cursor: pointer;
+			user-select: none;
+			color: #333;
+			font-size: 13px;
+			font-weight: 600;
+			transition: background 0.15s;
+		}
+
+		.mode-toggle:hover {
+			background: rgba(255, 255, 255, 0.35);
+		}
+
+		.mode-toggle input {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			opacity: 0;
+			pointer-events: none;
+		}
+
+		.mode-toggle-track {
+			display: inline-block;
+			position: relative;
+			width: 36px;
+			height: 20px;
+			border-radius: 999px;
+			background: rgba(60, 60, 90, 0.3);
+			transition: background 0.2s;
+			flex-shrink: 0;
+		}
+
+		.mode-toggle-thumb {
+			position: absolute;
+			top: 2px;
+			left: 2px;
+			width: 16px;
+			height: 16px;
+			border-radius: 50%;
+			background: #fff;
+			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+			transition: transform 0.2s;
+		}
+
+		.mode-toggle input:checked + .mode-toggle-track {
+			background: #5400A3;
+		}
+
+		.mode-toggle input:checked + .mode-toggle-track .mode-toggle-thumb {
+			transform: translateX(16px);
+		}
+
+		.mode-toggle input:focus-visible + .mode-toggle-track {
+			outline: 2px solid #5400A3;
+			outline-offset: 2px;
+		}
+
+		@media (max-width: 768px) {
+			.mode-toggle {
+				display: none;
+			}
+		}
 	</style>
 </head>
 <body id="index">
@@ -331,6 +478,11 @@
 				<img src="images/faces/faceVR.png" class="face">
 				<img src="images/faces/faceWiz.png" class="face">
 			</div>
+			<label class="mode-toggle" title="Toggle fractal layout">
+				<input type="checkbox" id="fractalModeToggle" checked>
+				<span class="mode-toggle-track"><span class="mode-toggle-thumb"></span></span>
+				<span class="mode-toggle-label">Fractal mode</span>
+			</label>
 		</div>
 		<nav>
 			<a href="#home" data-section="home" class="current">Home</a>
@@ -372,7 +524,7 @@
 					eyebrow: 'Hi, I\'m',
 					title: 'Nicholas Jennings',
 					image: 'images/me.jpg',
-					body: 'I\'m an incoming PhD student in Computer Science at Stanford. I work on generative runtime adaptations of application behaviors, Games, Computer Graphics, and Extended Reality.',
+					body: 'I\'m an incoming PhD student in Computer Science at Stanford. I work on generative runtime adaptations of application behaviors based on user action, how this generation can be controlled, and what all that means for the ecosystems and communities that form around generative apps. I\'m also interested in Games, Computer Graphics, and XR.',
 					links: [
 						{ href: 'https://www.linkedin.com/in/nicholasjohnjennings/', label: 'LinkedIn' },
 						{ href: 'CV.pdf', label: 'CV' },
@@ -382,22 +534,16 @@
 				},
 				{
 					section: 'home',
-					eyebrow: 'Background',
-					title: 'Berkeley → Stanford',
-					body: 'I have an MS in Computer Science from UC Berkeley, where I was advised by Björn Hartmann. My undergrad was also at Berkeley (CS + Applied Math double major). Previously I was a computer scientist at Sandia National Labs, and a SWE intern at AWS working on full-stack mobile dev for error handling and gamification.'
-				},
-				{
-					section: 'home',
-					eyebrow: 'Also',
-					title: 'Teaching & Side Work',
-					body: 'During undergrad I graded for the Math Taught the Right Way program. I still spend a lot of cycles on games, shader experiments, and VR toys — most of which end up on the Projects side of this spiral.'
+					eyebrow: 'All this info needs a SECOND CARD',
+					title: 'Background',
+					body: 'I have an MS in Computer Science from UC Berkeley, where I was advised by Björn Hartmann. My undergrad was also at Berkeley (CS + Applied Math double major). Previously I was a computer scientist at Sandia National Labs, and a SWE intern at AWS where I did full stack mobile development related to error handling and gamification.'
 				},
 				{
 					section: 'research',
 					eyebrow: 'VRST \'25',
 					title: 'Reimagining Go-Go: Effects of Signifiers in VR Selection',
 					image: 'images/XRSigTeaser.png',
-					body: 'Decoupling mechanics from signifiers in VR interactions — two new techniques (forward-axis compression, multi-axis compression) with identical mechanics to Go-Go but different signifiers. Usability and illusory-detection studies (N=18).',
+					body: 'Interaction techniques for room-scale Virtual Reality (VR) are commonly presented wholesale; however, decoupling the mechanics and signifiers of these interactions offers new interaction possibilities. To explore the effect of signifiers on VR interactions, we created two new interaction techniques (forward-axis compression and multi-axis compression) with identical mechanical mappings to the existing Go-Go technique but with different signifiers. We conducted usability and illusory detection studies (N=18) to compare the interactions. Our results indicate that participants had comparable performance regarding target selection time and the number of missclicks with standard Go-Go and forward-axis compression for both small and large spheres. Additionally, multi-axis compression causes Go-Go to become illusory at low-distance multipliers. We propose that separating mechanics from signifiers is beneficial for creating new VR interactions.',
 					links: [{ href: 'https://dl.acm.org/doi/10.1145/3756884.3766014', label: 'Paper' }]
 				},
 				{
@@ -405,7 +551,7 @@
 					eyebrow: 'UIST \'24 · Best Paper',
 					title: 'What\'s the Game, then? Runtime Behavior Generation',
 					image: 'images/RIT.png',
-					body: 'GROMIT is a novel LLM-based runtime behavior generation system for Unity. When triggered by a player action, it generates and compiles a relevant behavior without developer intervention. System evaluation + interview study with 13 game developers.',
+					body: 'Procedural content generation (PCG), the process of algorithmically creating game components instead of manually, has been a common tool of game development for decades. Recent advances in large language models (LLMs) enable the generation of game behaviors based on player input at runtime. Such code generation brings with it the possibility of entirely new gameplay interactions that may be difficult to integrate with typical game development workflows. We explore these implications through GROMIT, a novel LLM-based runtime behavior generation system for Unity. When triggered by a player action, GROMIT generates a relevant behavior which is compiled without developer intervention and incorporated into the game. We create three demonstration scenarios with GROMIT to investigate how such a technology might be used in game development. In a system evaluation we find that our implementation is able to produce behaviors that result in significant downstream impacts to gameplay. We then conduct an interview study with n=13 game developers using GROMIT as a probe to elicit their current opinion on runtime behavior generation tools, and enumerate the specific themes curtailing the wider use of such tools.',
 					links: [
 						{ href: 'https://dl.acm.org/doi/10.1145/3654777.3676358', label: 'Paper' },
 						{ href: 'https://youtu.be/1FzdVNuXT8w?si=mMvhyQvwarU3HHNy', label: 'Talk' },
@@ -417,15 +563,15 @@
 					eyebrow: 'SIGGRAPH \'24 · Honorable Mention',
 					title: 'Theory of Human Tetrachromatic Color Experience and Printing',
 					image: 'images/Isochromatic.png',
-					body: 'Over 50% of women are genetically tetrachromatic. We develop theory and engineering practice for fabricating tetrachromatic colors and potentially identifying tetrachromatic color vision in the wild.',
+					body: 'Genetic studies indicate that more than 50% of women are genetically tetrachromatic, expressing four distinct types of color photoreceptors (cone cells) in the retina. At least one functional tetrachromat has been identified in laboratory tests. We hypothesize that there is a large latent group in the population capable of fundamentally richer color experience, but we are not yet aware of this group because of a lack of tetrachromatic colors in the visual environment. This paper develops theory and engineering practice for fabricating tetrachromatic colors and potentially identifying tetrachromatic color vision in the wild.',
 					links: [{ href: 'https://imjal.github.io/theory-of-tetrachromacy/', label: 'Paper' }]
 				},
 				{
 					section: 'research',
-					eyebrow: 'Ongoing',
+					eyebrow: '-',
 					title: 'Beyond-Real Interactions in VR',
 					image: 'images/wimim.gif',
-					body: 'Several projects on interaction signifiers and multi-body interactions (where users control both their 1st person body and 1+ 3rd person bodies at once). The gif shows two additional bodies enabling multi-scale environment interaction.',
+					body: 'I\'ve worked on several projects related to beyond-real interactions in virtual reality. I tend to focus on interaction signifiers, and on multi-body interactions (where the user controls both their 1st person virtual body and 1+ 3rd person bodies at the same time). The gif (and the linked video) shows an example where 2 additional bodies (one small, one big) are used to enable interacting with an enviroment at multiple scales.',
 					links: [{ href: 'https://youtu.be/UztPLQAi9xw', label: 'Video' }]
 				},
 				{
@@ -433,7 +579,7 @@
 					eyebrow: 'CHI \'22 EA / ICED \'23',
 					title: 'GeneratiVR',
 					image: 'images/Figure-1a-update.png',
-					body: 'Two VR interaction techniques for efficiently evaluating generated design spaces — direct manipulation and demonstration of desired functionality to filter through expansive design options.',
+					body: 'Computational design tools can automatically generate large quantities of viable designs for a given design problem. This raises the challenge of how to enable designers to efficiently and effectively evaluate and select preferred designs from a large set of alternatives. In GeneratiVR, we present two novel interaction techniques to address this challenge, by leveraging Virtual Reality for rich, spatial user input. With these interaction methods, users can directly manipulate designs or demonstrate desired design functionality. The interactions allow users to rapidly filter through an expansive design space to specify or find their preferred designs.',
 					links: [
 						{ href: 'https://dl.acm.org/doi/abs/10.1145/3491101.3519616', label: 'Paper' },
 						{ href: 'https://www.cambridge.org/core/journals/proceedings-of-the-design-society/article/vr-or-not-investigating-interface-type-and-user-strategies-for-interactive-design-space-exploration/BFA6CE13915DD825D04B70806CCB70A3', label: 'VR or Not?' },
@@ -442,22 +588,48 @@
 				},
 				{
 					section: 'research',
-					eyebrow: 'Padova',
+					eyebrow: '-',
 					title: 'Anti-Virtualization',
 					image: 'images/android2.png',
-					body: 'With Eleonora Losiouk\'s group: taxonomy of Android virtualization-based malware, Gradle scripts for virtualizing malware and testing commercial AV detection, semi-automated pipeline for surfacing virtualization-based malware from virus databases.'
+					body: 'Android virtualization software can be a powerful tool for app development, but it can also be exploited for malicious purposes. During my time on the Anti-Virtualization research project led by Eleonora Losiouk, I conducted a review of prior work to create a taxonomy of known virtualization-based malwares and attacks for Android, built Gradle scripts for virtualizing malwares and assessing their detectability by commercial antivirus apps, and used Bash, Gradle, and Python scripts to create an semi-automated system for identifying virtualization-based malwares from virus databases, allowing for more in-depth analysis.'
 				},
 				{
 					section: 'research',
 					eyebrow: 'Publications',
 					title: 'Full Publication List',
-					body: 'VRST\'25 · UIST\'24 (Best Paper) · SIGGRAPH\'24 (Honorable Mention) · ICED\'23 · CHI\'22 EA.',
-					links: [
-						{ href: 'https://dl.acm.org/doi/10.1145/3756884.3766014', label: 'Go-Go (VRST\'25)' },
-						{ href: 'https://dl.acm.org/doi/10.1145/3654777.3676358', label: 'GROMIT (UIST\'24)' },
-						{ href: 'https://imjal.github.io/theory-of-tetrachromacy/', label: 'Tetrachromacy (SIGGRAPH\'24)' },
-						{ href: 'https://www.cambridge.org/core/journals/proceedings-of-the-design-society/article/vr-or-not-investigating-interface-type-and-user-strategies-for-interactive-design-space-exploration/BFA6CE13915DD825D04B70806CCB70A3', label: 'VR or Not? (ICED\'23)' },
-						{ href: 'https://dl.acm.org/doi/abs/10.1145/3491101.3519616', label: 'GeneratiVR (CHI\'22 EA)' }
+					citations: [
+						{
+							authors: 'Nicholas Jennings, Andrii Matviienko.',
+							title: 'Reimagining Go-Go: Effects of Signifiers in VR Selection Techniques',
+							href: 'https://dl.acm.org/doi/10.1145/3756884.3766014',
+							venue: 'VRST\'25'
+						},
+						{
+							authors: 'Nicholas Jennings, Han Wang, Isabel Li, James Smith, and Björn Hartmann.',
+							title: 'What\'s the Game, then? Opportunities and Challenges for Runtime Behavior Generation',
+							href: 'https://dl.acm.org/doi/10.1145/3654777.3676358',
+							venue: 'UIST \'24',
+							note: 'Best Paper'
+						},
+						{
+							authors: 'Jessica Lee, Nicholas Jennings, Varun Srivastava, Ren Ng.',
+							title: 'Theory of Human Tetrachromatic Color Experience and Printing',
+							href: 'https://imjal.github.io/theory-of-tetrachromacy/',
+							venue: 'SIGGRAPH 2024',
+							note: 'Honorable Mention'
+						},
+						{
+							authors: 'Ananya Nandy, James Smith, Nicholas Jennings, Mike Kuniavsky, Bjoern Hartmann.',
+							title: 'VR or Not? Investigating Interface Type and User Strategies for Interactive Design Space Exploration',
+							href: 'https://www.cambridge.org/core/journals/proceedings-of-the-design-society/article/vr-or-not-investigating-interface-type-and-user-strategies-for-interactive-design-space-exploration/BFA6CE13915DD825D04B70806CCB70A3',
+							venue: 'ICED 23'
+						},
+						{
+							authors: 'Nicholas Jennings, Ananya Nandy, Xinyi Zhu, Yuting Wang, Fanping Sui, James Smith, Björn Hartmann.',
+							title: 'GeneratiVR: Spatial Interactions in Virtual Reality to Explore Generative Design Spaces',
+							href: 'https://dl.acm.org/doi/abs/10.1145/3491101.3519616',
+							venue: 'CHI 2022 EA'
+						}
 					]
 				},
 				{
@@ -465,15 +637,15 @@
 					eyebrow: 'VR App',
 					title: 'BlossomVR',
 					image: 'images/blossom.png',
-					body: 'A Virtual Reality meditation app that lets users process their emotions through short minigames. On the Meta App Lab.',
+					body: 'BlossomVR is a Virtual Reality meditation app that allows users to process their emotions through short minigames. Find it on the Meta App Lab!',
 					links: [{ href: 'https://www.oculus.com/experiences/quest/9413401685396701/', label: 'App Lab' }]
 				},
 				{
 					section: 'projects',
-					eyebrow: 'VR System',
+					eyebrow: 'VR App',
 					title: 'TutoriVR',
 					image: 'images/tutori.png',
-					body: 'A robust, deployable VR-embedded tutorial system that supplements video tutorials with 3D and contextual aids directly in the user\'s VR environment.',
+					body: 'TutoriVR is a robust and deployable VR-embedded tutorial system that supplements video tutorials with 3D and contextual aids directly in the user\'s VR environment, based on the TutoriVR research study.',
 					links: [{ href: 'https://www.youtube.com/watch?v=CB_2tckiPLQ', label: 'Video' }]
 				},
 				{
@@ -481,7 +653,7 @@
 					eyebrow: 'Graphics',
 					title: 'Roman Candles',
 					image: 'images/night_firework002.gif',
-					body: 'Custom raytraced smoke rendering that handles arbitrary light sources. Fireworks are cool. Made for Foundations of Computer Graphics.',
+					body: 'Fireworks are cool. Creating a custom raytraced smoke rendering system that can handle an arbitrary number of light sources was tough but that\'s ok because fireworks are cool. Made for my Foundations of Computer Graphics class.',
 					links: [{ href: 'https://tcdanielh.github.io/WeaponizedRomanCandles/report.html', label: 'Writeup' }]
 				},
 				{
@@ -489,7 +661,7 @@
 					eyebrow: 'Game',
 					title: 'Minotaur',
 					image: 'images/minotaur.png',
-					body: 'A short adventure game about the myth of Theseus and the Minotaur. Random maze generation, wall-walking, full dialog system, spooky vibes. Made for my Greek and Roman Myths class.',
+					body: 'A short adventure game about the myth of Theseus and the Minotaur. It has random maze generation, wall-walking, a full dialog system, and spooky vibes! Made for my Greek and Roman Myths class.',
 					links: [{ href: 'https://frackfrick.itch.io/minotaur', label: 'itch.io' }]
 				},
 				{
@@ -497,7 +669,7 @@
 					eyebrow: 'Game',
 					title: 'Whale Snake',
 					image: 'images/whaleSnake.png',
-					body: 'A simple 3D snake game made for the Berkeley chapter of Upsilon Pi Epsilon. The club mascot is a whale, hence the whales.',
+					body: 'A simple 3D-snake game I made for the Berkeley chapter of the Upsilon Pi Epsilon Computer Science honors society. The club mascot is a whale, hence the whales.',
 					links: [{ href: 'https://frackfrick.itch.io/whale-snake', label: 'itch.io' }]
 				},
 				{
@@ -505,7 +677,7 @@
 					eyebrow: 'Game',
 					title: 'Super Mine Sweeper',
 					image: 'images/SMSBall.png',
-					body: 'Changing the topology of the surface you play Minesweeper on has interesting effects on gameplay and strategy — enough to turn this gimmick into an interesting gimmick.',
+					body: 'Changing the topology of the surface you play minesweeper has various interesting effects on gampeplay and strategy, which turns this gimmick into an interesting gimmick!',
 					links: [
 						{ href: 'https://www.youtube.com/embed/2nUMbJdhLXQ', label: 'Video' },
 						{ href: 'https://github.com/NicholasJJ/SuperMineSweeper', label: 'GitHub' }
@@ -516,7 +688,7 @@
 					eyebrow: 'Shader',
 					title: 'Kaleidoscope Raymarch',
 					image: 'images/keleidoscope.png',
-					body: 'A custom raymarching shader and collision detection system that lets the user "drag a hole around". My foray into shader development.',
+					body: 'This project uses a custom raymarching shader and collision detection system to let users "drag a hole around". This was my foray into shader development.',
 					links: [{ href: 'https://www.youtube.com/watch?v=shS5dpI74TE', label: 'Video' }]
 				},
 				{
@@ -524,7 +696,7 @@
 					eyebrow: 'Graphics',
 					title: 'ASCII Rasterizer',
 					image: 'images/ascii.png',
-					body: 'I was curious how cameras work in computers. I made this to check I understood. OpenGL is useful but ASCII is aesthetic.',
+					body: 'I was curious about how cameras work in computers, so I looked it up online. I made this to make sure I understood correctly. OpenGL might be "useful" but ASCII is aesthetic.',
 					links: [{ href: 'https://www.youtube.com/watch?v=JLC_KMDLvwI', label: 'Video' }]
 				},
 				{
@@ -532,7 +704,7 @@
 					eyebrow: 'VR Game',
 					title: 'Untitled VR Space Game',
 					image: 'images/VRSpace.png',
-					body: 'A space dogfighting game originally built for Google Cardboard, later ported to the Quest. Pew pew.',
+					body: 'A space dogfighting game made originally for the Google Cardboard and later for the Quest. Pew pew!',
 					links: [{ href: 'https://www.youtube.com/watch?v=EJ-vzFiydcM&t=15s', label: 'Video' }]
 				}
 			];
@@ -567,6 +739,14 @@
 			let currentStep = -1;
 			let rafPending = false;
 			let lastRenderedT = -1;
+			let simpleMode = false;
+			let userPrefersFractal = true;
+			const MOBILE_QUERY = window.matchMedia('(max-width: 768px)');
+			const FRACTAL_PREF_KEY = 'fractalMode';
+
+			function shouldUseSimpleLayout() {
+				return MOBILE_QUERY.matches || !userPrefersFractal;
+			}
 
 			function rotatePoint(x, y, angle) {
 				const c = Math.cos(angle);
@@ -646,9 +826,72 @@
 				baseOffsetY = (viewportHeight - fractalHeight * baseScale) / 2 - segmentBounds.minY * baseScale;
 
 				stepHeight = viewportHeight;
-				scrollTrack.style.height = ((CONTENT.length + 1) * stepHeight) + 'px';
+				if (simpleMode) {
+					scrollTrack.style.height = '0px';
+				} else {
+					scrollTrack.style.height = ((CONTENT.length + 1) * stepHeight) + 'px';
+				}
 
 				positionFlowers();
+			}
+
+			function getSimpleCurrentCard() {
+				if (!cardElements.length) return 0;
+				const target = window.scrollY + window.innerHeight / 2;
+				let best = 0;
+				for (let i = 0; i < cardElements.length; i++) {
+					if (cardElements[i].offsetTop > target) break;
+					best = i;
+				}
+				return best;
+			}
+
+			function applyLayout() {
+				const next = shouldUseSimpleLayout();
+				if (next === simpleMode && document.body.classList.contains('simple-layout') === next) {
+					return false;
+				}
+
+				let anchorIdx = 0;
+				if (cardElements.length && stepHeight > 0) {
+					anchorIdx = simpleMode
+						? getSimpleCurrentCard()
+						: Math.max(0, Math.min(CONTENT.length - 1, Math.round(window.scrollY / stepHeight)));
+				}
+
+				simpleMode = next;
+				document.body.classList.toggle('simple-layout', simpleMode);
+
+				resizeCanvas();
+
+				requestAnimationFrame(() => {
+					if (simpleMode) {
+						const card = cardElements[anchorIdx];
+						if (card) {
+							window.scrollTo({ top: Math.max(0, card.offsetTop - 100), behavior: 'auto' });
+						}
+					} else {
+						window.scrollTo({ top: anchorIdx * stepHeight, behavior: 'auto' });
+					}
+					lastRenderedT = -1;
+					requestRender();
+				});
+
+				return true;
+			}
+
+			function setupModeToggle() {
+				const toggle = document.getElementById('fractalModeToggle');
+				if (!toggle) return;
+				let stored = null;
+				try { stored = localStorage.getItem(FRACTAL_PREF_KEY); } catch (e) {}
+				userPrefersFractal = stored !== 'off';
+				toggle.checked = userPrefersFractal;
+				toggle.addEventListener('change', () => {
+					userPrefersFractal = toggle.checked;
+					try { localStorage.setItem(FRACTAL_PREF_KEY, userPrefersFractal ? 'on' : 'off'); } catch (e) {}
+					applyLayout();
+				});
 			}
 
 			function positionFlowers() {
@@ -797,7 +1040,19 @@
 
 			function createCards() {
 				cardLayer.innerHTML = '';
+				let lastSection = null;
 				cardElements = CONTENT.map((item, idx) => {
+					if (item.section !== lastSection) {
+						lastSection = item.section;
+						if (item.section !== 'home') {
+							const header = document.createElement('h2');
+							header.className = 'section-header';
+							header.dataset.section = item.section;
+							header.textContent = item.section;
+							cardLayer.appendChild(header);
+						}
+					}
+
 					const card = document.createElement('article');
 					card.className = 'fractal-card';
 					card.dataset.step = String(idx);
@@ -844,6 +1099,35 @@
 						card.appendChild(links);
 					}
 
+					if (item.citations && item.citations.length) {
+						const ul = document.createElement('ul');
+						item.citations.forEach((cite) => {
+							const li = document.createElement('li');
+							if (cite.authors) {
+								li.appendChild(document.createTextNode(cite.authors + ' '));
+							}
+							const a = document.createElement('a');
+							a.href = cite.href;
+							a.textContent = cite.title;
+							if (/^https?:/.test(cite.href)) {
+								a.target = '_blank';
+								a.rel = 'noopener';
+							}
+							li.appendChild(a);
+							if (cite.venue) {
+								li.appendChild(document.createTextNode(' ' + cite.venue));
+							}
+							if (cite.note) {
+								li.appendChild(document.createTextNode(' '));
+								const strong = document.createElement('strong');
+								strong.textContent = cite.note;
+								li.appendChild(strong);
+							}
+							ul.appendChild(li);
+						});
+						card.appendChild(ul);
+					}
+
 					cardLayer.appendChild(card);
 					return card;
 				});
@@ -875,6 +1159,15 @@
 			}
 
 			function scrollToStep(step) {
+				if (simpleMode) {
+					const card = cardElements[step];
+					if (!card) return;
+					window.scrollTo({
+						top: Math.max(0, card.offsetTop - 100),
+						behavior: 'smooth'
+					});
+					return;
+				}
 				window.scrollTo({
 					top: step * stepHeight,
 					behavior: 'smooth'
@@ -962,6 +1255,10 @@
 
 			function render() {
 				rafPending = false;
+				if (simpleMode) {
+					renderSimple();
+					return;
+				}
 				const scrollY = window.scrollY || window.pageYOffset;
 				const t = Math.max(0, Math.min(CONTENT.length - 0.001, scrollY / stepHeight));
 				if (t === lastRenderedT) return;
@@ -987,6 +1284,16 @@
 				}
 			}
 
+			function renderSimple() {
+				const activeIdx = getSimpleCurrentCard();
+				const colors = getSectionColorAt(activeIdx);
+				applyColors(colors);
+				const activeSection = CONTENT[activeIdx] ? CONTENT[activeIdx].section : 'home';
+				document.querySelectorAll('nav a[data-section]').forEach((a) => {
+					a.classList.toggle('current', a.dataset.section === activeSection);
+				});
+			}
+
 			function requestRender() {
 				if (rafPending) return;
 				rafPending = true;
@@ -996,10 +1303,7 @@
 			function scrollToSection(section) {
 				const step = SECTIONS[section];
 				if (step === undefined) return;
-				window.scrollTo({
-					top: step * stepHeight,
-					behavior: 'smooth'
-				});
+				scrollToStep(step);
 			}
 
 			function handleNavClicks() {
@@ -1015,9 +1319,7 @@
 			function handleInitialHash() {
 				const hash = window.location.hash.replace('#', '');
 				if (SECTIONS[hash] !== undefined) {
-					requestAnimationFrame(() => {
-						window.scrollTo({ top: SECTIONS[hash] * stepHeight, behavior: 'auto' });
-					});
+					requestAnimationFrame(() => scrollToStep(SECTIONS[hash]));
 				}
 			}
 
@@ -1025,17 +1327,26 @@
 				const built = buildSegments(BASE_LENGTH, RATIO, ITERATIONS + 1);
 				segments = built.segments;
 				segmentBounds = built.bounds;
+				let stored = null;
+				try { stored = localStorage.getItem(FRACTAL_PREF_KEY); } catch (e) {}
+				userPrefersFractal = stored !== 'off';
+				simpleMode = shouldUseSimpleLayout();
+				document.body.classList.toggle('simple-layout', simpleMode);
 				resizeCanvas();
 				createCards();
 				createProgressDots();
+				setupModeToggle();
 				handleNavClicks();
 				handleInitialHash();
 
 				window.addEventListener('scroll', requestRender, { passive: true });
 				window.addEventListener('resize', () => {
-					const prevT = stepHeight > 0 ? (window.scrollY / stepHeight) : 0;
+					if (applyLayout()) return;
+					const prevT = !simpleMode && stepHeight > 0 ? (window.scrollY / stepHeight) : 0;
 					resizeCanvas();
-					window.scrollTo({ top: prevT * stepHeight, behavior: 'auto' });
+					if (!simpleMode) {
+						window.scrollTo({ top: prevT * stepHeight, behavior: 'auto' });
+					}
 					lastRenderedT = -1;
 					requestRender();
 				});
