@@ -514,8 +514,15 @@
 			const BASE_LENGTH = 720;
 			const ITERATIONS = 6;
 			const INITIAL_ZOOM = 1.25;
-			const STEP_ZOOM = 2 / RATIO;
-			const CHILD_OFFSET = (RATIO * BASE_LENGTH) / 4;
+			// We zoom into the top/bottom branch of one of the SIDE vertical
+			// bisectors (the bisectors of the left/right half-copies), not the
+			// central one. That target copy has scale RATIO/4 = 0.125, so each
+			// step zooms 4/RATIO = 8x. SIDE_OFFSET is the horizontal distance to
+			// a half-copy's bisector; CHILD_OFFSET is the vertical distance from
+			// there to that copy's top/bottom branch.
+			const STEP_ZOOM = 4 / RATIO;
+			const SIDE_OFFSET = BASE_LENGTH / 4;
+			const CHILD_OFFSET = (RATIO * BASE_LENGTH) / 8;
 			const ROTATION_DIR = -1;
 			const CHILD_SIDE = 1;
 			const CARD_ANCHOR = { x: 0, y: 0 };
@@ -950,12 +957,22 @@
 				const rotFlip = Math.floor(stepIdx / 2) % 2 === 0 ? 1 : -1;
 				return {
 					rotationDir: ROTATION_DIR * rotFlip,
-					childSide: CHILD_SIDE * sideFlip
+					childSide: CHILD_SIDE * sideFlip,
+					// Which side bisector to dive into. Alternating each step makes
+					// the path cycle through all four targets (right-bottom,
+					// left-top, right-top, left-bottom), spreading the cards out.
+					horizSide: stepIdx % 2 === 0 ? 1 : -1
 				};
 			}
 
 			function getChildAnchor(params) {
-				return { x: 0, y: -params.childSide * params.rotationDir * CHILD_OFFSET };
+				// Center of the chosen side copy's top/bottom branch: offset
+				// horizontally to that half-copy's bisector, then vertically to
+				// its top or bottom branch.
+				return {
+					x: params.horizSide * SIDE_OFFSET,
+					y: -params.childSide * params.rotationDir * CHILD_OFFSET
+				};
 			}
 
 			function getStepTransform(progress, params) {
@@ -963,18 +980,20 @@
 					return { angle: 0, zoom: INITIAL_ZOOM, translateX: 0, translateY: 0 };
 				}
 				const childCenter = getChildAnchor(params);
-				const fullAngle = params.rotationDir * Math.PI / 2;
-				const fullZoom = INITIAL_ZOOM * STEP_ZOOM;
-				const rotatedCenter = rotatePoint(childCenter.x, childCenter.y, fullAngle);
-				const targetCenter = {
-					x: rotatedCenter.x * fullZoom,
-					y: rotatedCenter.y * fullZoom
-				};
+				const angle = params.rotationDir * Math.PI / 2 * progress;
+				const zoom = Math.exp(Math.log(STEP_ZOOM) * progress) * INITIAL_ZOOM;
+				// Move the focus point straight from the current card (origin) to
+				// the next card (childCenter), then derive the translation so that
+				// focus stays at screen center. The camera dollies directly between
+				// cards and rotates smoothly, instead of swinging wide. Endpoints
+				// (progress 0 and 1) match the old transform, so each step's
+				// self-similar zoom still lines up seamlessly.
+				const focus = rotatePoint(childCenter.x * progress, childCenter.y * progress, angle);
 				return {
-					angle: fullAngle * progress,
-					zoom: Math.exp(Math.log(STEP_ZOOM) * progress) * INITIAL_ZOOM,
-					translateX: targetCenter.x * progress,
-					translateY: targetCenter.y * progress
+					angle: angle,
+					zoom: zoom,
+					translateX: focus.x * zoom,
+					translateY: focus.y * zoom
 				};
 			}
 
@@ -1248,10 +1267,32 @@
 			}
 
 			function cardOpacity(d) {
-				if (d <= -1 || d >= 1) return 0;
-				if (d < 0) return smoothstep(-1, -0.1, d);
+				// Cards you haven't reached yet (d < 0) are fully present from
+				// the start, nested deep in the fractal — they don't fade in.
+				// A card only fades out once you scroll past it (d > 0.75).
+				if (d >= 1) return 0;
 				if (d > 0.75) return 1 - smoothstep(0.75, 1, d);
 				return 1;
+			}
+
+			// Anchor (position) + accumulated rotation of card `currentStep + n`
+			// within the current step's frame. n <= 0 is the current/past card at
+			// the frame origin. n >= 1 walks one child-step deeper per level, so
+			// upcoming cards spiral inward toward the fractal's center, each
+			// rotated and scaled down by STEP_ZOOM relative to the one before.
+			function getNestedAnchor(currentStep, n) {
+				if (n < 1) return { x: CARD_ANCHOR.x, y: CARD_ANCHOR.y, angle: 0 };
+				let ax = 0, ay = 0, angle = 0;
+				for (let k = currentStep + n - 1; k >= currentStep; k--) {
+					const kParams = getStepParams(k);
+					const fullAngle = kParams.rotationDir * Math.PI / 2;
+					const childAnchor = getChildAnchor(kParams);
+					const rot = rotatePoint(ax, ay, -fullAngle);
+					ax = childAnchor.x + rot.x / STEP_ZOOM;
+					ay = childAnchor.y + rot.y / STEP_ZOOM;
+					angle -= fullAngle;
+				}
+				return { x: ax, y: ay, angle: angle };
 			}
 
 			function updateCards(t) {
@@ -1259,7 +1300,6 @@
 				const currentProgress = t - currentStep;
 				const params = getStepParams(currentStep);
 				const transform = getStepTransform(currentProgress, params);
-				const approachAnchor = getChildAnchor(params);
 
 				// A box is "settled" only when the page is centered on it (not
 				// mid-spiral). Only then may it scroll its own overflow.
@@ -1282,15 +1322,17 @@
 
 					card.style.visibility = 'visible';
 
-					const anchor = d >= 0 ? CARD_ANCHOR : approachAnchor;
+					const anchor = getNestedAnchor(currentStep, i - currentStep);
 					const pos = applyTransform(anchor.x, anchor.y, transform);
 					const screen = fractalToScreen(pos.x, pos.y);
 
 					const offsetX = screen.x - viewportWidth / 2;
 					const offsetY = screen.y - viewportHeight / 2;
 
-					const cardZoom = Math.max(0.25, Math.min(1.5, Math.pow(STEP_ZOOM, d)));
-					const cardAngle = params.rotationDir * Math.PI / 2 * d;
+					// No lower clamp: deep upcoming cards genuinely shrink toward
+					// zero so the nesting reads as depth instead of a stack.
+					const cardZoom = Math.min(1.5, Math.pow(STEP_ZOOM, d));
+					const cardAngle = transform.angle + anchor.angle;
 
 					card.style.opacity = String(opacity);
 					card.style.transform =
