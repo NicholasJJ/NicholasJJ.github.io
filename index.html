@@ -95,7 +95,15 @@
 			display: flex;
 			flex-direction: column;
 			gap: 0.75rem;
-			overflow: auto;
+			overflow: hidden;
+		}
+
+		/* In fractal mode, only the box you've settled on may scroll its own
+		   content. Every other box stays locked so the wheel drives the page
+		   (the spiral) instead of getting captured by an inner scrollbar.
+		   Reaching the end of a long box chains out to the page scroll. */
+		.fractal-card.is-active {
+			overflow-y: auto;
 		}
 
 		.fractal-card h2 {
@@ -524,7 +532,7 @@
 					eyebrow: 'Hi, I\'m',
 					title: 'Nicholas Jennings',
 					image: 'images/faces/faceBeard.png',
-					body: 'I\'m an incoming PhD student in Computer Science at Stanford. I work on generative runtime adaptations of application behaviors based on user action, how this generation can be controlled, and what all that means for the ecosystems and communities that form around generative apps. I\'m also interested in Games, Computer Graphics, and XR.',
+					body: 'I\'m a PhD student in Computer Science at Stanford, advised by Professors Kayvon Fatahalian and Maneesh Agrawala. I work on generative runtime adaptations of application behaviors based on user action, how this generation can be controlled, and what all that means for the ecosystems and communities that form around generative apps. I\'m also interested in Games, Computer Graphics, and XR.',
 					links: [
 						{ href: 'https://www.linkedin.com/in/nicholasjohnjennings/', label: 'LinkedIn' },
 						{ href: 'CV.pdf', label: 'CV' },
@@ -537,6 +545,18 @@
 					eyebrow: 'All this info needs a SECOND CARD',
 					title: 'Background',
 					body: 'I have an MS in Computer Science from UC Berkeley, where I was advised by Björn Hartmann. My undergrad was also at Berkeley (CS + Applied Math double major). Previously I was a computer scientist at Sandia National Labs, and a SWE intern at AWS where I did full stack mobile development related to error handling and gamification.'
+				},
+				{
+					section: 'research',
+					eyebrow: 'C&C \'26',
+					title: 'InfiniteCATs',
+					image: 'images/infCATsTeaser.png',
+					body: "Large Language Models are increasingly intermediating creative processes, shaping the spaces that users explore, and how they reach them. We lack insight into how LLM-intermediation is implicitly shaping exploration and sense-making processes, and how users develop strategies to navigate this. Players of semantic crafting games like Infinite Craft merge concepts to craft new ones, from a constrained set of initial options, where each combination result is determined by an LLM. This simple, yet expressively open-ended substrate presents a well-scoped environment for observing LLM-mediated creative activity and sensemaking behaviors. We built InfiniteCATs, a semantic crafting system used to collect and analyze thousands of actions from 17 users in a preliminary study. We demonstrate InfiniteCATs' potential as a testbed for capturing user and community-level creative interactions through LLM-mediated semantic space. Future work includes further developing these data collection and analysis tools as open research community resources, for application in larger-scale behavioral studies.",
+					links: [
+						{ href: 'https://dl.acm.org/doi/10.1145/3803784.3816855', label: 'Short Paper Coming Soon!' },
+						{ href: 'https://cats.snailbunny.site/demo', label: 'Demo Website'},
+						{ href: 'https://cats.snailbunny.site/', label: 'Repo' }
+					]
 				},
 				{
 					section: 'research',
@@ -601,6 +621,12 @@
 					eyebrow: 'Publications',
 					title: 'Full Publication List',
 					citations: [
+						{
+							authors: 'Nicholas Jennings*, Shm Garanganao Almeda*, Björn Hartmann, and Max Kreminski',
+							title: 'InfiniteCATs: Semantic Crafting as a Substrate for Creative Activity Tracing',
+							href: 'https://dl.acm.org/doi/10.1145/3803784.3816855',
+							venue: 'C&C\'26'
+						},
 						{
 							authors: 'Nicholas Jennings, Andrii Matviienko.',
 							title: 'Reimagining Go-Go: Effects of Signifiers in VR Selection Techniques',
@@ -753,6 +779,7 @@
 			let cardElements = [];
 			let currentStep = -1;
 			let rafPending = false;
+			let snapTimer = null;
 			let lastRenderedT = -1;
 			let simpleMode = false;
 			let userPrefersFractal = true;
@@ -1189,6 +1216,25 @@
 				});
 			}
 
+			// When the user stops scrolling, glide the page to the nearest box
+			// so it always comes to rest centered and upright (not mid-spiral).
+			function snapToNearest() {
+				if (simpleMode || stepHeight <= 0) return;
+				const target = Math.max(0, Math.min(
+					CONTENT.length - 1,
+					Math.round(window.scrollY / stepHeight)
+				));
+				const targetY = target * stepHeight;
+				if (Math.abs(window.scrollY - targetY) < 1) return; // already aligned
+				window.scrollTo({ top: targetY, behavior: 'smooth' });
+			}
+
+			function scheduleSnap() {
+				if (simpleMode) return;
+				if (snapTimer) clearTimeout(snapTimer);
+				snapTimer = setTimeout(snapToNearest, 140);
+			}
+
 			function scrollMiniListIntoView(el) {
 				const cTop = progressDots.scrollTop;
 				const cBottom = cTop + progressDots.clientHeight;
@@ -1215,9 +1261,15 @@
 				const transform = getStepTransform(currentProgress, params);
 				const approachAnchor = getChildAnchor(params);
 
+				// A box is "settled" only when the page is centered on it (not
+				// mid-spiral). Only then may it scroll its own overflow.
+				const settledIdx = Math.round(t);
+				const settled = Math.abs(t - settledIdx) < 0.04;
+
 				for (let i = 0; i < cardElements.length; i++) {
 					const d = t - i;
 					const card = cardElements[i];
+					card.classList.toggle('is-active', settled && i === settledIdx);
 					const opacity = cardOpacity(d);
 
 					if (opacity <= 0.01) {
@@ -1354,7 +1406,10 @@
 				handleNavClicks();
 				handleInitialHash();
 
-				window.addEventListener('scroll', requestRender, { passive: true });
+				window.addEventListener('scroll', () => {
+					requestRender();
+					scheduleSnap();
+				}, { passive: true });
 				window.addEventListener('resize', () => {
 					if (applyLayout()) return;
 					const prevT = !simpleMode && stepHeight > 0 ? (window.scrollY / stepHeight) : 0;
