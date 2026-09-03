@@ -1,0 +1,46 @@
+---
+layout: base
+---
+{%- assign minutes = nil -%}
+<article class="post">
+	<nav class="post-breadcrumb" aria-label="Topic">
+		<a href="{{ '/blog/' | relative_url }}">Blog</a>
+		{%- assign acc = "" -%}
+		{%- for c in page.categories -%}
+			{%- if acc == "" -%}{%- assign acc = c -%}{%- else -%}{%- assign acc = acc | append: "-" | append: c -%}{%- endif -%}
+			<span class="sep">/</span>
+			<a href="{{ '/blog/#topic-' | append: acc | relative_url }}">{{ c }}</a>
+		{%- endfor -%}
+	</nav>
+
+	<h1 class="post-title">{{ page.title }}</h1>
+
+	<p class="post-meta">
+		<time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %-d, %Y" }}</time>
+		<span class="sep">·</span>
+		<span>{% include reading-time.html content=content %} min read</span>
+	</p>
+
+	{%- if page.image %}
+	<img class="post-hero" src="{{ page.image | relative_url }}" alt="{{ page.image_alt | default: page.title }}">
+	{%- endif %}
+
+	<div class="post-body">
+		{{ content }}
+	</div>
+</article>
+
+<nav class="post-nav" aria-label="More posts">
+	{%- if page.previous %}
+	<a class="post-nav-link prev" href="{{ page.previous.url | relative_url }}">
+		<span class="post-nav-label">Previous</span>
+		<span class="post-nav-title">{{ page.previous.title }}</span>
+	</a>
+	{%- endif %}
+	{%- if page.next %}
+	<a class="post-nav-link next" href="{{ page.next.url | relative_url }}">
+		<span class="post-nav-label">Next</span>
+		<span class="post-nav-title">{{ page.next.title }}</span>
+	</a>
+	{%- endif %}
+</nav>

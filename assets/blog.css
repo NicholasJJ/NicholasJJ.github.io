@@ -1,0 +1,433 @@
+/* ---------------------------------------------------------------------------
+   Blog presentation. Deliberately independent of the fractal engine: markdown
+   in _posts/ is pure content, this file is the only thing that styles it, and
+   post pages render fine with index.html's fractal removed entirely.
+   --------------------------------------------------------------------------- */
+
+body#blog {
+	background-color: #eaf7ef;
+	/* The fixed header is `position: fixed` with a wrapping nav, so its height
+	   changes with viewport width (160px wide, 229px once the nav wraps) and a
+	   single constant cannot clear it — the wavy clip-path edge ends up painted
+	   over the content.
+
+	   The literals below are the measured heights for each regime, so the page
+	   is correct with no JS at all. assets/header-offset.js then publishes the
+	   live measurement as --header-offset. max() means that value can only ever
+	   *raise* the padding: a stale or missing measurement can never pull the
+	   content back under the header. */
+	padding-top: max(var(--header-offset, 0px), 160px);
+}
+
+@media (max-width: 768px) {
+	body#blog {
+		padding-top: max(var(--header-offset, 0px), 229px);
+	}
+}
+
+/* Below ~368px the nav wraps onto a further row and the header grows again. */
+@media (max-width: 368px) {
+	body#blog {
+		padding-top: max(var(--header-offset, 0px), 272px);
+	}
+}
+
+body#blog .flower-mask {
+	background-color: #c9ecd8;
+}
+
+.site-title-link,
+.site-title-link:hover {
+	color: inherit;
+	text-decoration: none;
+}
+
+.blog-main {
+	max-width: 46rem;
+	margin: 0 auto;
+	padding: 2.5rem 0 5rem;
+}
+
+/* ---------- index ---------- */
+
+.blog-intro {
+	margin-bottom: 2.5rem;
+}
+
+.blog-intro h1 {
+	font-size: clamp(2rem, 5vw, 3rem);
+	margin: 0 0 0.4rem;
+	color: #223;
+}
+
+.blog-intro p {
+	margin: 0;
+	color: #4a5a52;
+	font-size: 1.02rem;
+}
+
+.topic-group {
+	margin-bottom: 2.25rem;
+	scroll-margin-top: 120px;
+}
+
+.topic-heading {
+	font-size: 0.78rem;
+	text-transform: uppercase;
+	letter-spacing: 0.14em;
+	font-weight: 700;
+	color: #5c7a6b;
+	margin: 0 0 0.75rem;
+	padding-bottom: 0.4rem;
+	border-bottom: 1px solid rgba(60, 90, 75, 0.18);
+}
+
+.topic-heading .depth-sep {
+	opacity: 0.45;
+	margin: 0 0.35rem;
+}
+
+.post-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.85rem;
+}
+
+.post-card {
+	display: block;
+	padding: 1rem 1.15rem;
+	background: rgba(255, 255, 255, 0.86);
+	border: 1px solid rgba(60, 90, 75, 0.16);
+	border-radius: 14px;
+	transition: transform 0.15s, box-shadow 0.15s;
+	color: inherit;
+}
+
+.post-card:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 10px 26px rgba(30, 60, 45, 0.13);
+	color: inherit;
+}
+
+.post-card h2 {
+	margin: 0 0 0.3rem;
+	font-size: 1.18rem;
+	color: #1d3a2c;
+	line-height: 1.25;
+}
+
+.post-card p {
+	margin: 0 0 0.5rem;
+	font-size: 0.94rem;
+	line-height: 1.55;
+	color: #43554b;
+}
+
+.post-card .post-meta {
+	margin: 0;
+}
+
+.post-meta {
+	font-size: 0.82rem;
+	color: #6a7f74;
+	letter-spacing: 0.02em;
+}
+
+.post-meta .sep {
+	margin: 0 0.45rem;
+	opacity: 0.5;
+}
+
+/* ---------- single post ---------- */
+
+.post-breadcrumb {
+	font-size: 0.8rem;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	font-weight: 600;
+	margin-bottom: 1.1rem;
+	color: #5c7a6b;
+}
+
+.post-breadcrumb .sep {
+	margin: 0 0.4rem;
+	opacity: 0.5;
+}
+
+.post-title {
+	font-size: clamp(1.9rem, 4.6vw, 2.9rem);
+	line-height: 1.12;
+	margin: 0 0 0.6rem;
+	color: #1d3a2c;
+	letter-spacing: -0.015em;
+}
+
+.post .post-meta {
+	margin: 0 0 2rem;
+}
+
+.post-hero {
+	width: 100%;
+	border-radius: 16px;
+	margin-bottom: 2rem;
+	display: block;
+}
+
+.post-body {
+	font-size: 1.06rem;
+	line-height: 1.72;
+	color: #26332c;
+}
+
+.post-body > * + * {
+	margin-top: 1.15rem;
+}
+
+.post-body h2 {
+	font-size: 1.5rem;
+	margin-top: 2.4rem;
+	color: #1d3a2c;
+	line-height: 1.25;
+}
+
+.post-body h3 {
+	font-size: 1.2rem;
+	margin-top: 1.9rem;
+	color: #1d3a2c;
+}
+
+.post-body img {
+	max-width: 100%;
+	height: auto;
+	border-radius: 12px;
+	display: block;
+	margin: 1.6rem auto;
+}
+
+.post-body figure {
+	margin: 1.8rem 0;
+}
+
+.post-body figcaption {
+	font-size: 0.86rem;
+	color: #6a7f74;
+	text-align: center;
+	margin-top: 0.5rem;
+}
+
+.post-body blockquote {
+	margin: 1.6rem 0;
+	padding: 0.4rem 0 0.4rem 1.1rem;
+	border-left: 3px solid rgba(60, 130, 100, 0.4);
+	color: #43554b;
+	font-style: italic;
+}
+
+.post-body code {
+	background: rgba(60, 90, 75, 0.1);
+	padding: 0.12em 0.38em;
+	border-radius: 5px;
+	font-size: 0.9em;
+}
+
+.post-body pre {
+	background: #1d2a23;
+	color: #e8f2ec;
+	padding: 1rem 1.15rem;
+	border-radius: 12px;
+	overflow-x: auto;
+	font-size: 0.88rem;
+	line-height: 1.55;
+}
+
+.post-body pre code {
+	background: none;
+	padding: 0;
+	color: inherit;
+}
+
+.post-body ul,
+.post-body ol {
+	padding-left: 1.4rem;
+}
+
+.post-body li + li {
+	margin-top: 0.35rem;
+}
+
+.post-body hr {
+	border: 0;
+	border-top: 1px solid rgba(60, 90, 75, 0.2);
+	margin: 2.5rem 0;
+}
+
+.post-body table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 0.94rem;
+}
+
+.post-body th,
+.post-body td {
+	border: 1px solid rgba(60, 90, 75, 0.2);
+	padding: 0.5rem 0.7rem;
+	text-align: left;
+}
+
+/* ---------- post-to-post nav ---------- */
+
+.post-nav {
+	display: flex;
+	gap: 1rem;
+	margin-top: 3.5rem;
+	flex-wrap: wrap;
+}
+
+.post-nav-link {
+	flex: 1 1 12rem;
+	padding: 0.85rem 1rem;
+	border: 1px solid rgba(60, 90, 75, 0.16);
+	border-radius: 12px;
+	background: rgba(255, 255, 255, 0.72);
+	color: inherit;
+}
+
+.post-nav-link:hover {
+	background: rgba(255, 255, 255, 0.95);
+	color: inherit;
+}
+
+.post-nav-link.next {
+	text-align: right;
+}
+
+.post-nav-label {
+	display: block;
+	font-size: 0.7rem;
+	text-transform: uppercase;
+	letter-spacing: 0.12em;
+	color: #6a7f74;
+	margin-bottom: 0.2rem;
+}
+
+.post-nav-title {
+	display: block;
+	font-weight: 600;
+	color: #1d3a2c;
+	line-height: 1.3;
+}
+
+/* ---------- popup footnotes ----------
+   Markdown keeps standard [^1] syntax; kramdown emits a normal endnote list at
+   the bottom. footnotes.js lifts those into click-to-open popups anchored at the
+   reference. Without JS the plain list at the bottom still works, so the content
+   degrades gracefully. */
+
+.fn-ref {
+	font-size: 0.72em;
+	line-height: 0;
+	vertical-align: super;
+}
+
+.fn-ref a,
+a.footnote {
+	display: inline-block;
+	min-width: 1.15em;
+	padding: 0 0.28em;
+	border-radius: 5px;
+	background: rgba(60, 130, 100, 0.16);
+	color: #0d6b52;
+	font-weight: 700;
+	text-align: center;
+	text-decoration: none;
+	transition: background 0.15s, color 0.15s;
+}
+
+.fn-ref a:hover,
+a.footnote:hover,
+a.footnote[aria-expanded="true"] {
+	background: #0d6b52;
+	color: #fff;
+}
+
+/* Only hidden once JS has successfully lifted the notes into popups. */
+body.fn-popups-ready .footnotes {
+	display: none;
+}
+
+.fn-popup {
+	position: absolute;
+	z-index: 1000;
+	max-width: min(22rem, calc(100vw - 2rem));
+	padding: 0.8rem 0.95rem;
+	background: #fffdf9;
+	border: 1px solid rgba(60, 90, 75, 0.22);
+	border-radius: 12px;
+	box-shadow: 0 14px 38px rgba(25, 50, 38, 0.22);
+	font-size: 0.92rem;
+	line-height: 1.6;
+	color: #26332c;
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(4px);
+	transition: opacity 0.14s ease, transform 0.14s ease, visibility 0.14s;
+}
+
+.fn-popup.is-open {
+	opacity: 1;
+	visibility: visible;
+	transform: translateY(0);
+}
+
+.fn-popup > *:first-child { margin-top: 0; }
+.fn-popup > *:last-child { margin-bottom: 0; }
+
+.fn-popup p { margin: 0 0 0.6rem; }
+.fn-popup p:last-child { margin-bottom: 0; }
+
+.fn-popup img {
+	max-width: 100%;
+	border-radius: 8px;
+	margin: 0.5rem 0 0;
+	display: block;
+}
+
+.fn-popup-arrow {
+	position: absolute;
+	width: 10px;
+	height: 10px;
+	background: #fffdf9;
+	border-left: 1px solid rgba(60, 90, 75, 0.22);
+	border-top: 1px solid rgba(60, 90, 75, 0.22);
+	transform: rotate(45deg);
+}
+
+.fn-popup.below .fn-popup-arrow { top: -6px; }
+.fn-popup.above .fn-popup-arrow { bottom: -6px; transform: rotate(225deg); }
+
+.fn-popup-close {
+	position: absolute;
+	top: 0.3rem;
+	right: 0.4rem;
+	border: 0;
+	background: none;
+	font-size: 1.05rem;
+	line-height: 1;
+	color: #6a7f74;
+	cursor: pointer;
+	padding: 0.2rem 0.3rem;
+	border-radius: 5px;
+}
+
+.fn-popup-close:hover {
+	background: rgba(60, 90, 75, 0.1);
+	color: #1d3a2c;
+}
+
+@media (max-width: 768px) {
+	.blog-main { padding: 1.5rem 0 4rem; }
+	.post-body { font-size: 1.01rem; }
+}

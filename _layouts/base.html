@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{% if page.title %}{{ page.title }} · {% endif %}{{ site.title }}</title>
+	<meta name="description" content="{{ page.description | default: page.excerpt | strip_html | strip_newlines | truncate: 160 | default: site.description }}">
+	<link rel="canonical" href="{{ page.url | absolute_url }}">
+	<link rel="stylesheet" href="{{ '/styles.css' | relative_url }}">
+	<link rel="stylesheet" href="{{ '/assets/blog.css' | relative_url }}">
+	<link rel="alternate" type="application/atom+xml" href="{{ '/blog/feed.xml' | relative_url }}" title="{{ site.title }}">
+	<meta name="theme-color" content="#90D7FF">
+</head>
+<body id="blog">
+	{% include header.html %}
+	<main class="blog-main">
+		{{ content }}
+	</main>
+	<script src="{{ '/assets/header-offset.js' | relative_url }}"></script>
+	<script src="{{ '/script.js' | relative_url }}"></script>
+	<script src="{{ '/assets/footnotes.js' | relative_url }}"></script>
+</body>
+</html>

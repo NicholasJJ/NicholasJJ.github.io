@@ -1,0 +1,58 @@
+title: "Nicholas Jennings"
+description: "Research, projects, and writing by Nicholas Jennings."
+url: "https://nicholasjj.github.io"
+baseurl: ""
+author: "Nicholas Jennings"
+
+# Topic hierarchy lives in each post's `categories`, and flows straight into
+# the URL: categories: [graphics, shaders] -> /blog/graphics/shaders/title/
+permalink: /blog/:categories/:title/
+
+# Ruby can default to US-ASCII locally, which breaks on any non-ASCII
+# character (GitHub Pages always builds as UTF-8).
+encoding: utf-8
+
+# The github-pages gem defaults to the jekyll-theme-primer theme, whose
+# SCSS we neither use nor want compiled. Disabling it keeps the output
+# clean and removes a locale-sensitive build step.
+theme: null
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+
+feed:
+  path: /blog/feed.xml
+
+# Words per minute used for the automatic reading-time estimate.
+reading_speed: 200
+
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+
+# NOTE: setting `exclude` replaces Jekyll's defaults, so the standard
+# tooling entries have to be repeated here explicitly.
+exclude:
+  - CLAUDE.md
+  - README.md
+  - .claude
+  - Gemfile
+  - Gemfile.lock
+  - gemfiles
+  - node_modules
+  - vendor
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+  - .sass-cache/
+  - .jekyll-cache/

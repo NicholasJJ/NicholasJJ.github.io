@@ -1,0 +1,28 @@
+---
+layout: null
+permalink: /blog/posts.json
+---
+{%- comment -%}
+Machine-readable manifest of every post. This is the ONLY contract between the
+blog content and the fractal engine in index.html: index.html fetches this file
+and turns each entry into a card. Drop the fractal and the blog still works;
+drop the blog and the fractal still works.
+{%- endcomment -%}
+{
+  "generated": {{ site.time | date_to_xmlschema | jsonify }},
+  "posts": [
+{%- for post in site.posts %}
+    {
+      "title": {{ post.title | jsonify }},
+      "url": {{ post.url | relative_url | jsonify }},
+      "date": {{ post.date | date: "%Y-%m-%d" | jsonify }},
+      "dateDisplay": {{ post.date | date: "%B %-d, %Y" | jsonify }},
+      "topics": {{ post.categories | jsonify }},
+      "topicPath": {{ post.categories | join: "/" | jsonify }},
+      "excerpt": {{ post.excerpt | strip_html | normalize_whitespace | strip | truncate: 240 | jsonify }},
+      "image": {% if post.image %}{{ post.image | relative_url | jsonify }}{% else %}null{% endif %},
+      "readingTime": {% include reading-time.html content=post.content %}
+    }{% unless forloop.last %},{% endunless %}
+{%- endfor %}
+  ]
+}

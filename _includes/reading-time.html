@@ -1,0 +1,8 @@
+{%- comment -%}
+Automatic reading-time estimate. Usage: {% include reading-time.html content=post.content %}
+Outputs a bare integer (minutes), ceiling-rounded, minimum 1.
+{%- endcomment -%}
+{%- assign _words = include.content | strip_html | number_of_words -%}
+{%- assign _speed = site.reading_speed | default: 200 -%}
+{%- assign _min = _words | plus: _speed | minus: 1 | divided_by: _speed -%}
+{%- if _min < 1 -%}1{%- else -%}{{ _min }}{%- endif -%}

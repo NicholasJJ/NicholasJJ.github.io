@@ -1,0 +1,63 @@
+---
+layout: base
+title: Blog
+permalink: /blog/
+description: "Writing by Nicholas Jennings, grouped by topic."
+---
+<div class="blog-intro">
+	<h1>Blog</h1>
+	<p>Notes on research, graphics, and whatever else I&rsquo;m building. Grouped by topic.</p>
+</div>
+
+{%- comment -%}
+Liquid has no nested-grouping primitive, so collect each post's full topic path
+("graphics/shaders"), de-duplicate, and render one group per distinct path.
+{%- endcomment -%}
+{%- assign path_str = "" -%}
+{%- for post in site.posts -%}
+	{%- if post.categories.size > 0 -%}
+		{%- assign p = post.categories | join: "/" -%}
+	{%- else -%}
+		{%- assign p = "uncategorized" -%}
+	{%- endif -%}
+	{%- assign path_str = path_str | append: p | append: "|" -%}
+{%- endfor -%}
+{%- assign paths = path_str | split: "|" | uniq | sort -%}
+
+{%- if paths.size == 0 %}
+<p class="post-meta">No posts yet. Add a markdown file to <code>_posts/</code> to get started.</p>
+{%- endif %}
+
+{%- for path in paths %}
+<section class="topic-group" id="topic-{{ path | replace: '/', '-' }}">
+	<h2 class="topic-heading">
+		{%- assign parts = path | split: "/" -%}
+		{%- for part in parts -%}
+			{%- unless forloop.first %}<span class="depth-sep">/</span>{% endunless -%}
+			{{ part }}
+		{%- endfor -%}
+	</h2>
+	<ul class="post-list">
+		{%- for post in site.posts %}
+			{%- if post.categories.size > 0 -%}
+				{%- assign p = post.categories | join: "/" -%}
+			{%- else -%}
+				{%- assign p = "uncategorized" -%}
+			{%- endif -%}
+			{%- if p == path %}
+		<li>
+			<a class="post-card" href="{{ post.url | relative_url }}">
+				<h2>{{ post.title }}</h2>
+				<p>{{ post.excerpt | strip_html | normalize_whitespace | strip | truncate: 190 }}</p>
+				<p class="post-meta">
+					<time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%B %-d, %Y" }}</time>
+					<span class="sep">·</span>
+					<span>{% include reading-time.html content=post.content %} min read</span>
+				</p>
+			</a>
+		</li>
+			{%- endif -%}
+		{%- endfor %}
+	</ul>
+</section>
+{%- endfor %}

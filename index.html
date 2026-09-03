@@ -122,6 +122,13 @@
 			margin: 0;
 		}
 
+		.fractal-card .card-meta {
+			font-size: 0.8rem;
+			color: #6a7f74;
+			letter-spacing: 0.02em;
+			margin: 0;
+		}
+
 		.fractal-card p {
 			margin: 0;
 			font-size: 0.95rem;
@@ -530,10 +537,15 @@
 			const SECTION_COLORS = {
 				home: { bg: '#f0e7db', flower: '#eed7b8', stroke: '#4a3a2a' },
 				research: { bg: '#e6e6fa', flower: '#c8c8f8', stroke: '#3a3055' },
-				projects: { bg: '#e0ffff', flower: '#b3f8f8', stroke: '#1f5a5c' }
+				projects: { bg: '#e0ffff', flower: '#b3f8f8', stroke: '#1f5a5c' },
+				blog: { bg: '#eaf7ef', flower: '#c9ecd8', stroke: '#1f5a44' }
 			};
 
-			const CONTENT = [
+			// Canonical section order in the spiral. 'blog' only materialises once
+			// blog/posts.json has been fetched and its cards appended to CONTENT.
+			const SECTION_ORDER = ['home', 'research', 'projects', 'blog'];
+
+			let CONTENT = [
 				{
 					section: 'home',
 					eyebrow: 'Hi, I\'m',
@@ -758,13 +770,20 @@
 				}
 			];
 
-			const SECTIONS = (function () {
+			function computeSections() {
 				const map = {};
 				CONTENT.forEach((item, idx) => {
 					if (map[item.section] === undefined) map[item.section] = idx;
 				});
 				return map;
-			})();
+			}
+
+			let SECTIONS = computeSections();
+
+			// Sections that actually have cards right now, in spiral order.
+			function activeSections() {
+				return SECTION_ORDER.filter((s) => SECTIONS[s] !== undefined);
+			}
 
 			const canvas = document.getElementById('fractalBg');
 			const context = canvas.getContext('2d');
@@ -785,6 +804,9 @@
 			let viewportHeight = 0;
 			let stepHeight = 0;
 			let cardElements = [];
+			// Optional per-step branch pin, keyed by card index. Lets every post in
+			// one topic dive into the same limb of the fractal.
+			let stepBranches = [];
 			let currentStep = -1;
 			let rafPending = false;
 			let snapTimer = null;
@@ -956,8 +978,22 @@
 			function getStepParams(stepIdx) {
 				const sideFlip = stepIdx % 2 === 0 ? 1 : -1;
 				const rotFlip = Math.floor(stepIdx / 2) % 2 === 0 ? 1 : -1;
+				const rotationDir = ROTATION_DIR * rotFlip;
+
+				// A card may pin which branch this step dives into. getChildAnchor
+				// derives y as -childSide * rotationDir * CHILD_OFFSET, so setting
+				// childSide = -v * rotationDir lands the dive on the requested side.
+				const branch = stepBranches[stepIdx];
+				if (branch) {
+					return {
+						rotationDir: rotationDir,
+						childSide: -branch.v * rotationDir,
+						horizSide: branch.h
+					};
+				}
+
 				return {
-					rotationDir: ROTATION_DIR * rotFlip,
+					rotationDir: rotationDir,
 					childSide: CHILD_SIDE * sideFlip,
 					// Which side bisector to dive into. Alternating each step makes
 					// the path cycle through all four targets (right-bottom,
@@ -1042,7 +1078,7 @@
 			}
 
 			function getSectionColorAt(t) {
-				const sectionList = ['home', 'research', 'projects'];
+				const sectionList = activeSections();
 				const starts = sectionList.map((s) => SECTIONS[s]);
 				const colors = sectionList.map((s) => ({
 					bg: hexToRgb(SECTION_COLORS[s].bg),
@@ -1130,6 +1166,13 @@
 					const title = document.createElement('h2');
 					title.textContent = item.title;
 					card.appendChild(title);
+
+					if (item.meta) {
+						const meta = document.createElement('p');
+						meta.className = 'card-meta';
+						meta.textContent = item.meta;
+						card.appendChild(meta);
+					}
 
 					if (item.image) {
 						const img = document.createElement('img');
@@ -1344,7 +1387,7 @@
 			}
 
 			function updateNav(t) {
-				const sectionList = ['home', 'research', 'projects'];
+				const sectionList = activeSections();
 				let activeSection = sectionList[0];
 				for (let i = 0; i < sectionList.length; i++) {
 					if (t + 0.4 >= SECTIONS[sectionList[i]]) activeSection = sectionList[i];
@@ -1433,6 +1476,97 @@
 				}
 			}
 
+			// ---- blog ------------------------------------------------------------
+			// Content lives in _posts/*.md; Jekyll renders blog/posts.json from it.
+			// The fractal never parses markdown, it only consumes that manifest, so
+			// the aesthetic and the writing stay completely decoupled.
+
+			// The four dive targets: {left,right} side bisector x {top,bottom} branch.
+			const BLOG_BRANCHES = [
+				{ h: 1, v: 1 }, { h: -1, v: 1 }, { h: 1, v: -1 }, { h: -1, v: -1 }
+			];
+
+			function branchForTopic(topicPath) {
+				let hash = 0;
+				for (let i = 0; i < topicPath.length; i++) {
+					hash = (hash * 31 + topicPath.charCodeAt(i)) >>> 0;
+				}
+				return BLOG_BRANCHES[hash % BLOG_BRANCHES.length];
+			}
+
+			// Pin every post sharing a topic to the same branch, so a topic occupies
+			// one visible limb of the fractal.
+			function assignBlogBranches() {
+				stepBranches = [];
+				CONTENT.forEach((item, idx) => {
+					if (item.section === 'blog' && item.topicPath) {
+						stepBranches[idx] = branchForTopic(item.topicPath);
+					}
+				});
+			}
+
+			function blogCardsFrom(posts) {
+				// Group by topic path so a topic's posts are contiguous when scrolling.
+				const byTopic = {};
+				const order = [];
+				posts.forEach((post) => {
+					const key = post.topicPath || 'uncategorized';
+					if (!byTopic[key]) { byTopic[key] = []; order.push(key); }
+					byTopic[key].push(post);
+				});
+				order.sort();
+
+				const cards = [];
+				order.forEach((key) => {
+					byTopic[key].forEach((post) => {
+						cards.push({
+							section: 'blog',
+							topicPath: key,
+							eyebrow: key.split('/').join(' \u00b7 '),
+							title: post.title,
+							image: post.image || undefined,
+							meta: post.dateDisplay + ' \u00b7 ' + post.readingTime + ' min read',
+							body: post.excerpt,
+							links: [{ href: post.url, label: 'Read post' }]
+						});
+					});
+				});
+				return cards;
+			}
+
+			function loadBlogPosts() {
+				fetch('blog/posts.json', { cache: 'no-cache' })
+					.then((res) => (res.ok ? res.json() : null))
+					.then((data) => {
+						if (!data || !data.posts || !data.posts.length) return;
+
+						const cards = blogCardsFrom(data.posts);
+						cards.push({
+							section: 'blog',
+							eyebrow: 'Archive',
+							title: 'All posts, by topic',
+							body: 'Browse the full archive, grouped by the topic hierarchy.',
+							links: [{ href: 'blog/', label: 'Open the blog' }]
+						});
+
+						// Blog cards append at the end, so existing card indices (and any
+						// current scroll position) stay valid across the rebuild.
+						CONTENT = CONTENT.concat(cards);
+						SECTIONS = computeSections();
+						assignBlogBranches();
+
+						createCards();
+						createProgressDots();
+						resizeCanvas();
+						handleInitialHash();
+						lastRenderedT = -1;
+						requestRender();
+					})
+					.catch(() => {
+						// No manifest (e.g. served without Jekyll) - site works unchanged.
+					});
+			}
+
 			function init() {
 				const built = buildSegments(BASE_LENGTH, RATIO, ITERATIONS + 1);
 				segments = built.segments;
@@ -1448,6 +1582,7 @@
 				setupModeToggle();
 				handleNavClicks();
 				handleInitialHash();
+				loadBlogPosts();
 
 				window.addEventListener('scroll', () => {
 					requestRender();
