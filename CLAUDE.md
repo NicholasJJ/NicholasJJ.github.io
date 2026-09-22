@@ -112,8 +112,12 @@ The puzzles are made elsewhere (the SteamedHams repo's `dailygen publish … --o
   in, `'sokoban-player-host'` out) for the timer, result, undo/reset buttons
   and forwarded keys.
 - **Routes** are query strings: `/sokobandl/` (today's puzzle, else the most
-  recent one before today, else the first day), `?d=YYYY-MM-DD` (the share
-  link) and `?archive`. There is deliberately **no date gating** for now.
+  recent one before today; before launch, a "first puzzle arrives on…" note),
+  `?d=YYYY-MM-DD` (the share link) and `?archive`.
+- **Gating**: the archive and the prev/next links only ever cover days whose
+  date has arrived (local time). A direct `?d=` link to a later day still
+  loads (the filename is guessable anyway), it just isn't listed or linked
+  until its date. The whole week is committed and pushed ahead of time.
 - **Timer** follows crossword rules: it starts when the day's (non-tutorial)
   board appears, survives reloads, and stops on the win. Per-day progress is
   in `localStorage` under `sokobandl:<date>`.
@@ -136,8 +140,17 @@ The puzzles are made elsewhere (the SteamedHams repo's `dailygen publish … --o
   fixed top-left, linking home) instead of `header.html`; the face switcher
   in `script.js` still works on it. `assets/sokobandl.css` sets its own small
   `padding-top` and hides `styles.css`'s fixed blue `html::before` strip.
+- **Touch**: the sealed page's own touch handlers are passive, so a swipe on
+  the board would also scroll the page (or pull-to-refresh / back-navigate).
+  `assets/sokobandl.js` injects `touch-action: none` and a non-passive
+  `touchmove` preventDefault into the embedded document on load (same
+  origin, nothing in the embed scrolls), and the CSS sets `touch-action:
+  none` on the iframe and `overscroll-behavior: none` on html/body.
 - `_layouts/base.html` gained optional front matter hooks for this page:
-  `body_id`, `header`, `noindex`, `stylesheets`, `scripts`.
+  `body_id`, `html_class`, `header`, `theme_color`, `noindex`, `stylesheets`,
+  `scripts`. `html_class: sokobandl` is what lets the CSS hide the site's
+  `html::before` blue strip without `:has()`; `theme_color` recolours the
+  mobile browser toolbar, which otherwise stays the header blue.
 
 ### Design System
 

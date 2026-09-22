@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"{% if page.html_class %} class="{{ page.html_class }}"{% endif %}>
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="{{ '/styles.css' | relative_url }}">
 	<link rel="stylesheet" href="{{ '/assets/blog.css' | relative_url }}">
 	<link rel="alternate" type="application/atom+xml" href="{{ '/blog/feed.xml' | relative_url }}" title="{{ site.title }}">
-	<meta name="theme-color" content="#90D7FF">
+	<meta name="theme-color" content="{{ page.theme_color | default: '#90D7FF' }}">
 	{%- if page.noindex %}
 	<meta name="robots" content="noindex, nofollow">
 	{%- endif %}

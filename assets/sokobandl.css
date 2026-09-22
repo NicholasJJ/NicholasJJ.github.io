@@ -9,9 +9,18 @@
    --------------------------------------------------------------------------- */
 
 /* styles.css paints a fixed blue strip above the site header via html::before
-   (overscroll cover); with no header here it is just a stray band. */
-html:has(body#sokobandl)::before {
+   (overscroll cover); with no header here it is just a stray band. The page
+   sets html_class: sokobandl so this needs no :has() support. */
+html.sokobandl::before {
 	display: none;
+}
+
+/* Touch: a swipe on the board must move the player, not the page. No
+   pull-to-refresh on a swipe down, no browser back/forward on a swipe
+   sideways, and (below) no panning from touches that start on the board. */
+html.sokobandl,
+body#sokobandl {
+	overscroll-behavior: none;
 }
 
 body#sokobandl {
@@ -88,7 +97,8 @@ body#sokobandl {
 	.sok-splash {
 		white-space: normal;
 		width: max-content;
-		max-width: 38vw;
+		max-width: 26vw;
+		font-size: 0.33em;
 	}
 }
 
@@ -116,6 +126,10 @@ body#sokobandl {
 	   backdrop behind an iframe whose scheme differs from its host element,
 	   so declare the same here to keep the embed's transparent body see-through. */
 	color-scheme: dark;
+	/* Touches that begin inside the frame never pan the parent page; the
+	   host script also injects the same rule plus a touchmove guard into the
+	   embedded document (same origin) for browsers that ignore this here. */
+	touch-action: none;
 }
 
 /* ---------- controls ---------- */
@@ -270,10 +284,6 @@ body#sokobandl {
 
 .sok-archive .is-done .sok-arch-meta {
 	color: #2f7a4a;
-}
-
-.sok-archive .is-upcoming {
-	opacity: 0.7;
 }
 
 @media (max-width: 768px) {

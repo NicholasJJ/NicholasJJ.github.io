@@ -4,8 +4,10 @@
    The puzzle generator publishes ./index.json (a manifest of days) and one
    sealed, self-contained page per day under ./levels/. This script:
 
-     1. reads the manifest and picks a day (today's, ?d=YYYY-MM-DD, or the
-        nearest one — no date gating for now, it's a soft launch);
+     1. reads the manifest and picks a day: today's (or the latest before
+        it), or ?d=YYYY-MM-DD. Only days up to today are *listed* (archive,
+        prev/next); a typed ?d= link to a later day still loads, which is fine
+        for a puzzle;
      2. shows that day's page in the iframe with ?embed=1 and sizes the frame
         from the page's own `size` messages;
      3. listens to the page (postMessage, source 'sokoban-player') for the
@@ -98,26 +100,25 @@
 		$('sokEmpty').hidden = false;
 	}
 
-	function showArchive(days) {
+	// `listed` is always the released days only (date <= today), oldest first.
+	function showArchive(listed) {
 		document.title = 'sokobandl · archive';
-		$('sokDate').textContent = 'every puzzle so far';
+		$('sokDate').textContent = listed.length ? 'every puzzle so far' : 'no puzzles yet';
 		var nav = $('sokNav');
 		var latest = el('a', null, '← back to today');
 		latest.href = './';
 		nav.appendChild(latest);
 
 		var list = $('sokArchive');
-		days.slice().reverse().forEach(function (day) {
+		listed.slice().reverse().forEach(function (day) {
 			var rec = loadRecord(day.date);
 			var li = el('li');
 			var a = el('a');
 			a.href = dayLink(day.date);
 			if (rec.finishedAt) a.classList.add('is-done');
-			if (day.date > today) a.classList.add('is-upcoming');
 			a.appendChild(el('span', 'sok-arch-date', day.date));
 			var meta = summary(day);
 			if (rec.finishedAt) meta += ' · ✓ ' + fmt(rec.elapsedMs) + ', ' + rec.moves + ' moves';
-			else if (day.date > today) meta += ' · upcoming';
 			a.appendChild(el('span', 'sok-arch-meta', meta));
 			li.appendChild(a);
 			list.appendChild(li);
@@ -125,9 +126,16 @@
 		list.hidden = false;
 	}
 
-	function showDay(days, idx) {
-		var day = days[idx], prev = days[idx - 1], next = days[idx + 1];
-		var isLatest = idx === days.length - 1;
+	function showDay(day, listed) {
+		// Neighbours come from the released days only, so the page never links
+		// forward to an unreleased puzzle (even when viewing one directly).
+		var prev = null, next = null;
+		listed.forEach(function (d) {
+			if (d.date < day.date) prev = d;
+			else if (d.date > day.date && !next) next = d;
+		});
+		var latest = listed[listed.length - 1];
+		var isLatest = !!latest && latest.date === day.date;
 		document.title = 'sokobandl · ' + day.date;
 
 		var dateEl = $('sokDate');
@@ -144,7 +152,7 @@
 		if (prev) { var p = el('a', null, '← ' + prev.date); p.href = dayLink(prev.date); nav.appendChild(p); }
 		var arch = el('a', null, 'archive'); arch.href = '?archive'; nav.appendChild(arch);
 		if (next) { var n = el('a', null, next.date + ' →'); n.href = dayLink(next.date); nav.appendChild(n); }
-		else if (!isLatest) { var l = el('a', null, 'latest'); l.href = './'; nav.appendChild(l); }
+		else if (!isLatest && latest) { var l = el('a', null, 'latest'); l.href = './'; nav.appendChild(l); }
 
 		$('sokGame').hidden = false;
 		runGame(day);
@@ -312,6 +320,20 @@
 		});
 		window.addEventListener('blur', stopRewind);
 
+		// The sealed page's own touch handlers are passive, so a swipe on the
+		// board would also scroll (or pull-to-refresh, or back-navigate) the
+		// page around it. The pages are same-origin, so add a guard from here
+		// rather than changing them: nothing inside the embed needs to scroll,
+		// so a touch that moves inside it is always the player's swipe.
+		function lockTouches(doc) {
+			if (!doc || !doc.body || doc.body.dataset.sokLocked) return;
+			doc.body.dataset.sokLocked = '1';
+			var style = doc.createElement('style');
+			style.textContent = 'html, body, canvas { touch-action: none; overscroll-behavior: none; }';
+			doc.head.appendChild(style);
+			doc.addEventListener('touchmove', function (e) { e.preventDefault(); }, { passive: false });
+		}
+
 		// Keys pressed while the shell (not the iframe) has focus still play.
 		var KEYS = {
 			arrowup: { type: 'move', dir: 0 }, w: { type: 'move', dir: 0 },
@@ -330,7 +352,10 @@
 		});
 
 		frame.addEventListener('load', function () {
-			try { frame.contentWindow.focus(); } catch (e) { /* cross-origin guard */ }
+			try {
+				frame.contentWindow.focus();
+				lockTouches(frame.contentDocument);
+			} catch (e) { /* cross-origin guard */ }
 		});
 
 		if (rec.finishedAt) finish(rec.moves, rec.undos);   // beaten on this device already: show it, let them replay
@@ -347,24 +372,31 @@
 		.then(function (res) { if (!res.ok) throw new Error('index.json ' + res.status); return res.json(); })
 		.then(function (manifest) {
 			var days = (manifest.days || []).slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; });
+			// The gate: only days whose date has arrived (local time) are listed
+			// or linked. The whole week is committed ahead; this is what hides it.
+			var listed = days.filter(function (d) { return d.date <= today; });
 			var params = new URLSearchParams(location.search);
 
-			if (params.has('archive')) { showArchive(days); return; }
-			if (!days.length) { showEmpty('No puzzles published yet.'); return; }
+			if (params.has('archive')) { showArchive(listed); return; }
 
 			var want = params.get('d');
-			var idx;
+			var day;
 			if (want) {
-				idx = days.findIndex(function (d) { return d.date === want; });
-				if (idx < 0) { showEmpty('There is no puzzle for ' + want + '.'); return; }
+				// A direct link loads even before its date (guessable filename,
+				// fine for a puzzle); it just is not listed anywhere until then.
+				day = days.find(function (d) { return d.date === want; });
+				if (!day) { showEmpty('There is no puzzle for ' + want + '.'); return; }
 			} else {
-				// Today's if it exists, else the most recent one before today,
-				// else (before launch) the very first day.
-				idx = -1;
-				days.forEach(function (d, i) { if (d.date <= today) idx = i; });
-				if (idx < 0) idx = 0;
+				day = listed[listed.length - 1];   // today's, or the latest before it
+				if (!day) {
+					var first = days[0];
+					showEmpty(first
+						? 'The first puzzle arrives on ' + prettyDate(first.date) + '.'
+						: 'No puzzles published yet.');
+					return;
+				}
 			}
-			showDay(days, idx);
+			showDay(day, listed);
 		})
 		.catch(function (err) {
 			showEmpty('The puzzle list could not be loaded (' + err.message + ').');
