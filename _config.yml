@@ -38,12 +38,19 @@ defaults:
       type: posts
     values:
       layout: post
+  # The daily sokoban is a soft launch: keep its shell and every sealed level
+  # page out of the sitemap (the shell also sets noindex in its front matter).
+  - scope:
+      path: "sokobandl"
+    values:
+      sitemap: false
 
 # NOTE: setting `exclude` replaces Jekyll's defaults, so the standard
 # tooling entries have to be repeated here explicitly.
 exclude:
   - CLAUDE.md
   - README.md
+  - sokobandl/README.md
   - .claude
   - Gemfile
   - Gemfile.lock

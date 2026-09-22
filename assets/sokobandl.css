@@ -1,0 +1,318 @@
+/* ---------------------------------------------------------------------------
+   sokobandl — the daily sokoban shell (sokobandl/index.html).
+
+   The board itself is painted by the day's sealed page inside an iframe and is
+   deliberately dark; everything around it is this file, in the site's pastel
+   palette. The page has no site header: `header: corner` in its front matter
+   swaps it for _includes/corner-face.html, the face alone in the top-left
+   corner linking home, styled at the bottom of this file.
+   --------------------------------------------------------------------------- */
+
+/* styles.css paints a fixed blue strip above the site header via html::before
+   (overscroll cover); with no header here it is just a stray band. */
+html:has(body#sokobandl)::before {
+	display: none;
+}
+
+body#sokobandl {
+	background-color: #f9e7ee;
+	/* No fixed header to clear, just the corner face. */
+	padding-top: 2.5rem;
+	--sok-ink: #3b2438;
+	--sok-muted: #7a5f74;
+	--sok-accent: var(--SatPurple, #9B50CE);
+	--sok-card: rgba(255, 255, 255, 0.86);
+	--sok-line: rgba(90, 50, 85, 0.18);
+}
+
+.sok {
+	color: var(--sok-ink);
+	text-align: center;
+}
+
+.sok-intro h1 {
+	font-size: clamp(2rem, 5vw, 3rem);
+	margin: 0 0 0.2rem;
+	letter-spacing: 0.04em;
+}
+
+.sok-intro h1 a,
+.sok-intro h1 a:hover {
+	color: inherit;
+	text-decoration: none;
+}
+
+/* The splash: yellow, tilted, pulsing text, Minecraft style. Its centre sits
+   on the title's top-right corner at every width (translate(-50%, -50%) from
+   left:100% / top:0), tilted clockwise. Words come from assets/sokobandl-text.js. */
+.sok-intro h1 {
+	position: relative;
+	display: inline-block;
+}
+
+.sok-splash {
+	--sok-tilt: 18deg;
+	--sok-place: translate(-50%, -50%);
+	position: absolute;
+	left: 100%;
+	top: 0;
+	font-size: 0.36em;
+	font-weight: 700;
+	line-height: 1.1;
+	letter-spacing: 0.01em;
+	white-space: nowrap;
+	text-align: center;
+	color: #ffea00;
+	text-shadow: 2px 2px 0 #3b2438, -1px -1px 0 #3b2438, 1px -1px 0 #3b2438, -1px 1px 0 #3b2438;
+	transform-origin: center;
+	transform: var(--sok-place) rotate(var(--sok-tilt));
+	animation: sok-splash 0.45s ease-in-out infinite alternate;
+	pointer-events: none;
+}
+
+.sok-splash:empty {
+	display: none;
+}
+
+@keyframes sok-splash {
+	from { transform: var(--sok-place) rotate(var(--sok-tilt)) scale(1); }
+	to   { transform: var(--sok-place) rotate(var(--sok-tilt)) scale(1.09); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.sok-splash { animation: none; }
+}
+
+@media (max-width: 768px) {
+	/* Same anchor on a phone, but let long ones wrap so they stay on screen. */
+	.sok-splash {
+		white-space: normal;
+		width: max-content;
+		max-width: 38vw;
+	}
+}
+
+/* ---------- the board ---------- */
+
+.sok-board {
+	display: flex;
+	justify-content: center;
+	margin: 0 auto;
+	max-width: 760px;
+	padding: 0.6rem 0.4rem;
+	border-radius: 18px;
+	background: var(--sok-card);
+	border: 1px solid var(--sok-line);
+	box-shadow: 0 10px 26px rgba(80, 30, 70, 0.10);
+}
+
+#sokFrame {
+	display: block;
+	border: 0;
+	width: 100%;
+	height: 360px;
+	background: transparent;
+	/* The sealed page declares color-scheme: dark. Browsers paint an opaque
+	   backdrop behind an iframe whose scheme differs from its host element,
+	   so declare the same here to keep the embed's transparent body see-through. */
+	color-scheme: dark;
+}
+
+/* ---------- controls ---------- */
+
+.sok-controls {
+	display: flex;
+	justify-content: center;
+	gap: 0.7rem;
+	margin: 0.9rem 0 0.4rem;
+}
+
+.sok button {
+	font: inherit;
+	font-size: 0.95rem;
+	color: var(--sok-ink);
+	background: var(--sok-card);
+	border: 1px solid var(--sok-line);
+	border-radius: 999px;
+	padding: 0.55rem 1.15rem;
+	cursor: pointer;
+	transition: transform 0.12s, box-shadow 0.12s, background 0.12s;
+	/* The undo button is held down to rewind: no text selection, no
+	   long-press callout, and no scroll stealing the pointer mid-hold. */
+	user-select: none;
+	-webkit-user-select: none;
+	-webkit-touch-callout: none;
+	touch-action: none;
+}
+
+.sok button:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 6px 16px rgba(80, 30, 70, 0.14);
+}
+
+.sok button:active,
+.sok button.is-held {
+	transform: translateY(0);
+	background: #efe0ea;
+	box-shadow: none;
+}
+
+.sok-glyph {
+	font-size: 1.1em;
+	line-height: 1;
+	margin-right: 0.15em;
+}
+
+.sok-status {
+	min-height: 1.4em;
+	margin: 0.4rem 0 0;
+	font-size: 1rem;
+	font-variant-numeric: tabular-nums;
+}
+
+.sok-status b {
+	color: var(--sok-accent);
+	font-weight: 600;
+}
+
+.sok-status.is-dead {
+	color: #a3383c;
+}
+
+/* ---------- result ---------- */
+
+.sok-result {
+	max-width: 32rem;
+	margin: 0.9rem auto 0;
+	padding: 0.9rem 1.1rem;
+	background: var(--sok-card);
+	border: 1px solid var(--sok-line);
+	border-radius: 14px;
+}
+
+.sok-result p {
+	margin: 0 0 0.6rem;
+	font-size: 1rem;
+}
+
+.sok-result-actions {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 0.6rem;
+	flex-wrap: wrap;
+}
+
+.sok-copied {
+	font-size: 0.85rem;
+	color: var(--sok-muted);
+}
+
+.sok-help {
+	margin: 1.4rem auto 0;
+	max-width: 32rem;
+	font-size: 0.82rem;
+	line-height: 1.6;
+	color: var(--sok-muted);
+}
+
+.sok-help b {
+	color: var(--sok-ink);
+	font-weight: 600;
+}
+
+/* ---------- archive / empty ---------- */
+
+.sok-empty {
+	color: var(--sok-muted);
+	margin: 2rem 0;
+}
+
+.sok-archive {
+	list-style: none;
+	padding: 0;
+	margin: 0 auto;
+	max-width: 32rem;
+	text-align: left;
+	display: flex;
+	flex-direction: column;
+	gap: 0.6rem;
+}
+
+.sok-archive a {
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	gap: 0.8rem;
+	padding: 0.75rem 1rem;
+	background: var(--sok-card);
+	border: 1px solid var(--sok-line);
+	border-radius: 12px;
+	color: inherit;
+	text-decoration: none;
+	transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.sok-archive a:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 10px 26px rgba(80, 30, 70, 0.13);
+}
+
+.sok-archive .sok-arch-date {
+	font-weight: 600;
+}
+
+.sok-archive .sok-arch-meta {
+	font-size: 0.85rem;
+	color: var(--sok-muted);
+	text-align: right;
+}
+
+.sok-archive .is-done .sok-arch-meta {
+	color: #2f7a4a;
+}
+
+.sok-archive .is-upcoming {
+	opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+	.sok-board {
+		padding: 0.4rem 0.2rem;
+		border-radius: 14px;
+	}
+	.sok button {
+		padding: 0.7rem 1.4rem;
+	}
+}
+
+/* ---------- the corner face (in place of the site header) ---------- */
+
+.corner-face {
+	position: fixed;
+	top: 10px;
+	left: 14px;
+	z-index: 10;
+	display: block;
+	line-height: 0;
+	transition: transform 0.15s;
+}
+
+.corner-face:hover {
+	transform: translateY(-2px);
+}
+
+.corner-face .face-container {
+	width: 106px;
+	height: 60px;
+}
+
+@media (max-width: 768px) {
+	body#sokobandl {
+		padding-top: 3.5rem;
+	}
+	.corner-face .face-container {
+		width: 78px;
+		height: 44px;
+	}
+}

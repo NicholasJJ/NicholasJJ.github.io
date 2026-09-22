@@ -1,8 +1,9 @@
 // Select all face images
 const faceImages = document.querySelectorAll('.face');
 
-// Keep track of the current visible image index
-let currentIndex = 0;
+// Keep track of the current visible image index (whichever image the markup
+// marks .active, so the first click never leaves two faces showing)
+let currentIndex = Math.max(0, Array.from(faceImages).findIndex(f => f.classList.contains('active')));
 
 // Function to switch to a new random image
 function switchRandomImage() {

@@ -1,0 +1,60 @@
+---
+layout: base
+title: sokobandl
+permalink: /sokobandl/
+description: "A small sokoban puzzle every day."
+body_id: sokobandl
+header: corner
+noindex: true
+sitemap: false
+stylesheets:
+  - /assets/sokobandl.css
+scripts:
+  - /assets/sokobandl-text.js
+  - /assets/sokobandl.js
+---
+{%- comment -%}
+The daily sokoban shell. Everything dynamic lives in assets/sokobandl.js: it
+reads ./index.json (written by the puzzle generator, see README.md in this
+folder), shows one day's sealed page in the iframe, and talks to it over
+postMessage for the timer, the result and the undo/reset buttons.
+
+Routes: /sokobandl/            today's puzzle (or the nearest one)
+        /sokobandl/?d=YYYY-MM-DD  a specific day (the share link)
+        /sokobandl/?archive     every day
+{%- endcomment %}
+<div class="sok">
+	<div class="sok-intro">
+		<h1><a href="./">sokobandl (beta)</a><span class="sok-splash" id="sokSplash" aria-hidden="true"></span></h1>
+		<p class="sok-tagline">daily block-pushing puzzles</p>
+	</div>
+
+	<p class="sok-date" id="sokDate"></p>
+	<nav class="sok-nav" id="sokNav" aria-label="days"></nav>
+
+	<div class="sok-game" id="sokGame" hidden>
+		<div class="sok-board">
+			<iframe id="sokFrame" title="today's puzzle" allowtransparency="true"></iframe>
+		</div>
+		<div class="sok-controls">
+			<button type="button" id="sokUndo" title="undo (hold to rewind)"><span class="sok-glyph">&#x21B6;</span> undo</button>
+			<button type="button" id="sokReset" title="restart the level"><span class="sok-glyph">&#x21BB;</span> reset</button>
+		</div>
+		<p class="sok-status" id="sokStatus"></p>
+		<div class="sok-result" id="sokResult" hidden>
+			<p id="sokResultText"></p>
+			<div class="sok-result-actions">
+				<button type="button" id="sokCopy">copy result</button>
+				<button type="button" id="sokShare" hidden>share</button>
+				<span class="sok-copied" id="sokCopied" aria-live="polite"></span>
+			</div>
+		</div>
+		<p class="sok-help">
+			<b>Arrows / WASD</b> move &middot; <b>Z</b> undo &middot; <b>R</b> restart &middot; swipe on the board to move.
+			Hold <b>undo</b>, or rest two fingers beside the board, to rewind.
+		</p>
+	</div>
+
+	<p class="sok-empty" id="sokEmpty" hidden></p>
+	<ol class="sok-archive" id="sokArchive" hidden></ol>
+</div>

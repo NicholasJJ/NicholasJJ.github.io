@@ -1,0 +1,234 @@
+{
+  "schemaVersion": 1,
+  "name": "sokobondl",
+  "generatedAt": "2026-09-22T21:30:40.2531980Z",
+  "days": [
+    {
+      "date": "2026-09-28",
+      "file": "levels/2026-09-28.html",
+      "weekId": "W21",
+      "day": 0,
+      "title": "Day 1 Mon",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 1,
+      "mechanics": [],
+      "tutorials": [],
+      "publishedAt": "2026-09-22T16:57:21.9128620Z"
+    },
+    {
+      "date": "2026-09-29",
+      "file": "levels/2026-09-29.html",
+      "weekId": "W21",
+      "day": 1,
+      "title": "Day 2 Tue",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 1,
+      "mechanics": [],
+      "tutorials": [],
+      "publishedAt": "2026-09-22T16:57:21.9128620Z"
+    },
+    {
+      "date": "2026-09-30",
+      "file": "levels/2026-09-30.html",
+      "weekId": "W21",
+      "day": 2,
+      "title": "Day 3 Wed",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 1,
+      "mechanics": [],
+      "tutorials": [],
+      "publishedAt": "2026-09-22T16:57:21.9128620Z"
+    },
+    {
+      "date": "2026-10-01",
+      "file": "levels/2026-10-01.html",
+      "weekId": "W21",
+      "day": 3,
+      "title": "Day 4 Thu",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 2,
+      "mechanics": [
+        "slide"
+      ],
+      "tutorials": [
+        "slide"
+      ],
+      "publishedAt": "2026-09-22T16:57:21.9128620Z"
+    },
+    {
+      "date": "2026-10-02",
+      "file": "levels/2026-10-02.html",
+      "weekId": "W21",
+      "day": 4,
+      "title": "Day 5 Fri",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 1,
+      "mechanics": [
+        "slide"
+      ],
+      "tutorials": [],
+      "publishedAt": "2026-09-22T16:57:21.9128620Z"
+    },
+    {
+      "date": "2026-10-03",
+      "file": "levels/2026-10-03.html",
+      "weekId": "W21",
+      "day": 5,
+      "title": "Day 6 Sat",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 2,
+      "mechanics": [
+        "slide",
+        "fight"
+      ],
+      "tutorials": [
+        "fight"
+      ],
+      "publishedAt": "2026-09-22T16:57:21.9128620Z"
+    },
+    {
+      "date": "2026-10-04",
+      "file": "levels/2026-10-04.html",
+      "weekId": "W21",
+      "day": 6,
+      "title": "Day 7 Sun",
+      "w": 7,
+      "h": 6,
+      "boxes": 3,
+      "levels": 2,
+      "mechanics": [
+        "slide",
+        "fight",
+        "fall"
+      ],
+      "tutorials": [
+        "fall"
+      ],
+      "publishedAt": "2026-09-22T16:57:21.9128620Z"
+    },
+    {
+      "date": "2026-10-05",
+      "file": "levels/2026-10-05.html",
+      "weekId": "W20",
+      "day": 0,
+      "title": "Day 1 Mon",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 1,
+      "mechanics": [],
+      "tutorials": [],
+      "publishedAt": "2026-09-22T21:30:40.2531980Z"
+    },
+    {
+      "date": "2026-10-06",
+      "file": "levels/2026-10-06.html",
+      "weekId": "W20",
+      "day": 1,
+      "title": "Day 2 Tue",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 2,
+      "mechanics": [
+        "slide"
+      ],
+      "tutorials": [
+        "slide"
+      ],
+      "publishedAt": "2026-09-22T21:30:40.2531980Z"
+    },
+    {
+      "date": "2026-10-07",
+      "file": "levels/2026-10-07.html",
+      "weekId": "W20",
+      "day": 2,
+      "title": "Day 3 Wed",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 1,
+      "mechanics": [
+        "slide"
+      ],
+      "tutorials": [],
+      "publishedAt": "2026-09-22T21:30:40.2531980Z"
+    },
+    {
+      "date": "2026-10-08",
+      "file": "levels/2026-10-08.html",
+      "weekId": "W20",
+      "day": 3,
+      "title": "Day 4 Thu",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 1,
+      "mechanics": [
+        "slide"
+      ],
+      "tutorials": [],
+      "publishedAt": "2026-09-22T21:30:40.2531980Z"
+    },
+    {
+      "date": "2026-10-09",
+      "file": "levels/2026-10-09.html",
+      "weekId": "W20",
+      "day": 4,
+      "title": "Day 5 Fri",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 1,
+      "mechanics": [
+        "slide"
+      ],
+      "tutorials": [],
+      "publishedAt": "2026-09-22T21:30:40.2531980Z"
+    },
+    {
+      "date": "2026-10-10",
+      "file": "levels/2026-10-10.html",
+      "weekId": "W20",
+      "day": 5,
+      "title": "Day 6 Sat",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 1,
+      "mechanics": [
+        "slide"
+      ],
+      "tutorials": [],
+      "publishedAt": "2026-09-22T21:30:40.2531980Z"
+    },
+    {
+      "date": "2026-10-11",
+      "file": "levels/2026-10-11.html",
+      "weekId": "W20",
+      "day": 6,
+      "title": "Day 7 Sun",
+      "w": 7,
+      "h": 6,
+      "boxes": 3,
+      "levels": 1,
+      "mechanics": [
+        "slide"
+      ],
+      "tutorials": [],
+      "publishedAt": "2026-09-22T21:30:40.2531980Z"
+    }
+  ]
+}

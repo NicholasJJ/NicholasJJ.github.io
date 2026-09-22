@@ -1,0 +1,14 @@
+{%- comment -%}
+A minimal stand-in for header.html: just the face, fixed in the top-left
+corner, linking home. Used by pages that set `header: corner` in their front
+matter (the daily sokoban). The .face-container / .face markup is what
+script.js's face switcher expects, so clicking it still cycles faces.
+{%- endcomment -%}
+<a class="corner-face" href="{{ '/' | relative_url }}" aria-label="Nicholas Jennings — home">
+	<div class="face-container">
+		<img src="{{ '/images/faces/faceClean.png' | relative_url }}" class="face" alt="">
+		<img src="{{ '/images/faces/faceBeard.png' | relative_url }}" class="face active" alt="">
+		<img src="{{ '/images/faces/faceVR.png' | relative_url }}" class="face" alt="">
+		<img src="{{ '/images/faces/faceWiz.png' | relative_url }}" class="face" alt="">
+	</div>
+</a>

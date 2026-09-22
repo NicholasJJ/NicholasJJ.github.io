@@ -19,6 +19,7 @@ body#blog {
 	padding-top: max(var(--header-offset, 0px), 160px);
 }
 
+
 @media (max-width: 768px) {
 	body#blog {
 		padding-top: max(var(--header-offset, 0px), 229px);

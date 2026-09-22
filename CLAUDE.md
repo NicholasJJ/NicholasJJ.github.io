@@ -89,6 +89,56 @@ child anchor is exactly `(h * SIDE_OFFSET, v * CHILD_OFFSET)` **regardless of
 step parity** — which is what makes a topic occupy one limb no matter where it
 lands in scroll order.
 
+### The Daily Sokoban (`sokobandl/`)
+
+An unlisted daily puzzle at `/sokobandl/`. It is a soft launch: **nothing on
+the main page or in the nav links to it**, the shell is `noindex`, and the
+whole folder is kept out of the sitemap via a `_config.yml` default.
+
+The puzzles are made elsewhere (the SteamedHams repo's `dailygen publish … --out
+<site>/sokobandl`); this repo only shows them. The handover contract is in
+[`sokobandl/README.md`](sokobandl/README.md) and must not change:
+
+- `sokobandl/index.json` is the manifest (one entry per day, oldest first) and
+  `sokobandl/levels/YYYY-MM-DD.html` is one **sealed, self-contained page per
+  day** (engine + renderer + rules + level). Never edit those pages; Jekyll
+  copies them verbatim (no front matter). Re-publishing a week only rewrites
+  that week's files and manifest entries.
+- The shell is `sokobandl/index.html` (a Jekyll page on `_layouts/base.html`
+  with `body_id: sokobandl`), styled by `assets/sokobandl.css` and driven by
+  `assets/sokobandl.js`. It fetches the manifest, iframes the day's page with
+  `?embed=1` (plus `&bar=0` on days with a single level; tutorial days keep the
+  level bar), and talks to it over `postMessage` (`source: 'sokoban-player'`
+  in, `'sokoban-player-host'` out) for the timer, result, undo/reset buttons
+  and forwarded keys.
+- **Routes** are query strings: `/sokobandl/` (today's puzzle, else the most
+  recent one before today, else the first day), `?d=YYYY-MM-DD` (the share
+  link) and `?archive`. There is deliberately **no date gating** for now.
+- **Timer** follows crossword rules: it starts when the day's (non-tutorial)
+  board appears, survives reloads, and stops on the win. Per-day progress is
+  in `localStorage` under `sokobandl:<date>`.
+- **Editable words** live in `assets/sokobandl-text.js` (loaded before the
+  main script): `splashes` (the yellow tilted Minecraft-style text next to
+  the title, one picked per visit) and `results` (tiers keyed by solve time,
+  `from`/`until` as `m:ss` or `h:mm:ss`, first match wins) whose `text` is
+  appended verbatim to the share sentence; the pick is stored in the day's
+  record as `tail` so the copied text stays stable.
+- **Rewind**: holding the undo button, or resting two fingers anywhere on the
+  shell outside the board, repeats undo. Touches *on* the board belong to the
+  iframe's own document and cannot be seen by the shell, so two fingers on the
+  board itself does nothing.
+- The iframe is sized from the embedded document's measured height (same
+  origin), not from the page's `size` message alone: that message reports
+  `scrollHeight`, which can never be smaller than the frame and would only
+  ever grow it.
+- **No site header.** `header: corner` in the front matter makes
+  `_layouts/base.html` include `_includes/corner-face.html` (the face alone,
+  fixed top-left, linking home) instead of `header.html`; the face switcher
+  in `script.js` still works on it. `assets/sokobandl.css` sets its own small
+  `padding-top` and hides `styles.css`'s fixed blue `html::before` strip.
+- `_layouts/base.html` gained optional front matter hooks for this page:
+  `body_id`, `header`, `noindex`, `stylesheets`, `scripts`.
+
 ### Design System
 
 - **Color-coded sections**: Each section (home / research / projects) has its own background + flower + fractal-stroke colors. In fractal mode these are defined in `SECTION_COLORS` in the inline script and interpolated as you scroll between sections. `styles.css` also defines per-page body-ID colors (`#index`, `#research`, `#projects`) used by the legacy/simple styling.
@@ -157,6 +207,7 @@ The site is hosted on GitHub Pages. Changes are deployed by:
 - `_posts/*.md` - blog posts (the only place blog content lives)
 - `_layouts/`, `_includes/` - blog page templates and the reading-time helper
 - `blog/index.html` - topic-grouped blog index; `blog/posts.json` - manifest the fractal consumes
+- `sokobandl/` - the daily sokoban: `index.html` shell, generator-owned `index.json` + `levels/*.html`, `README.md` (the handover contract); `assets/sokobandl.css` / `.js` are its styling and logic
 - `assets/blog.css` - all blog styling; `assets/footnotes.js` - popup footnotes
 - `_site/` - Jekyll build output, gitignored, never committed
 - `research.html`, `projects.html` - redirect stubs to `index.html#research` / `#projects`
