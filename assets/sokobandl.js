@@ -422,7 +422,7 @@
 			Trace.encode(recorder.trace).then(function (text) {
 				if (navigator.clipboard && navigator.clipboard.writeText) {
 					return navigator.clipboard.writeText(text).then(function () {
-						traceNote('copied (' + Math.round(text.length / 1024) + ' KB) — paste it to Nick');
+						traceNote('copied (' + Math.round(text.length / 1024) + ' KB)');
 					});
 				}
 				throw new Error('no clipboard');
