@@ -132,9 +132,11 @@ The puzzles are made elsewhere (the SteamedHams repo's `dailygen publish … --o
   inside the embedded document) and every page event (`move` with the
   page-reported `dir`, `undo`, `reset`, `dead`, `win`, `level`, tab
   hidden/visible) with timestamps into `localStorage` under
-  `sokobandl:trace:<date>`. Nothing is uploaded: the site is static. Players
-  export with the "download trace" (JSON file) / "copy trace" (one gzip+base64
-  line, `sokobandl-trace:v1:…`) buttons under the board.
+  `sokobandl:trace:<date>`. Nothing is uploaded: the site is static. The
+  "download trace" (JSON file) / "copy trace" (one gzip+base64 line,
+  `sokobandl-trace:v1:…`) buttons under the board are hidden unless the URL
+  has `&trace=show` (e.g. `/sokobandl/?d=2026-09-28&trace=show`); recording
+  itself is always on.
 - **Replay** at `/sokobandl/replay/` (`assets/sokobandl-replay.js` / `.css`):
   drop or paste traces, one lane per player, each an iframe of the day's
   sealed page driven by the trace's `level` / `move` / `undo` / `reset`

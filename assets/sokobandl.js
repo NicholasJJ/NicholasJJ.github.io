@@ -255,7 +255,10 @@
 				case 'ready':
 					if (recorder.trace) recorder.trace.levels = m.levels;
 					recorder.add('ready', { level: m.current });
-					$('sokTrace').hidden = false;
+					// Recording is always on; the export buttons stay hidden unless
+					// the URL carries &trace=show (a quiet door while the study
+					// side is undecided).
+					if (new URLSearchParams(location.search).get('trace') === 'show') $('sokTrace').hidden = false;
 					break;
 				case 'level': recorder.add('level', { index: m.index, tutorial: !!m.tutorial }); break;
 				case 'move':
