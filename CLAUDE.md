@@ -127,6 +127,23 @@ The puzzles are made elsewhere (the SteamedHams repo's `dailygen publish … --o
   `from`/`until` as `m:ss` or `h:mm:ss`, first match wins) whose `text` is
   appended verbatim to the share sentence; the pick is stored in the day's
   record as `tail` so the copied text stays stable.
+- **Action traces** (`assets/sokobandl-trace.js`, format documented in its
+  header): the shell records every intent (key / swipe / button, captured
+  inside the embedded document) and every page event (`move` with the
+  page-reported `dir`, `undo`, `reset`, `dead`, `win`, `level`, tab
+  hidden/visible) with timestamps into `localStorage` under
+  `sokobandl:trace:<date>`. Nothing is uploaded: the site is static. Players
+  export with the "download trace" (JSON file) / "copy trace" (one gzip+base64
+  line, `sokobandl-trace:v1:…`) buttons under the board.
+- **Replay** at `/sokobandl/replay/` (`assets/sokobandl-replay.js` / `.css`):
+  drop or paste traces, one lane per player, each an iframe of the day's
+  sealed page driven by the trace's `level` / `move` / `undo` / `reset`
+  events over a shared clock (lanes align at the moment the puzzle appeared;
+  "skip pauses" compresses stretches where nobody acted). Seeking = reload
+  level 0 and re-dispatch every event up to the target. Replaying the board
+  requires `dir` on `move` events, which the generator's player must send
+  (`$('move', {index, moves, dir})`); traces from pages built without it
+  still show a timeline but a warning instead of a driven board.
 - **Rewind**: holding the undo button, or resting two fingers anywhere on the
   shell outside the board, repeats undo. Touches *on* the board belong to the
   iframe's own document and cannot be seen by the shell, so two fingers on the
@@ -220,7 +237,7 @@ The site is hosted on GitHub Pages. Changes are deployed by:
 - `_posts/*.md` - blog posts (the only place blog content lives)
 - `_layouts/`, `_includes/` - blog page templates and the reading-time helper
 - `blog/index.html` - topic-grouped blog index; `blog/posts.json` - manifest the fractal consumes
-- `sokobandl/` - the daily sokoban: `index.html` shell, generator-owned `index.json` + `levels/*.html`, `README.md` (the handover contract); `assets/sokobandl.css` / `.js` are its styling and logic
+- `sokobandl/` - the daily sokoban: `index.html` shell, `replay/index.html` trace visualizer, generator-owned `index.json` + `levels/*.html`, `README.md` (the handover contract); `assets/sokobandl*.css` / `.js` are its styling and logic (`-text.js` editable strings, `-trace.js` recording/export, `-replay.js` the visualizer)
 - `assets/blog.css` - all blog styling; `assets/footnotes.js` - popup footnotes
 - `_site/` - Jekyll build output, gitignored, never committed
 - `research.html`, `projects.html` - redirect stubs to `index.html#research` / `#projects`

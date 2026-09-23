@@ -13,6 +13,7 @@ stylesheets:
   - /assets/sokobandl.css
 scripts:
   - /assets/sokobandl-text.js
+  - /assets/sokobandl-trace.js
   - /assets/sokobandl.js
 ---
 {%- comment -%}
@@ -55,6 +56,15 @@ Routes: /sokobandl/            today's puzzle (or the nearest one)
 			<b>Arrows / WASD</b> move &middot; <b>Z</b> undo &middot; <b>R</b> restart &middot; swipe on the board to move.
 			Hold <b>undo</b>, or rest two fingers beside the board, to rewind.
 		</p>
+		<div class="sok-trace" id="sokTrace" hidden>
+			<p>Your moves and their timings are recorded in this browser only, nowhere else.
+				If you send me a trace I can replay it.</p>
+			<div class="sok-result-actions">
+				<button type="button" id="sokTraceSave">download trace</button>
+				<button type="button" id="sokTraceCopy">copy trace</button>
+				<span class="sok-copied" id="sokTraceNote" aria-live="polite"></span>
+			</div>
+		</div>
 	</div>
 
 	<p class="sok-empty" id="sokEmpty" hidden></p>

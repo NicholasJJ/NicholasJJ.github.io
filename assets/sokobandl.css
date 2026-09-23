@@ -235,6 +235,26 @@ body#sokobandl {
 	font-weight: 600;
 }
 
+.sok-trace {
+	max-width: 32rem;
+	margin: 1.2rem auto 0;
+	padding: 0.8rem 1rem;
+	border: 1px dashed var(--sok-line);
+	border-radius: 14px;
+	font-size: 0.82rem;
+	color: var(--sok-muted);
+}
+
+.sok-trace p {
+	margin: 0 0 0.6rem;
+	line-height: 1.5;
+}
+
+.sok-trace button {
+	font-size: 0.85rem;
+	padding: 0.4rem 0.9rem;
+}
+
 /* ---------- archive / empty ---------- */
 
 .sok-empty {

@@ -1,0 +1,67 @@
+---
+layout: base
+title: sokobandl replay
+permalink: /sokobandl/replay/
+description: "Replay recorded sokobandl traces side by side."
+body_id: sokobandl
+html_class: sokobandl
+header: corner
+theme_color: "#f9e7ee"
+noindex: true
+sitemap: false
+stylesheets:
+  - /assets/sokobandl.css
+  - /assets/sokobandl-replay.css
+scripts:
+  - /assets/sokobandl-trace.js
+  - /assets/sokobandl-replay.js
+---
+{%- comment -%}
+The trace visualizer. Drop in trace files (or paste copied traces) from
+several players and watch them solve the same day side by side: each lane is
+the day's sealed level page in an iframe, driven by the trace's moves over
+the recorded timeline. assets/sokobandl-replay.js does everything.
+{%- endcomment %}
+<div class="sok sok-replay">
+	<div class="sok-intro">
+		<h1><a href="../">sokobandl</a> <span class="sok-replay-sub">replay</span></h1>
+		<p class="sok-tagline">Load a few traces of the same day and watch them side by side.</p>
+	</div>
+
+	<div class="sok-loader" id="rpLoader">
+		<label class="sok-drop" id="rpDrop">
+			<input type="file" id="rpFiles" accept=".json,application/json,.txt" multiple hidden>
+			<span><b>Drop trace files here</b> or click to choose (.json from &ldquo;download trace&rdquo;)</span>
+		</label>
+		<div class="sok-paste">
+			<textarea id="rpPaste" rows="2" placeholder="…or paste a copied trace (sokobandl-trace:v1:…) and press add"></textarea>
+			<button type="button" id="rpAdd">add</button>
+		</div>
+		<div class="sok-result-actions">
+			<button type="button" id="rpLocal">load my own traces from this browser</button>
+			<button type="button" id="rpClear" hidden>clear all</button>
+			<span class="sok-copied" id="rpNote" aria-live="polite"></span>
+		</div>
+	</div>
+
+	<div class="sok-transport" id="rpTransport" hidden>
+		<button type="button" id="rpPlay" title="play / pause (space)">&#x25B6; play</button>
+		<button type="button" id="rpRestart" title="back to the start">&#x23EE;</button>
+		<label>speed
+			<select id="rpSpeed">
+				<option value="1">1&times;</option>
+				<option value="2">2&times;</option>
+				<option value="4" selected>4&times;</option>
+				<option value="8">8&times;</option>
+				<option value="16">16&times;</option>
+				<option value="64">64&times;</option>
+			</select>
+		</label>
+		<label class="sok-check"><input type="checkbox" id="rpClip" checked> stop each lane at its win</label>
+		<label class="sok-check"><input type="checkbox" id="rpSkipIdle" checked> skip pauses over 5s</label>
+		<input type="range" id="rpScrub" min="0" max="1000" value="0" step="1" aria-label="timeline">
+		<span class="sok-clock" id="rpClock">0:00</span>
+	</div>
+
+	<div class="sok-lanes" id="rpLanes"></div>
+</div>

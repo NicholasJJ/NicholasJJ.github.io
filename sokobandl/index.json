@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "name": "sokobondl",
-  "generatedAt": "2026-09-22T21:30:40.2531980Z",
+  "generatedAt": "2026-09-23T06:41:14.8389510Z",
   "days": [
     {
       "date": "2026-09-28",
@@ -15,7 +15,7 @@
       "levels": 1,
       "mechanics": [],
       "tutorials": [],
-      "publishedAt": "2026-09-22T16:57:21.9128620Z"
+      "publishedAt": "2026-09-23T06:41:02.7670490Z"
     },
     {
       "date": "2026-09-29",
@@ -29,7 +29,7 @@
       "levels": 1,
       "mechanics": [],
       "tutorials": [],
-      "publishedAt": "2026-09-22T16:57:21.9128620Z"
+      "publishedAt": "2026-09-23T06:41:02.7670490Z"
     },
     {
       "date": "2026-09-30",
@@ -43,7 +43,7 @@
       "levels": 1,
       "mechanics": [],
       "tutorials": [],
-      "publishedAt": "2026-09-22T16:57:21.9128620Z"
+      "publishedAt": "2026-09-23T06:41:02.7670490Z"
     },
     {
       "date": "2026-10-01",
@@ -61,7 +61,7 @@
       "tutorials": [
         "slide"
       ],
-      "publishedAt": "2026-09-22T16:57:21.9128620Z"
+      "publishedAt": "2026-09-23T06:41:02.7670490Z"
     },
     {
       "date": "2026-10-02",
@@ -77,7 +77,7 @@
         "slide"
       ],
       "tutorials": [],
-      "publishedAt": "2026-09-22T16:57:21.9128620Z"
+      "publishedAt": "2026-09-23T06:41:02.7670490Z"
     },
     {
       "date": "2026-10-03",
@@ -96,7 +96,7 @@
       "tutorials": [
         "fight"
       ],
-      "publishedAt": "2026-09-22T16:57:21.9128620Z"
+      "publishedAt": "2026-09-23T06:41:02.7670490Z"
     },
     {
       "date": "2026-10-04",
@@ -116,7 +116,7 @@
       "tutorials": [
         "fall"
       ],
-      "publishedAt": "2026-09-22T16:57:21.9128620Z"
+      "publishedAt": "2026-09-23T06:41:02.7670490Z"
     },
     {
       "date": "2026-10-05",
@@ -130,7 +130,7 @@
       "levels": 1,
       "mechanics": [],
       "tutorials": [],
-      "publishedAt": "2026-09-22T21:30:40.2531980Z"
+      "publishedAt": "2026-09-23T06:41:14.8389510Z"
     },
     {
       "date": "2026-10-06",
@@ -148,7 +148,7 @@
       "tutorials": [
         "slide"
       ],
-      "publishedAt": "2026-09-22T21:30:40.2531980Z"
+      "publishedAt": "2026-09-23T06:41:14.8389510Z"
     },
     {
       "date": "2026-10-07",
@@ -164,7 +164,7 @@
         "slide"
       ],
       "tutorials": [],
-      "publishedAt": "2026-09-22T21:30:40.2531980Z"
+      "publishedAt": "2026-09-23T06:41:14.8389510Z"
     },
     {
       "date": "2026-10-08",
@@ -180,7 +180,7 @@
         "slide"
       ],
       "tutorials": [],
-      "publishedAt": "2026-09-22T21:30:40.2531980Z"
+      "publishedAt": "2026-09-23T06:41:14.8389510Z"
     },
     {
       "date": "2026-10-09",
@@ -196,7 +196,7 @@
         "slide"
       ],
       "tutorials": [],
-      "publishedAt": "2026-09-22T21:30:40.2531980Z"
+      "publishedAt": "2026-09-23T06:41:14.8389510Z"
     },
     {
       "date": "2026-10-10",
@@ -212,7 +212,7 @@
         "slide"
       ],
       "tutorials": [],
-      "publishedAt": "2026-09-22T21:30:40.2531980Z"
+      "publishedAt": "2026-09-23T06:41:14.8389510Z"
     },
     {
       "date": "2026-10-11",
@@ -228,7 +228,7 @@
         "slide"
       ],
       "tutorials": [],
-      "publishedAt": "2026-09-22T21:30:40.2531980Z"
+      "publishedAt": "2026-09-23T06:41:14.8389510Z"
     }
   ]
 }

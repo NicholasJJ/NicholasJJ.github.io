@@ -168,9 +168,22 @@
 		var moves = 0;
 		var onTutorial = false;
 
-		function post(msg) {
+		// ---- the action trace (assets/sokobandl-trace.js): every intent and
+		// every accepted move, with timing, kept in this browser only.
+		var Trace = window.SokobandlTrace;
+		var recorder = Trace ? Trace.open(day) : { add: function () {}, flush: function () {}, trace: null };
+		// Directions come from the page itself: its `move` message carries
+		// `dir` (0 up, 1 down, 2 left, 3 right, 4 action). Intents are recorded
+		// separately (watchInputs below) so rejected inputs are visible too.
+		function noteInput(kind, dir, src) {
+			return recorder.add('input', dir == null ? { kind: kind, src: src } : { kind: kind, dir: dir, src: src });
+		}
+
+		// Host-driven inputs carry their source with them; the page ignores the
+		// extra field and the capture listener inside the frame records it.
+		function post(msg, src) {
 			if (frame.contentWindow) {
-				frame.contentWindow.postMessage(Object.assign({ source: HOST }, msg), '*');
+				frame.contentWindow.postMessage(Object.assign({ source: HOST, src: src || 'host' }, msg), '*');
 			}
 		}
 
@@ -237,11 +250,34 @@
 			});
 		}
 
+		function record(m) {
+			switch (m.type) {
+				case 'ready':
+					if (recorder.trace) recorder.trace.levels = m.levels;
+					recorder.add('ready', { level: m.current });
+					$('sokTrace').hidden = false;
+					break;
+				case 'level': recorder.add('level', { index: m.index, tutorial: !!m.tutorial }); break;
+				case 'move':
+					recorder.add('move', typeof m.dir === 'number'
+						? { index: m.index, moves: m.moves, dir: m.dir }
+						: { index: m.index, moves: m.moves });
+					break;
+				case 'blocked': recorder.add('blocked', { index: m.index, dir: m.dir }); break;
+				case 'undo': recorder.add('undo', { index: m.index, moves: m.moves }); break;
+				case 'reset': recorder.add('reset', { index: m.index }); break;
+				case 'dead': recorder.add('dead', { index: m.index, moves: m.moves }); break;
+				case 'win': recorder.add('win', { index: m.index, moves: m.moves, undos: m.undos, tutorial: !!m.tutorial }); recorder.flush(); break;
+				case 'error': recorder.add('error', { message: String(m.message) }); break;
+			}
+		}
+
 		// ---- messages from the sealed page
 		window.addEventListener('message', function (e) {
 			var m = e.data;
 			if (!m || m.source !== PLAYER || e.source !== frame.contentWindow) return;
 			if (m.type === 'size') { fitFrame(m.height); return; }
+			record(m);
 			if (m.type === 'error') { setStatus(m.message, true); return; }
 			if (rec.finishedAt) return;                     // already solved: the result line stays put
 			switch (m.type) {
@@ -278,9 +314,9 @@
 		var rewind = null;
 		function startRewind() {
 			if (rewind) return;
-			post({ type: 'undo' });
+			post({ type: 'undo' }, 'button');
 			rewind = { delay: setTimeout(function () {
-				rewind.tick = setInterval(function () { post({ type: 'undo' }); }, 90);
+				rewind.tick = setInterval(function () { post({ type: 'undo' }, 'rewind'); }, 90);
 			}, 320) };
 			$('sokUndo').classList.add('is-held');
 		}
@@ -301,10 +337,10 @@
 		undoBtn.addEventListener('keydown', function (e) {
 			// Space/Enter on the focused button: one undo, and don't let the key
 			// fall through to the forwarding handler below as an action press.
-			if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); e.stopPropagation(); post({ type: 'undo' }); }
+			if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); e.stopPropagation(); post({ type: 'undo' }, 'button'); }
 		});
 
-		$('sokReset').addEventListener('click', function () { post({ type: 'reset' }); this.blur(); });
+		$('sokReset').addEventListener('click', function () { post({ type: 'reset' }, 'button'); this.blur(); });
 
 		// Two fingers resting anywhere on the shell (outside the board — the
 		// iframe is its own document and keeps its touches) rewinds until lifted.
@@ -334,6 +370,65 @@
 			doc.addEventListener('touchmove', function (e) { e.preventDefault(); }, { passive: false });
 		}
 
+		// Every input reaches the sealed page as one of three events on its
+		// window: a keydown, a touchend (swipe), or a host message. Capture-phase
+		// listeners there see each one just before the page's own handler runs
+		// and record the intent. The key map and the swipe rule (18px dead zone,
+		// dominant axis) mirror the page's; keep them in step if that changes.
+		var BOARD_KEYS = {
+			arrowup: ['move', 0], w: ['move', 0], arrowdown: ['move', 1], s: ['move', 1],
+			arrowleft: ['move', 2], a: ['move', 2], arrowright: ['move', 3], d: ['move', 3],
+			x: ['move', 4], ' ': ['move', 4], r: ['reset'], z: ['undo'], u: ['undo'],
+			n: ['next'], enter: ['next'], p: ['prev']
+		};
+		function watchInputs(doc) {
+			if (!doc || !doc.body || doc.body.dataset.sokWatched) return;
+			doc.body.dataset.sokWatched = '1';
+			var win = doc.defaultView;
+			win.addEventListener('keydown', function (e) {
+				if (e.metaKey || e.ctrlKey || e.altKey) return;
+				var k = BOARD_KEYS[e.key.toLowerCase()];
+				if (k) noteInput(k[0], k[1], 'key');
+			}, true);
+			var start = null;
+			win.addEventListener('touchstart', function (e) {
+				start = e.target && e.target.tagName === 'CANVAS' ? [e.touches[0].clientX, e.touches[0].clientY] : null;
+			}, { capture: true, passive: true });
+			win.addEventListener('touchend', function (e) {
+				if (!start) return;
+				var dx = e.changedTouches[0].clientX - start[0], dy = e.changedTouches[0].clientY - start[1];
+				start = null;
+				if (Math.abs(dx) < 18 && Math.abs(dy) < 18) return;
+				noteInput('move', Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 3 : 2) : (dy > 0 ? 1 : 0), 'swipe');
+			}, { capture: true, passive: true });
+			win.addEventListener('message', function (e) {
+				var d = e.data;
+				if (!d || d.source !== HOST) return;
+				if (d.type === 'move') noteInput('move', d.dir, d.src);
+				else if (d.type === 'undo' || d.type === 'reset' || d.type === 'next' || d.type === 'prev') noteInput(d.type, undefined, d.src);
+			}, true);
+		}
+
+		// ---- exporting the trace
+		function traceNote(text) { $('sokTraceNote').textContent = text; }
+		$('sokTraceSave').addEventListener('click', function () {
+			if (!recorder.trace) return;
+			recorder.flush();
+			traceNote('saved ' + Trace.download(recorder.trace));
+		});
+		$('sokTraceCopy').addEventListener('click', function () {
+			if (!recorder.trace) return;
+			recorder.flush();
+			Trace.encode(recorder.trace).then(function (text) {
+				if (navigator.clipboard && navigator.clipboard.writeText) {
+					return navigator.clipboard.writeText(text).then(function () {
+						traceNote('copied (' + Math.round(text.length / 1024) + ' KB) — paste it to Nick');
+					});
+				}
+				throw new Error('no clipboard');
+			}).catch(function () { traceNote('could not copy — use download instead'); });
+		});
+
 		// Keys pressed while the shell (not the iframe) has focus still play.
 		var KEYS = {
 			arrowup: { type: 'move', dir: 0 }, w: { type: 'move', dir: 0 },
@@ -348,13 +443,14 @@
 			var msg = KEYS[e.key.toLowerCase()];
 			if (!msg) return;
 			e.preventDefault();
-			post(msg);
+			post(msg, 'shell-key');
 		});
 
 		frame.addEventListener('load', function () {
 			try {
 				frame.contentWindow.focus();
 				lockTouches(frame.contentDocument);
+				watchInputs(frame.contentDocument);
 			} catch (e) { /* cross-origin guard */ }
 		});
 
