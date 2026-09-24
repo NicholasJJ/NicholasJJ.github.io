@@ -29,17 +29,16 @@ window.SOKOBANDL_TEXT = {
 		'now with crates!',
 		'push responsibly',
 		'cratemaxxing!',
-		'no crates were harmed',
 		'also try sokoban!',
 		'made in a cave with a box of crates',
-		'100% crate-free! (jk)',
 		'who\'s building these warehouses?!',
 		'less violent than minesweeper!',
 		'you\'ll never guess what we put in the crates',
 		'new and improved!',
 		'****! I stubbed my toe!',
 		'why are you blue?',
-		'ya like jazz?'
+		'ya like jazz?',
+		'in 4 years we\'ll have more puzzles than Sinking Star!'
 	],
 
 	results: [
@@ -48,19 +47,19 @@ window.SOKOBANDL_TEXT = {
 			', either because its an easy puzzle or I\'m a genius',
 		] },
 		{ until: '1:00', text: [
-			' in one clean push',
-			', no notes',
+			', noice!',
+			', ezpz gg no re',
 		] },
 		{ from: '10:00', until: '30:00', text: [
 			' after a long staring contest with a crate',
-			', and I thought about it a lot',
+			', this one was really hard don\'t judge me...'
 		] },
 		{ from: '30:00', until: '2:00:00', text: [
 			', but only because I went afk to grab a snack',
-			', with a lunch break in the middle',
+			', I like to savour these things ya know?',
 		] },
 		{ from: '2:00:00', text: [
-			', and by "beat" I mean I left the tab open all day',
+			' after walking downtown to consult a wizard for guidance',
 			', which is more of a lifestyle than a time',
 		] },
 	],
