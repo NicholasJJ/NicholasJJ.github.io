@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "name": "sokobondl",
-  "generatedAt": "2026-09-23T06:41:14.8389510Z",
+  "generatedAt": "2026-09-24T21:32:51.2292890Z",
   "days": [
     {
       "date": "2026-09-28",
@@ -229,6 +229,125 @@
       ],
       "tutorials": [],
       "publishedAt": "2026-09-23T06:41:14.8389510Z"
+    },
+    {
+      "date": "2026-10-12",
+      "file": "levels/2026-10-12.html",
+      "weekId": "W22",
+      "day": 0,
+      "title": "Down the Chute",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 2,
+      "mechanics": [
+        "fall"
+      ],
+      "tutorials": [
+        "fall"
+      ],
+      "publishedAt": "2026-09-24T21:32:51.2292890Z"
+    },
+    {
+      "date": "2026-10-13",
+      "file": "levels/2026-10-13.html",
+      "weekId": "W22",
+      "day": 1,
+      "title": "Twin Chute",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 1,
+      "mechanics": [
+        "fall"
+      ],
+      "tutorials": [],
+      "publishedAt": "2026-09-24T21:32:51.2292890Z"
+    },
+    {
+      "date": "2026-10-14",
+      "file": "levels/2026-10-14.html",
+      "weekId": "W22",
+      "day": 2,
+      "title": "Side Drop",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 1,
+      "mechanics": [
+        "fall"
+      ],
+      "tutorials": [],
+      "publishedAt": "2026-09-24T21:32:51.2292890Z"
+    },
+    {
+      "date": "2026-10-15",
+      "file": "levels/2026-10-15.html",
+      "weekId": "W22",
+      "day": 3,
+      "title": "Up and Over",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 1,
+      "mechanics": [
+        "fall"
+      ],
+      "tutorials": [],
+      "publishedAt": "2026-09-24T21:32:51.2292890Z"
+    },
+    {
+      "date": "2026-10-16",
+      "file": "levels/2026-10-16.html",
+      "weekId": "W22",
+      "day": 4,
+      "title": "Slip Road",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 2,
+      "mechanics": [
+        "slide",
+        "fall"
+      ],
+      "tutorials": [
+        "slide"
+      ],
+      "publishedAt": "2026-09-24T21:32:51.2292890Z"
+    },
+    {
+      "date": "2026-10-17",
+      "file": "levels/2026-10-17.html",
+      "weekId": "W22",
+      "day": 5,
+      "title": "Cold Shuffle",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 1,
+      "mechanics": [
+        "slide",
+        "fall"
+      ],
+      "tutorials": [],
+      "publishedAt": "2026-09-24T21:32:51.2292890Z"
+    },
+    {
+      "date": "2026-10-18",
+      "file": "levels/2026-10-18.html",
+      "weekId": "W22",
+      "day": 6,
+      "title": "Swap Shop",
+      "w": 7,
+      "h": 6,
+      "boxes": 3,
+      "levels": 1,
+      "mechanics": [
+        "slide",
+        "fall"
+      ],
+      "tutorials": [],
+      "publishedAt": "2026-09-24T21:32:51.2292890Z"
     }
   ]
 }
