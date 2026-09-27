@@ -316,6 +316,20 @@ body#sokobandl {
 	}
 }
 
+/* ---------- footer ---------- */
+
+.sok-footer {
+	max-width: 34rem;
+	margin: 3rem auto 2.5rem;
+	font-size: 0.85rem;
+	line-height: 1.6;
+	color: var(--sok-muted);
+}
+
+.sok-footer p {
+	margin: 0;
+}
+
 /* ---------- the corner face (in place of the site header) ---------- */
 
 .corner-face {

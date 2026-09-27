@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "name": "sokobondl",
-  "generatedAt": "2026-09-24T21:32:51.2292890Z",
+  "generatedAt": "2026-09-27T01:16:47.4095340Z",
   "days": [
     {
       "date": "2026-09-28",
@@ -348,6 +348,131 @@
       ],
       "tutorials": [],
       "publishedAt": "2026-09-24T21:32:51.2292890Z"
+    },
+    {
+      "date": "2026-10-19",
+      "file": "levels/2026-10-19.html",
+      "weekId": "W23",
+      "day": 0,
+      "title": "Drawn Together",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 2,
+      "mechanics": [
+        "stick"
+      ],
+      "tutorials": [
+        "stick"
+      ],
+      "publishedAt": "2026-09-27T01:16:47.4095340Z"
+    },
+    {
+      "date": "2026-10-20",
+      "file": "levels/2026-10-20.html",
+      "weekId": "W23",
+      "day": 1,
+      "title": "Opposites Attract",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 1,
+      "mechanics": [
+        "stick"
+      ],
+      "tutorials": [],
+      "publishedAt": "2026-09-27T01:16:47.4095340Z"
+    },
+    {
+      "date": "2026-10-21",
+      "file": "levels/2026-10-21.html",
+      "weekId": "W23",
+      "day": 2,
+      "title": "Push Me Pull You",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 2,
+      "mechanics": [
+        "stick"
+      ],
+      "tutorials": [
+        "tug"
+      ],
+      "publishedAt": "2026-09-27T01:16:47.4095340Z"
+    },
+    {
+      "date": "2026-10-22",
+      "file": "levels/2026-10-22.html",
+      "weekId": "W23",
+      "day": 3,
+      "title": "Split Decision",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 1,
+      "mechanics": [
+        "stick"
+      ],
+      "tutorials": [],
+      "publishedAt": "2026-09-27T01:16:47.4095340Z"
+    },
+    {
+      "date": "2026-10-23",
+      "file": "levels/2026-10-23.html",
+      "weekId": "W23",
+      "day": 4,
+      "title": "Magnetic Personality",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 2,
+      "mechanics": [
+        "fight",
+        "stick"
+      ],
+      "tutorials": [
+        "fight"
+      ],
+      "publishedAt": "2026-09-27T01:16:47.4095340Z"
+    },
+    {
+      "date": "2026-10-24",
+      "file": "levels/2026-10-24.html",
+      "weekId": "W23",
+      "day": 5,
+      "title": "Falling Out",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 2,
+      "mechanics": [
+        "fight",
+        "stick",
+        "fall"
+      ],
+      "tutorials": [
+        "fall"
+      ],
+      "publishedAt": "2026-09-27T01:16:47.4095340Z"
+    },
+    {
+      "date": "2026-10-25",
+      "file": "levels/2026-10-25.html",
+      "weekId": "W23",
+      "day": 6,
+      "title": "Opposing Forces",
+      "w": 7,
+      "h": 6,
+      "boxes": 3,
+      "levels": 1,
+      "mechanics": [
+        "fight",
+        "stick",
+        "fall"
+      ],
+      "tutorials": [],
+      "publishedAt": "2026-09-27T01:16:47.4095340Z"
     }
   ]
 }
