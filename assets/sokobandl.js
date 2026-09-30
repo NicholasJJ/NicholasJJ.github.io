@@ -83,6 +83,16 @@
 		return '';
 	}
 
+	function plural(n, word) { return n + ' ' + word + (n === 1 ? '' : 's'); }
+	// "34 moves, 2 restarts, 5 undos": zero counts are left out, and so are
+	// counts a record doesn't have (solves from before they were tracked).
+	function resultDetail(r) {
+		var parts = [plural(r.moves, 'move')];
+		if (r.restarts) parts.push(plural(r.restarts, 'restart'));
+		if (r.totalUndos) parts.push(plural(r.totalUndos, 'undo'));
+		return parts.join(', ');
+	}
+
 	function dayLink(date) { return '?d=' + date; }
 	function shareLink(date) { return location.origin + location.pathname + dayLink(date); }
 
@@ -118,7 +128,7 @@
 			if (rec.finishedAt) a.classList.add('is-done');
 			a.appendChild(el('span', 'sok-arch-date', day.date));
 			var meta = summary(day);
-			if (rec.finishedAt) meta += ' · ✓ ' + fmt(rec.elapsedMs) + ', ' + rec.moves + ' moves';
+			if (rec.finishedAt) meta += ' · ✓ ' + fmt(rec.elapsedMs) + ', ' + resultDetail(rec);
 			a.appendChild(el('span', 'sok-arch-meta', meta));
 			li.appendChild(a);
 			list.appendChild(li);
@@ -225,12 +235,23 @@
 				rec.moves = m;
 				rec.undos = undos;
 			}
+			// Undos and restarts over the whole solve come from the trace; the
+			// page's own `undos` only covers the attempt that won (a restart
+			// zeroes it). Only trust the trace if its puzzle win is this solve,
+			// so a replay recorded after an untraced solve can't stand in for it.
+			if (typeof rec.restarts !== 'number' && recorder.trace && Trace) {
+				var c = Trace.puzzleCounts(recorder.trace);
+				if (c.solved && Math.abs(recorder.trace.t0 + c.winT - rec.finishedAt) < 5000) {
+					rec.restarts = c.restarts;
+					rec.totalUndos = c.undos;
+				}
+			}
 			// The joke tail is picked once and kept, so the copied text is stable.
 			if (typeof rec.tail !== 'string') rec.tail = resultTail(rec.elapsedMs);
 			saveRecord(day.date, rec);
-			setStatus('solved in <b>' + fmt(rec.elapsedMs) + '</b> · ' + rec.moves + ' moves', false);
+			setStatus('solved in <b>' + fmt(rec.elapsedMs) + '</b> · ' + resultDetail(rec), false);
 			$('sokResultText').textContent = 'I beat the ' + day.date + ' sokobandl in ' +
-				fmt(rec.elapsedMs) + ' (' + rec.moves + ' moves)' + (rec.tail || '!');
+				fmt(rec.elapsedMs) + ' (' + resultDetail(rec) + ')' + (rec.tail || '!');
 			$('sokResult').hidden = false;
 		}
 		function shareText() { return $('sokResultText').textContent + '\n' + shareLink(day.date); }
@@ -478,7 +499,21 @@
 
 			if (params.has('archive')) { showArchive(listed); return; }
 
+			// Accept loose spellings (2026-10-3, 2026/10/03, 2026.10.3) and
+			// tidy the address bar to the canonical form, so a hand-typed link
+			// still finds its day and anything shared from here is canonical.
 			var want = params.get('d');
+			if (want) {
+				var parts = want.trim().match(/^(\d{4})[-\/.](\d{1,2})[-\/.](\d{1,2})$/);
+				if (parts) {
+					var canon = parts[1] + '-' + pad(Number(parts[2])) + '-' + pad(Number(parts[3]));
+					if (canon !== want) {
+						want = canon;
+						params.set('d', canon);
+						try { history.replaceState(null, '', '?' + params.toString()); } catch (e) { /* ignore */ }
+					}
+				}
+			}
 			var day;
 			if (want) {
 				// A direct link loads even before its date (guessable filename,

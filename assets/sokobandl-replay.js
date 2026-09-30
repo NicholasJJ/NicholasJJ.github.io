@@ -121,7 +121,10 @@
 		head.appendChild(name);
 		var meta = el('div', 'sok-lane-meta',
 			trace.date + ' · ' + (sum.solved ? 'solved in ' + fmt(sum.elapsedMs) : 'unsolved') +
-			' · ' + sum.moves + ' moves, ' + sum.undos + ' undos, ' + sum.resets + ' resets' +
+			' · ' + (function (c) {
+				var n = function (k, w) { return k + ' ' + w + (k === 1 ? '' : 's'); };
+				return n(sum.moves, 'move') + ', ' + n(c.restarts, 'restart') + ', ' + n(c.undos, 'undo');
+			})(Trace.puzzleCounts(trace)) +
 			(sum.sessions > 1 ? ', ' + sum.sessions + ' sittings' : ''));
 		head.appendChild(meta);
 		var remove = el('button', 'sok-lane-remove', 'remove');

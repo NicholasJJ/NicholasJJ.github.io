@@ -221,10 +221,61 @@
 		return s;
 	}
 
+	// The numbers for the result line: undos and restarts on the day's puzzle
+	// only (tutorial levels never count), up to its first win.
+	//   undos     every undo the board accepted, so a held rewind counts once
+	//             per step it took back.
+	//   restarts  every time the puzzle board was put back to its start after
+	//             it had been shown: the reset button or R, and also a page
+	//             reload or a trip to the tutorial and back that threw away
+	//             moves on the puzzle (the board starts over either way).
+	// winT is the trace time of that win, so callers can check that the
+	// counts belong to the solve they are describing.
+	function puzzleCounts(trace) {
+		var tutorialOf = {};
+		(trace.levels || []).forEach(function (l) { tutorialOf[l.index] = !!l.tutorial; });
+		var isPuzzle = function (i) { return i != null && !tutorialOf[i]; };
+		var c = { undos: 0, restarts: 0, solved: false, winT: null };
+		var shown = false, progress = 0;
+		for (var i = 0; i < trace.events.length && !c.solved; i++) {
+			var e = trace.events[i];
+			switch (e.type) {
+				case 'session':
+					if (shown && progress > 0) c.restarts++;
+					progress = 0;
+					break;
+				case 'ready':
+					if (isPuzzle(e.level)) shown = true;
+					break;
+				case 'level':
+					if (!e.tutorial && isPuzzle(e.index)) {
+						if (shown && progress > 0) c.restarts++;
+						progress = 0;
+						shown = true;
+					}
+					break;
+				case 'reset':
+					if (isPuzzle(e.index)) { c.restarts++; progress = 0; }
+					break;
+				case 'move':
+				case 'undo':
+					if (isPuzzle(e.index)) {
+						progress = e.moves;
+						if (e.type === 'undo') c.undos++;
+					}
+					break;
+				case 'win':
+					if (!e.tutorial) { c.solved = true; c.winT = e.t; }
+					break;
+			}
+		}
+		return c;
+	}
+
 	window.SokobandlTrace = {
 		VERSION: VERSION, PREFIX: PREFIX,
 		open: open, load: load, listLocal: listLocal,
 		encode: encode, decode: decode, parse: parse,
-		download: download, summarize: summarize
+		download: download, summarize: summarize, puzzleCounts: puzzleCounts
 	};
 })();

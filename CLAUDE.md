@@ -127,6 +127,15 @@ The puzzles are made elsewhere (the SteamedHams repo's `dailygen publish … --o
   `from`/`until` as `m:ss` or `h:mm:ss`, first match wins) whose `text` is
   appended verbatim to the share sentence; the pick is stored in the day's
   record as `tail` so the copied text stays stable.
+- **Result line**: `I beat the <date> sokobandl in <time> (<moves>, <restarts>, <undos>)`
+  + the joke tail. Moves are the winning board's path length (from the page's
+  `win`). Restarts and undos come from the trace via
+  `SokobandlTrace.puzzleCounts()`, counted on the day's puzzle only (never
+  tutorials) up to its first win: every accepted undo (a held rewind counts
+  each step), and every time the puzzle board went back to its start (reset,
+  or a reload / tutorial round-trip that discarded moves). Zero counts are
+  omitted. They are stored in the day's record as `restarts` / `totalUndos`
+  at the win; the page's own `undos` field only covers the winning attempt.
 - **Action traces** (`assets/sokobandl-trace.js`, format documented in its
   header): the shell records every intent (key / swipe / button, captured
   inside the embedded document) and every page event (`move` with the
