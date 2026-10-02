@@ -316,6 +316,38 @@ body#sokobandl {
 	}
 }
 
+/* ---------- credits (from the manifest's `credits`, above the footer) ---------- */
+
+.sok-credits {
+	max-width: 34rem;
+	margin: 2.5rem auto 0;
+	padding: 0.8rem 1.1rem;
+	background: var(--sok-card);
+	border: 1px solid var(--sok-line);
+	border-radius: 14px;
+	font-size: 0.88rem;
+	line-height: 1.55;
+}
+
+.sok-credit {
+	margin: 0;
+}
+
+.sok-credit + .sok-credit,
+.sok-credit-note + .sok-credit {
+	margin-top: 0.6rem;
+}
+
+.sok-credit a {
+	color: var(--sok-accent);
+}
+
+.sok-credit-note {
+	margin: 0.2rem 0 0;
+	font-size: 0.8rem;
+	color: var(--sok-muted);
+}
+
 /* ---------- footer ---------- */
 
 .sok-footer {
@@ -328,6 +360,10 @@ body#sokobandl {
 
 .sok-footer p {
 	margin: 0;
+}
+
+.sok-credits:not([hidden]) + .sok-footer {
+	margin-top: 1.5rem;
 }
 
 /* ---------- the corner face (in place of the site header) ---------- */

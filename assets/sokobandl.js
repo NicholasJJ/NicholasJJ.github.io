@@ -136,6 +136,35 @@
 		list.hidden = false;
 	}
 
+	// Credits for the mechanic a day introduces, straight from the manifest:
+	// the generator decides which days carry them (the week a mechanic first
+	// appears). Missing or empty means nothing is shown. One line per credit,
+	// with the optional note under it. Built with textContent, and only
+	// http(s) links are made clickable.
+	function showCredits(day) {
+		var credits = Array.isArray(day.credits) ? day.credits.filter(function (c) { return c && c.title; }) : [];
+		var box = $('sokCredits');
+		box.textContent = '';
+		if (!credits.length) { box.hidden = true; return; }
+		credits.forEach(function (c) {
+			var line = el('p', 'sok-credit');
+			line.appendChild(document.createTextNode('This week\u2019s mechanic was brought to you by: '));
+			var url = String(c.url || '');
+			if (/^https?:\/\//i.test(url)) {
+				var a = el('a', null, c.title);
+				a.href = url;
+				a.target = '_blank';
+				a.rel = 'noopener';
+				line.appendChild(a);
+			} else {
+				line.appendChild(el('b', null, c.title));
+			}
+			box.appendChild(line);
+			if (c.note) box.appendChild(el('p', 'sok-credit-note', c.note));
+		});
+		box.hidden = false;
+	}
+
 	function showDay(day, listed) {
 		// Neighbours come from the released days only, so the page never links
 		// forward to an unreleased puzzle (even when viewing one directly).
@@ -165,6 +194,7 @@
 		else if (!isLatest && latest) { var l = el('a', null, 'latest'); l.href = './'; nav.appendChild(l); }
 
 		$('sokGame').hidden = false;
+		showCredits(day);
 		runGame(day);
 	}
 

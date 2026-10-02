@@ -136,6 +136,12 @@ The puzzles are made elsewhere (the SteamedHams repo's `dailygen publish … --o
   or a reload / tutorial round-trip that discarded moves). Zero counts are
   omitted. They are stored in the day's record as `restarts` / `totalUndos`
   at the win; the page's own `undos` field only covers the winning attempt.
+- **Credits**: a manifest day may carry `credits: [{tag, title, url, note}]`
+  (missing = empty). The generator decides which days get them (the week a
+  mechanic first appears); the shell never does. `showCredits()` renders one
+  line per credit, "This week's mechanic was brought to you by: <title link>",
+  plus the optional `note` underneath, in `#sokCredits` just above the WIP
+  footer. Nothing is shown when the list is empty.
 - **Action traces** (`assets/sokobandl-trace.js`, format documented in its
   header): the shell records every intent (key / swipe / button, captured
   inside the embedded document) and every page event (`move` with the
