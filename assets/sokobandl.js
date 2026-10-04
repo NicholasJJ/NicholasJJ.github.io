@@ -165,7 +165,7 @@
 		box.hidden = false;
 	}
 
-	function showDay(day, listed) {
+	function showDay(day, listed, days) {
 		// Neighbours come from the released days only, so the page never links
 		// forward to an unreleased puzzle (even when viewing one directly).
 		var prev = null, next = null;
@@ -195,12 +195,12 @@
 
 		$('sokGame').hidden = false;
 		showCredits(day);
-		runGame(day);
+		runGame(day, days || listed);
 	}
 
 	// ---- the game ----------------------------------------------------------
 
-	function runGame(day) {
+	function runGame(day, days) {
 		var frame = $('sokFrame');
 		var status = $('sokStatus');
 		var rec = loadRecord(day.date);
@@ -483,6 +483,120 @@
 			}).catch(function () { traceNote('could not copy — use download instead'); });
 		});
 
+		// ---- "tutorials for this week": a popup that plays every tutorial
+		// level of this day's week, up to and including this day, in the order
+		// they appeared, without leaving the page. Each one runs in its own
+		// iframe of the page that introduced it, jumped straight to that
+		// tutorial level. That frame's messages never reach the timer or the
+		// trace (both only listen to the main frame), and it is kept on its
+		// tutorial: the page's "next level" keys are swallowed and, as a
+		// fallback, any switch to a non-tutorial level is sent back.
+		var tutDialog = $('sokTutorials');
+		function setupTutorials() {
+			var list = [];
+			(days || []).forEach(function (d) {
+				if (d.weekId !== day.weekId || d.date > day.date) return;
+				var n = Array.isArray(d.tutorials) ? d.tutorials.length : 0;
+				for (var i = 0; i < n; i++) list.push({ day: d, index: i, count: n });
+			});
+			// Only worth offering if some tutorial lives on another day; this
+			// day's own tutorial already opens its page.
+			if (!list.some(function (t) { return t.day.date !== day.date; })) return;
+			$('sokTutBtn').hidden = false;
+
+			var DONE = 'sokobandl:tutorials-done';
+			var done = {};
+			try { done = JSON.parse(localStorage.getItem(DONE) || '{}') || {}; } catch (e) { done = {}; }
+			var tFrame = $('sokTutFrame'), chips = $('sokTutList'), note = $('sokTutNote');
+			var current = null, buttons = [];
+
+			function tPost(msg) {
+				if (tFrame.contentWindow) tFrame.contentWindow.postMessage(Object.assign({ source: HOST }, msg), '*');
+			}
+			function keyOf(t) { return t.day.date + '#' + t.index; }
+			function label(t) {
+				var d = new Date(t.day.date + 'T12:00:00');
+				var name = d.toLocaleDateString(undefined, { weekday: 'long' });
+				return name + (t.count > 1 ? ' ' + (t.index + 1) : '') + (t.day.date === day.date ? ' (today\u2019s page)' : '');
+			}
+			function open(i) {
+				current = list[i];
+				buttons.forEach(function (b, j) { b.classList.toggle('is-current', j === i); });
+				note.textContent = '';
+				var src = current.day.file + '?embed=1&bar=0';
+				if (tFrame.getAttribute('src') === src) { tPost({ type: 'load', index: current.index }); focusFrame(); }
+				else { tFrame.setAttribute('src', src); }
+			}
+			function focusFrame() { try { tFrame.contentWindow.focus(); } catch (e) { /* ignore */ } }
+
+			list.forEach(function (t, i) {
+				var b = el('button', 'sok-tut-chip', label(t));
+				b.type = 'button';
+				if (done[keyOf(t)]) b.classList.add('is-done');
+				b.addEventListener('click', function () { open(i); });
+				chips.appendChild(b);
+				buttons.push(b);
+			});
+
+			tFrame.addEventListener('load', function () {
+				try {
+					var doc = tFrame.contentDocument;
+					lockTouches(doc);
+					// The win banner's "press Enter / N for the next level" doesn't
+					// apply here (those keys are swallowed), so hide that line.
+					var st = doc.createElement('style');
+					st.textContent = '#banner small { display: none; }';
+					doc.head.appendChild(st);
+					doc.defaultView.addEventListener('keydown', function (e) {
+						var k = e.key.toLowerCase();
+						if (k === 'n' || k === 'p' || k === 'enter') { e.stopImmediatePropagation(); e.preventDefault(); }
+						// Focus lives in this frame, so the dialog never sees Escape itself.
+						if (k === 'escape' && tutDialog.close) { e.preventDefault(); tutDialog.close(); }
+					}, true);
+				} catch (e) { /* cross-origin guard */ }
+			});
+
+			window.addEventListener('message', function (e) {
+				var m = e.data;
+				if (!m || m.source !== PLAYER || e.source !== tFrame.contentWindow || !current) return;
+				if (m.type === 'size') {
+					var h = m.height;
+					try { h = tFrame.contentDocument.documentElement.getBoundingClientRect().height; } catch (err) { /* keep */ }
+					tFrame.style.height = Math.min(640, Math.ceil(h) + 8) + 'px';
+				} else if (m.type === 'ready') {
+					if (m.current !== current.index) tPost({ type: 'load', index: current.index });
+					focusFrame();
+				} else if (m.type === 'level' && !m.tutorial) {
+					tPost({ type: 'load', index: current.index });
+				} else if (m.type === 'dead') {
+					note.textContent = 'you fell in \u2014 undo or reset';
+				} else if (m.type === 'move' || m.type === 'undo' || m.type === 'level') {
+					note.textContent = '';
+				} else if (m.type === 'win' && m.tutorial) {
+					done[keyOf(current)] = 1;
+					try { localStorage.setItem(DONE, JSON.stringify(done)); } catch (err) { /* ignore */ }
+					buttons[list.indexOf(current)].classList.add('is-done');
+					var nextI = list.indexOf(current) + 1;
+					note.textContent = nextI < list.length ? 'done! pick the next one above' : 'done! now go solve today\'s puzzle!';
+				}
+			});
+
+			$('sokTutBtn').addEventListener('click', function () {
+				if (typeof tutDialog.showModal === 'function') tutDialog.showModal(); else tutDialog.setAttribute('open', '');
+				// Start on the first one not yet finished.
+				var first = list.findIndex(function (t) { return !done[keyOf(t)]; });
+				open(first < 0 ? 0 : first);
+			});
+			$('sokTutUndo').addEventListener('click', function () { tPost({ type: 'undo' }); focusFrame(); });
+			$('sokTutReset').addEventListener('click', function () { tPost({ type: 'reset' }); focusFrame(); });
+			$('sokTutClose').addEventListener('click', function () { if (tutDialog.close) tutDialog.close(); else tutDialog.removeAttribute('open'); });
+			tutDialog.addEventListener('close', function () {
+				try { frame.contentWindow.focus(); } catch (e) { /* ignore */ }
+			});
+			// Clicking the dimmed backdrop closes it too.
+			tutDialog.addEventListener('click', function (e) { if (e.target === tutDialog && tutDialog.close) tutDialog.close(); });
+		}
+
 		// Keys pressed while the shell (not the iframe) has focus still play.
 		var KEYS = {
 			arrowup: { type: 'move', dir: 0 }, w: { type: 'move', dir: 0 },
@@ -494,6 +608,7 @@
 		};
 		window.addEventListener('keydown', function (e) {
 			if (e.metaKey || e.ctrlKey || e.altKey) return;
+			if (tutDialog.open) return;          // the tutorials popup has the keys
 			var msg = KEYS[e.key.toLowerCase()];
 			if (!msg) return;
 			e.preventDefault();
@@ -507,6 +622,8 @@
 				watchInputs(frame.contentDocument);
 			} catch (e) { /* cross-origin guard */ }
 		});
+
+		setupTutorials();
 
 		if (rec.finishedAt) finish(rec.moves, rec.undos);   // beaten on this device already: show it, let them replay
 		// The level bar is only useful when there is more than one level (a
@@ -560,7 +677,7 @@
 					return;
 				}
 			}
-			showDay(day, listed);
+			showDay(day, listed, days);
 		})
 		.catch(function (err) {
 			showEmpty('The puzzle list could not be loaded (' + err.message + ').');

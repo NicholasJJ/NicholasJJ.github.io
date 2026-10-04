@@ -136,6 +136,16 @@ The puzzles are made elsewhere (the SteamedHams repo's `dailygen publish … --o
   or a reload / tutorial round-trip that discarded moves). Zero counts are
   omitted. They are stored in the day's record as `restarts` / `totalUndos`
   at the win; the page's own `undos` field only covers the winning attempt.
+- **Tutorials popup**: a "tutorials for this week" button (next to undo /
+  reset) opens a `<dialog>` listing every tutorial level from the viewed
+  day's week (same `weekId`, dated up to and including the viewed day), in
+  order, from each day's `tutorials` count (tutorial levels are the first
+  indices of a page). Each plays in its own iframe of the introducing day's
+  page, jumped to that level with a host `load`. Its messages never reach the
+  timer or trace (those only listen to the main frame); the page's N / P /
+  Enter are swallowed and any switch to a non-tutorial level is sent back.
+  Finished tutorials get a tick, stored in `sokobandl:tutorials-done`. The
+  button is hidden when the only tutorials are on the viewed day's own page.
 - **Credits**: a manifest day may carry `credits: [{tag, title, url, note}]`
   (missing = empty). The generator decides which days get them (the week a
   mechanic first appears); the shell never does. `showCredits()` renders one

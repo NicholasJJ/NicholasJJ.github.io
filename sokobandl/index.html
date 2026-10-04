@@ -42,6 +42,7 @@ Routes: /sokobandl/            today's puzzle (or the nearest one)
 		<div class="sok-controls">
 			<button type="button" id="sokUndo" title="undo (hold to rewind)"><span class="sok-glyph">&#x21B6;</span> undo</button>
 			<button type="button" id="sokReset" title="restart the level"><span class="sok-glyph">&#x21BB;</span> reset</button>
+			<button type="button" id="sokTutBtn" hidden>prev tutorials for this week</button>
 		</div>
 		<p class="sok-status" id="sokStatus"></p>
 		<div class="sok-result" id="sokResult" hidden>
@@ -69,6 +70,23 @@ Routes: /sokobandl/            today's puzzle (or the nearest one)
 
 	<p class="sok-empty" id="sokEmpty" hidden></p>
 	<ol class="sok-archive" id="sokArchive" hidden></ol>
+
+	<dialog class="sok-tutorials" id="sokTutorials" aria-labelledby="sokTutTitle">
+		<div class="sok-tut-head">
+			<h2 id="sokTutTitle">tutorials for this week</h2>
+			<button type="button" id="sokTutClose" aria-label="close">&times;</button>
+		</div>
+		<p class="sok-tut-sub">In the order they showed up. No guarantees they apply to today's level...</p>
+		<div class="sok-tut-list" id="sokTutList"></div>
+		<div class="sok-tut-board">
+			<iframe id="sokTutFrame" title="tutorial" allowtransparency="true"></iframe>
+		</div>
+		<div class="sok-controls">
+			<button type="button" id="sokTutUndo"><span class="sok-glyph">&#x21B6;</span> undo</button>
+			<button type="button" id="sokTutReset"><span class="sok-glyph">&#x21BB;</span> reset</button>
+		</div>
+		<p class="sok-tut-note" id="sokTutNote" aria-live="polite"></p>
+	</dialog>
 
 	<section class="sok-credits" id="sokCredits" aria-label="credits" hidden></section>
 
