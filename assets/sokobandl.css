@@ -102,6 +102,50 @@ body#sokobandl {
 	}
 }
 
+/* the "about" link-button in the tagline */
+.sok .sok-about-btn {
+	font: inherit;
+	color: var(--sok-accent);
+	background: none;
+	border: 0;
+	border-radius: 0;
+	padding: 0;
+	box-shadow: none;
+	transform: none;
+	text-decoration: underline;
+	text-underline-offset: 0.15em;
+	cursor: pointer;
+	touch-action: auto;
+}
+
+.sok .sok-about-btn:hover {
+	transform: none;
+	box-shadow: none;
+}
+
+/* the about popup's text (from _includes/sokobandl-about.md) */
+.sok-about-body {
+	text-align: left;
+	font-size: 0.95rem;
+	line-height: 1.6;
+}
+
+.sok-about-body h2,
+.sok-about-body h3 {
+	font-size: 1rem;
+	margin: 1.1rem 0 0.3rem;
+}
+
+.sok-about-body p,
+.sok-about-body ul,
+.sok-about-body ol {
+	margin: 0.5rem 0;
+}
+
+.sok-about-body a {
+	color: var(--sok-accent);
+}
+
 /* ---------- the board ---------- */
 
 .sok-board {
@@ -319,7 +363,8 @@ body#sokobandl {
 
 /* ---------- tutorials popup ---------- */
 
-.sok-tutorials {
+.sok-tutorials,
+.sok-dialog {
 	width: min(560px, calc(100vw - 32px));
 	max-height: calc(100dvh - 32px);
 	overflow-y: auto;
@@ -333,7 +378,8 @@ body#sokobandl {
 	overscroll-behavior: contain;
 }
 
-.sok-tutorials::backdrop {
+.sok-tutorials::backdrop,
+.sok-dialog::backdrop {
 	background: rgba(59, 36, 56, 0.45);
 }
 
@@ -349,7 +395,8 @@ body#sokobandl {
 	font-size: 1.15rem;
 }
 
-.sok-tutorials #sokTutClose {
+.sok-tutorials #sokTutClose,
+.sok .sok-dialog-close {
 	font-size: 1.3rem;
 	line-height: 1;
 	padding: 0.2rem 0.6rem;

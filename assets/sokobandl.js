@@ -608,7 +608,7 @@
 		};
 		window.addEventListener('keydown', function (e) {
 			if (e.metaKey || e.ctrlKey || e.altKey) return;
-			if (tutDialog.open) return;          // the tutorials popup has the keys
+			if (tutDialog.open || $('sokAbout').open) return;   // a popup has the keys
 			var msg = KEYS[e.key.toLowerCase()];
 			if (!msg) return;
 			e.preventDefault();
@@ -632,6 +632,21 @@
 	}
 
 	// ---- boot ----------------------------------------------------------------
+
+	// The "about" popup: static text from _includes/sokobandl-about.md, so it
+	// works on every view and even if the puzzle list fails to load.
+	(function () {
+		var dlg = $('sokAbout');
+		if (!dlg) return;
+		$('sokAboutBtn').addEventListener('click', function () {
+			if (typeof dlg.showModal === 'function') dlg.showModal(); else dlg.setAttribute('open', '');
+		});
+		$('sokAboutClose').addEventListener('click', function () { if (dlg.close) dlg.close(); else dlg.removeAttribute('open'); });
+		dlg.addEventListener('click', function (e) { if (e.target === dlg && dlg.close) dlg.close(); });
+		dlg.addEventListener('close', function () {
+			try { $('sokFrame').contentWindow.focus(); } catch (e) { /* no game on this view */ }
+		});
+	})();
 
 	$('sokSplash').textContent = pick(TEXT.splashes);
 

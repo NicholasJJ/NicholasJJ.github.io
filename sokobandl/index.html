@@ -29,8 +29,20 @@ Routes: /sokobandl/            today's puzzle (or the nearest one)
 <div class="sok">
 	<div class="sok-intro">
 		<h1><a href="./">sokobandl (beta)</a><span class="sok-splash" id="sokSplash" aria-hidden="true"></span></h1>
-		<p class="sok-tagline">daily block-pushing puzzles</p>
+		<p class="sok-tagline">daily block-pushing puzzles &middot; <button type="button" class="sok-about-btn" id="sokAboutBtn">about</button></p>
 	</div>
+
+	{%- comment -%} The about text lives in _includes/sokobandl-about.md. {%- endcomment %}
+	{%- capture sok_about -%}{% include sokobandl-about.md %}{%- endcapture %}
+	<dialog class="sok-dialog sok-about" id="sokAbout" aria-labelledby="sokAboutTitle">
+		<div class="sok-tut-head">
+			<h2 id="sokAboutTitle">about</h2>
+			<button type="button" class="sok-dialog-close" id="sokAboutClose" aria-label="close">&times;</button>
+		</div>
+		<div class="sok-about-body">
+			{{ sok_about | markdownify }}
+		</div>
+	</dialog>
 
 	<p class="sok-date" id="sokDate"></p>
 	<nav class="sok-nav" id="sokNav" aria-label="days"></nav>

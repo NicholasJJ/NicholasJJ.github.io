@@ -136,6 +136,10 @@ The puzzles are made elsewhere (the SteamedHams repo's `dailygen publish … --o
   or a reload / tutorial round-trip that discarded moves). Zero counts are
   omitted. They are stored in the day's record as `restarts` / `totalUndos`
   at the win; the page's own `undos` field only covers the winning attempt.
+- **About popup**: an "about" link-button in the tagline opens a `<dialog>`
+  whose text is the Markdown in `_includes/sokobandl-about.md`, rendered at
+  build time (`capture` + `markdownify` in `sokobandl/index.html`). Edit that
+  file to change the text; no script involved beyond open/close.
 - **Tutorials popup**: a "tutorials for this week" button (next to undo /
   reset) opens a `<dialog>` listing every tutorial level from the viewed
   day's week (same `weekId`, dated up to and including the viewed day), in

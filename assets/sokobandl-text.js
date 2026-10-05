@@ -43,6 +43,9 @@ window.SOKOBANDL_TEXT = {
 	],
 
 	results: [
+		{ until: '0:10', text: [
+			' which means I get a cookie!',
+		] },
 		{ until: '0:20', text: [
 			', which is suspiciously fast',
 			', either because its an easy puzzle or I\'m a genius',
