@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "name": "sokobondl",
-  "generatedAt": "2026-10-02T23:26:29.1800610Z",
+  "generatedAt": "2026-10-05T06:32:06.1910390Z",
   "days": [
     {
       "date": "2026-09-28",
@@ -433,6 +433,190 @@
         }
       ],
       "publishedAt": "2026-10-02T23:26:29.1800610Z"
+    },
+    {
+      "date": "2026-10-19",
+      "file": "levels/2026-10-19.html",
+      "weekId": "W24",
+      "day": 0,
+      "title": "First Bite",
+      "w": 6,
+      "h": 5,
+      "boxes": 2,
+      "levels": 2,
+      "mechanics": [],
+      "tutorials": [
+        "eat"
+      ],
+      "credits": [
+        {
+          "tag": "eat",
+          "title": "New system makes building robots a snap",
+          "url": "https://engineering.princeton.edu/?p=22801",
+          "note": "Princeton\u0027s magnetically controlled metabot rolls, crawls and changes shape; here the robot rolls and grows by eating teal crates."
+        }
+      ],
+      "publishedAt": "2026-10-05T06:32:06.1910390Z"
+    },
+    {
+      "date": "2026-10-20",
+      "file": "levels/2026-10-20.html",
+      "weekId": "W24",
+      "day": 1,
+      "title": "Keep Your Distance",
+      "w": 6,
+      "h": 6,
+      "boxes": 2,
+      "levels": 1,
+      "mechanics": [
+        "eaten"
+      ],
+      "tutorials": [],
+      "credits": [
+        {
+          "tag": "eat",
+          "title": "New system makes building robots a snap",
+          "url": "https://engineering.princeton.edu/?p=22801",
+          "note": "Princeton\u0027s magnetically controlled metabot rolls, crawls and changes shape; here the robot rolls and grows by eating teal crates."
+        }
+      ],
+      "publishedAt": "2026-10-05T06:32:06.1910390Z"
+    },
+    {
+      "date": "2026-10-21",
+      "file": "levels/2026-10-21.html",
+      "weekId": "W24",
+      "day": 2,
+      "title": "Cold Feet",
+      "w": 6,
+      "h": 6,
+      "boxes": 2,
+      "levels": 3,
+      "mechanics": [
+        "slide",
+        "eaten"
+      ],
+      "tutorials": [
+        "slide",
+        "shove"
+      ],
+      "credits": [
+        {
+          "tag": "eat",
+          "title": "New system makes building robots a snap",
+          "url": "https://engineering.princeton.edu/?p=22801",
+          "note": "Princeton\u0027s magnetically controlled metabot rolls, crawls and changes shape; here the robot rolls and grows by eating teal crates."
+        }
+      ],
+      "publishedAt": "2026-10-05T06:32:06.1910390Z"
+    },
+    {
+      "date": "2026-10-22",
+      "file": "levels/2026-10-22.html",
+      "weekId": "W24",
+      "day": 3,
+      "title": "Shove Over",
+      "w": 6,
+      "h": 6,
+      "boxes": 2,
+      "levels": 1,
+      "mechanics": [
+        "slide",
+        "eaten",
+        "shove"
+      ],
+      "tutorials": [],
+      "credits": [
+        {
+          "tag": "eat",
+          "title": "New system makes building robots a snap",
+          "url": "https://engineering.princeton.edu/?p=22801",
+          "note": "Princeton\u0027s magnetically controlled metabot rolls, crawls and changes shape; here the robot rolls and grows by eating teal crates."
+        }
+      ],
+      "publishedAt": "2026-10-05T06:32:06.1910390Z"
+    },
+    {
+      "date": "2026-10-23",
+      "file": "levels/2026-10-23.html",
+      "weekId": "W24",
+      "day": 4,
+      "title": "Takeout",
+      "w": 6,
+      "h": 6,
+      "boxes": 2,
+      "levels": 1,
+      "mechanics": [
+        "slide",
+        "eaten",
+        "eathome",
+        "shove"
+      ],
+      "tutorials": [],
+      "credits": [
+        {
+          "tag": "eat",
+          "title": "New system makes building robots a snap",
+          "url": "https://engineering.princeton.edu/?p=22801",
+          "note": "Princeton\u0027s magnetically controlled metabot rolls, crawls and changes shape; here the robot rolls and grows by eating teal crates."
+        }
+      ],
+      "publishedAt": "2026-10-05T06:32:06.1910390Z"
+    },
+    {
+      "date": "2026-10-24",
+      "file": "levels/2026-10-24.html",
+      "weekId": "W24",
+      "day": 5,
+      "title": "Room for Dessert",
+      "w": 7,
+      "h": 6,
+      "boxes": 2,
+      "levels": 1,
+      "mechanics": [
+        "slide",
+        "eaten",
+        "eat",
+        "eathome",
+        "shove"
+      ],
+      "tutorials": [],
+      "credits": [
+        {
+          "tag": "eat",
+          "title": "New system makes building robots a snap",
+          "url": "https://engineering.princeton.edu/?p=22801",
+          "note": "Princeton\u0027s magnetically controlled metabot rolls, crawls and changes shape; here the robot rolls and grows by eating teal crates."
+        }
+      ],
+      "publishedAt": "2026-10-05T06:32:06.1910390Z"
+    },
+    {
+      "date": "2026-10-25",
+      "file": "levels/2026-10-25.html",
+      "weekId": "W24",
+      "day": 6,
+      "title": "Big Appetite",
+      "w": 7,
+      "h": 7,
+      "boxes": 3,
+      "levels": 1,
+      "mechanics": [
+        "slide",
+        "eat",
+        "eathome",
+        "shove"
+      ],
+      "tutorials": [],
+      "credits": [
+        {
+          "tag": "eat",
+          "title": "New system makes building robots a snap",
+          "url": "https://engineering.princeton.edu/?p=22801",
+          "note": "Princeton\u0027s magnetically controlled metabot rolls, crawls and changes shape; here the robot rolls and grows by eating teal crates."
+        }
+      ],
+      "publishedAt": "2026-10-05T06:32:06.1910390Z"
     }
   ]
 }

@@ -38,27 +38,33 @@ window.SOKOBANDL_TEXT = {
 		'****! I stubbed my toe!',
 		'why are you blue?',
 		'ya like jazz?',
-		'in 4 years we\'ll have more puzzles than Sinking Star!'
+		'in 4 years we\'ll have more puzzles than Sinking Star!',
+		'gettin funky',
 	],
 
 	results: [
 		{ until: '0:20', text: [
 			', which is suspiciously fast',
 			', either because its an easy puzzle or I\'m a genius',
+			' and if you get a slower time, I\'m simply better than you :)',
+			'... tbh I thought the blue guy was Sonic so I tried going fast',
 		] },
-		{ until: '1:00', text: [
+		{ until: '2:00', text: [
 			', noice!',
 			', ezpz gg no re',
+			' because I\'m just that cool',
+			' k luv ya byeee',
 		] },
-		{ from: '10:00', until: '30:00', text: [
+		{ until: '12:00', text: [
 			' after a long staring contest with a crate',
-			', this one was really hard don\'t judge me...'
+			', this one was really hard don\'t judge me...',
+			'... bruh does Nicholas even playtest these (he does not)'
 		] },
-		{ from: '30:00', until: '2:00:00', text: [
+		{ until: '40:00', text: [
 			', but only because I went afk to grab a snack',
 			', I like to savour these things ya know?',
 		] },
-		{ from: '2:00:00', text: [
+		{ from: '40:00', text: [
 			' after walking downtown to consult a wizard for guidance',
 			', which is more of a lifestyle than a time',
 		] },
