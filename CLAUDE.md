@@ -166,7 +166,40 @@ The puzzles are made elsewhere (the SteamedHams repo's `dailygen publish … --o
   `sokobandl-trace:v1:…`) buttons under the board are hidden unless the URL
   has `&trace=show` (e.g. `/sokobandl/?d=2026-09-28&trace=show`); recording
   itself is always on.
-- **Replay** at `/sokobandl/replay/` (`assets/sokobandl-replay.js` / `.css`):
+- **Leaderboard** (`assets/sokobandl-api.js`, talking to the separate
+  `sokobandl-api` repo deployed on Vercel at
+  `https://sokobandl-api-three.vercel.app`; see that repo's README). No
+  accounts: after solving, "send to leaderboard" (under the result) opens a
+  popup for a **three-letter name, unique per day only** (free again the next
+  day). The server scores the solve from the trace itself and returns a
+  private token for that day, kept in `localStorage` as
+  `sokobandl:lb:<date>` = `{ name, token, result }`; the last name used is
+  remembered in `sokobandl:lb-name`. The public leaderboard shows rank, name
+  and time. Other players' replays need that day's token ("send yours to see
+  theirs"); your own replay never needs the server. Every API call has a
+  timeout and fails quietly: the game, timer and share line never depend on
+  it. `?api=local` on any page points it at the API repo's in-memory dev
+  server (`npm run dev` there, port 3001; launch entry `sokobandl-api-dev`);
+  it sticks for the browser tab (sessionStorage) with a "local API" badge,
+  and `?api=live` switches back. The board is reachable before solving from the
+  day page's "leaderboard" popup.
+- **Leaderboard popup**: the day page's nav has "leaderboard" (opens a
+  `<dialog>` with that day's rank / name / time, open to anyone, solved or
+  not) and a separate "replay" link. Under the result, "see the
+  leaderboard" opens the same popup. With this browser's pass for the day,
+  every other row gets "compare", linking to
+  `replay/?d=<date>&with=<NAME>`.
+- **Replay** at `/sokobandl/replay/`: `?d=` preselects a day and adds your
+  own replay from this browser's recording; `&with=ABC` also adds ABC's.
+  "Grab from leaderboard": a day dropdown (released days, newest first),
+  then a name box that narrows that day's leaderboard as you type (matches
+  starting with the letters first, then containing them; arrow keys + Enter,
+  or click). Grabbing others needs the day's pass; "add mine" adds your own.
+  The name suggestions only show while the name box is focused. Up to 8
+  lanes, laid out across the full window width (not the text column): four
+  per row, two below 680px. Arbitrary trace files (any day, any player) load under the
+  collapsed "load trace files".
+- **Replay lanes** (`assets/sokobandl-replay.js` / `.css`):
   drop or paste traces, one lane per player, each an iframe of the day's
   sealed page driven by the trace's `level` / `move` / `undo` / `reset`
   events over a shared clock (lanes align at the moment the puzzle appeared;
@@ -268,7 +301,7 @@ The site is hosted on GitHub Pages. Changes are deployed by:
 - `_posts/*.md` - blog posts (the only place blog content lives)
 - `_layouts/`, `_includes/` - blog page templates and the reading-time helper
 - `blog/index.html` - topic-grouped blog index; `blog/posts.json` - manifest the fractal consumes
-- `sokobandl/` - the daily sokoban: `index.html` shell, `replay/index.html` trace visualizer, generator-owned `index.json` + `levels/*.html`, `README.md` (the handover contract); `assets/sokobandl*.css` / `.js` are its styling and logic (`-text.js` editable strings, `-trace.js` recording/export, `-replay.js` the visualizer)
+- `sokobandl/` - the daily sokoban: `index.html` shell, `replay/index.html` trace visualizer, generator-owned `index.json` + `levels/*.html`, `README.md` (the handover contract); `assets/sokobandl*.css` / `.js` are its styling and logic (`-text.js` editable strings, `-trace.js` recording/export, `-api.js` the leaderboard client, `-replay.js` the visualizer)
 - `assets/blog.css` - all blog styling; `assets/footnotes.js` - popup footnotes
 - `_site/` - Jekyll build output, gitignored, never committed
 - `research.html`, `projects.html` - redirect stubs to `index.html#research` / `#projects`

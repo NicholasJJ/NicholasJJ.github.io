@@ -361,6 +361,169 @@ body#sokobandl {
 	}
 }
 
+/* ---------- leaderboard bits under the result ---------- */
+
+.sok-lb {
+	margin-top: 0.8rem;
+	padding-top: 0.7rem;
+	border-top: 1px dashed var(--sok-line);
+}
+
+.sok-lb-line {
+	font-size: 0.9rem !important;
+	color: var(--sok-muted);
+	min-height: 0;
+}
+
+.sok-lb-line:empty {
+	display: none;
+}
+
+/* a button that looks like a link */
+.sok .sok-linkbtn {
+	background: none;
+	border: 0;
+	border-radius: 0;
+	padding: 0;
+	box-shadow: none;
+	transform: none;
+	color: var(--sok-accent);
+	font-size: 0.92rem;
+	text-decoration: underline;
+	text-underline-offset: 0.15em;
+	touch-action: auto;
+}
+
+.sok .sok-linkbtn:hover {
+	transform: none;
+	box-shadow: none;
+}
+
+/* the leaderboard popup (rows share .sok-lbrow styles below). Not .sok-board:
+   that's the frame around the game. */
+.sok-lbdialog {
+	width: min(420px, calc(100vw - 32px));
+}
+
+.sok-board-day {
+	margin: 0.2rem 0 0.4rem;
+	font-size: 0.88rem;
+	color: var(--sok-muted);
+	text-align: left;
+}
+
+.sok-board-note {
+	margin: 0.3rem 0;
+	font-size: 0.85rem;
+	color: var(--sok-muted);
+	text-align: left;
+}
+
+.sok-board-note:empty {
+	display: none;
+}
+
+.sok-board-list {
+	list-style: none;
+	margin: 0.3rem 0 0;
+	padding: 0;
+	max-height: min(26rem, 60vh);
+	overflow-y: auto;
+	text-align: left;
+}
+
+/* leaderboard rows: the popup here, and the name suggestions on the replay page */
+.sok-lbrow {
+	display: flex;
+	align-items: center;
+	gap: 0.8rem;
+	padding: 0.4rem 0.3rem;
+	border-top: 1px solid var(--sok-line);
+	font-variant-numeric: tabular-nums;
+}
+
+.sok-lbrow:first-child {
+	border-top: 0;
+}
+
+.sok-lbrow.is-me {
+	background: rgba(155, 80, 206, 0.08);
+	border-radius: 8px;
+}
+
+.sok-lbrow-rank {
+	width: 2.6em;
+	color: var(--sok-muted);
+	font-size: 0.85rem;
+}
+
+.sok-lbrow-name {
+	flex: 1;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+}
+
+.sok-lbrow-time {
+	color: var(--sok-accent);
+	font-weight: 600;
+}
+
+.sok .sok-lbrow-btn {
+	font-size: 0.78rem;
+	padding: 0.2rem 0.7rem;
+	min-width: 5.5em;
+	text-align: center;
+	color: var(--sok-ink);
+	text-decoration: none;
+	background: var(--sok-card);
+	border: 1px solid var(--sok-line);
+	border-radius: 999px;
+}
+
+.sok .sok-lbrow-btn:hover {
+	border-color: var(--sok-accent);
+	color: var(--sok-accent);
+}
+
+/* the send popup */
+.sok-send {
+	width: min(360px, calc(100vw - 32px));
+}
+
+.sok-send-help {
+	margin: 0.4rem 0 0.9rem;
+	font-size: 0.88rem;
+	color: var(--sok-muted);
+}
+
+.sok-send input {
+	font: inherit;
+	font-size: 2rem;
+	font-weight: 700;
+	letter-spacing: 0.35em;
+	text-align: center;
+	text-transform: uppercase;
+	width: 5.5em;
+	padding: 0.25rem 0 0.25rem 0.35em;
+	border: 2px solid var(--sok-line);
+	border-radius: 12px;
+	background: #fff;
+	color: var(--sok-ink);
+	display: block;
+	margin: 0 auto 0.8rem;
+}
+
+.sok-send input:focus {
+	outline: none;
+	border-color: var(--sok-accent);
+}
+
+.sok-send-msg {
+	min-height: 1.3em;
+	margin: 0.6rem 0 0;
+	font-size: 0.88rem;
+}
+
 /* ---------- tutorials popup ---------- */
 
 .sok-tutorials,

@@ -190,6 +190,10 @@
 		var nav = $('sokNav');
 		if (prev) { var p = el('a', null, '← ' + prev.date); p.href = dayLink(prev.date); nav.appendChild(p); }
 		var arch = el('a', null, 'archive'); arch.href = '?archive'; nav.appendChild(arch);
+		// The public leaderboard (rank, name, time) is open to anyone, solved or
+		// not; it opens as a popup (openBoard in runGame). Replays are their own page.
+		var board = el('a', null, 'leaderboard'); board.href = '#leaderboard'; board.id = 'sokBoardLink'; nav.appendChild(board);
+		var replay = el('a', null, 'replay'); replay.href = 'replay/?d=' + day.date; nav.appendChild(replay);
 		if (next) { var n = el('a', null, next.date + ' →'); n.href = dayLink(next.date); nav.appendChild(n); }
 		else if (!isLatest && latest) { var l = el('a', null, 'latest'); l.href = './'; nav.appendChild(l); }
 
@@ -283,7 +287,133 @@
 			$('sokResultText').textContent = 'I beat the ' + day.date + ' sokobandl in ' +
 				fmt(rec.elapsedMs) + ' (' + resultDetail(rec) + ')' + (rec.tail || '!');
 			$('sokResult').hidden = false;
+			showLeaderboard();
 		}
+
+		// ---- the leaderboard (assets/sokobandl-api.js). Optional and never in
+		// the game's way: if the API can't be reached, sending just says so.
+		var API = window.SokobandlAPI;
+		var sendDlg = $('sokSendDlg');
+
+		// The trace of this solve, if the recording covers it (solves from
+		// before recording existed can't be sent). The user-agent is dropped.
+		function solvedTrace() {
+			var t = recorder.trace;
+			if (!t || !Trace || !rec.finishedAt) return null;
+			var c = Trace.puzzleCounts(t);
+			if (!c.solved || Math.abs(t.t0 + c.winT - rec.finishedAt) > 5000) return null;
+			var copy = {};
+			Object.keys(t).forEach(function (k) { if (k !== 'ua') copy[k] = t[k]; });
+			return copy;
+		}
+		function showLeaderboard() {
+			if (!API) return;
+			$('sokLb').hidden = false;
+			var pass = API.pass(day.date);
+			var line = $('sokLbLine');
+			if (pass) {
+				$('sokSend').hidden = true;
+				line.textContent = 'sent as ' + pass.name;
+				// Where it stands now (others may have sent since).
+				API.leaderboard(day.date).then(function (b) {
+					if (!b.ok) return;
+					var me = b.entries.filter(function (e) { return e.name === pass.name; })[0];
+					if (me) line.textContent = 'sent as ' + pass.name + ' \u00b7 #' + me.rank + ' of ' + b.total + ' so far';
+				});
+			} else if (solvedTrace()) {
+				$('sokSend').hidden = false;
+				line.textContent = '';
+			} else {
+				$('sokSend').hidden = true;
+				line.textContent = 'This solve was before replays were recorded, so it can\u2019t be sent.';
+			}
+		}
+
+		// The leaderboard popup: rank, name, time for this day. With this
+		// browser's pass for the day, every other row gets "compare", which opens
+		// the replay page with both solves loaded.
+		var boardDlg = $('sokBoardDlg');
+		function openBoard() {
+			if (typeof boardDlg.showModal === 'function') boardDlg.showModal(); else boardDlg.setAttribute('open', '');
+			$('sokBoardDay').textContent = prettyDate(day.date);
+			var list = $('sokBoardList'), note = $('sokBoardNote');
+			list.textContent = '';
+			if (!API) { note.textContent = 'The leaderboard isn\u2019t available here.'; return; }
+			note.textContent = 'loading\u2026';
+			API.leaderboard(day.date).then(function (b) {
+				if (!b.ok) { note.textContent = 'The leaderboard isn\u2019t reachable right now.'; return; }
+				var pass = API.pass(day.date);
+				list.textContent = '';
+				b.entries.forEach(function (e) {
+					var mine = !!pass && pass.name === e.name;
+					var li = el('li', 'sok-lbrow' + (mine ? ' is-me' : ''));
+					li.appendChild(el('span', 'sok-lbrow-rank', '#' + e.rank));
+					li.appendChild(el('span', 'sok-lbrow-name', e.name + (mine ? ' (you)' : '')));
+					li.appendChild(el('span', 'sok-lbrow-time', fmt(e.timeMs)));
+					if (pass && !mine) {
+						var a = el('a', 'sok-lbrow-btn', 'compare');
+						a.href = 'replay/?d=' + day.date + '&with=' + encodeURIComponent(e.name);
+						li.appendChild(a);
+					} else if (pass) {
+						// keep your own time lined up with everyone else's
+						var gap = el('span', 'sok-lbrow-btn', 'compare');
+						gap.style.visibility = 'hidden';
+						gap.setAttribute('aria-hidden', 'true');
+						li.appendChild(gap);
+					}
+					list.appendChild(li);
+				});
+				note.textContent =
+					!b.entries.length ? 'No one has sent a result for this day yet.' :
+					pass ? (b.total === 1 ? 'Just you so far.' : '') :
+					rec.finishedAt ? 'Send your result to compare replays.' :
+					'Solve this day\u2019s puzzle and send your result to compare replays.';
+			});
+		}
+		$('sokBoardLink').addEventListener('click', function (e) { e.preventDefault(); openBoard(); });
+		$('sokBoardFromResult').addEventListener('click', openBoard);
+		$('sokBoardClose').addEventListener('click', function () { if (boardDlg.close) boardDlg.close(); else boardDlg.removeAttribute('open'); });
+		boardDlg.addEventListener('click', function (e) { if (e.target === boardDlg && boardDlg.close) boardDlg.close(); });
+		boardDlg.addEventListener('close', function () { try { frame.contentWindow.focus(); } catch (e) { /* ignore */ } });
+
+		$('sokSend').addEventListener('click', function () {
+			$('sokSendName').value = API.lastName();
+			$('sokSendMsg').textContent = '';
+			if (typeof sendDlg.showModal === 'function') sendDlg.showModal(); else sendDlg.setAttribute('open', '');
+			$('sokSendName').focus();
+			$('sokSendName').select();
+		});
+		$('sokSendName').addEventListener('input', function () {
+			var v = this.value.replace(/[^a-z]/gi, '').toUpperCase().slice(0, 3);
+			if (v !== this.value) this.value = v;
+		});
+		$('sokSendForm').addEventListener('submit', function (e) {
+			e.preventDefault();
+			var name = $('sokSendName').value.trim();
+			var msg = $('sokSendMsg');
+			if (!API.NAME_RE.test(name)) { msg.textContent = 'Three letters, please.'; return; }
+			var trace = solvedTrace();
+			if (!trace) { msg.textContent = 'This solve can\u2019t be sent.'; return; }
+			var go = $('sokSendGo');
+			go.disabled = true;
+			msg.textContent = 'sending\u2026';
+			API.submit(day.date, name.toUpperCase(), trace).then(function (r) {
+				go.disabled = false;
+				if (r.ok) {
+					if (sendDlg.close) sendDlg.close(); else sendDlg.removeAttribute('open');
+					showLeaderboard();
+					if (r.alreadySubmitted) $('sokLbLine').textContent = 'this solve was already sent as ' + r.result.name;
+					return;
+				}
+				msg.textContent =
+					r.reason === 'taken' ? name.toUpperCase() + ' is taken today. Try another.' :
+					r.reason === 'unreachable' ? 'Couldn\u2019t reach the leaderboard. Your result is safe here, so try again later.' :
+					'The leaderboard didn\u2019t accept this solve (' + r.message + ').';
+			});
+		});
+		$('sokSendClose').addEventListener('click', function () { if (sendDlg.close) sendDlg.close(); else sendDlg.removeAttribute('open'); });
+		sendDlg.addEventListener('click', function (e) { if (e.target === sendDlg && sendDlg.close) sendDlg.close(); });
+
 		function shareText() { return $('sokResultText').textContent + '\n' + shareLink(day.date); }
 
 		$('sokCopy').addEventListener('click', function () {
@@ -608,7 +738,7 @@
 		};
 		window.addEventListener('keydown', function (e) {
 			if (e.metaKey || e.ctrlKey || e.altKey) return;
-			if (tutDialog.open || $('sokAbout').open) return;   // a popup has the keys
+			if (tutDialog.open || $('sokAbout').open || sendDlg.open || boardDlg.open) return;   // a popup has the keys
 			var msg = KEYS[e.key.toLowerCase()];
 			if (!msg) return;
 			e.preventDefault();

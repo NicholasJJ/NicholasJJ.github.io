@@ -102,10 +102,12 @@
 
 	// ---- lanes -------------------------------------------------------------
 
-	function addLane(trace, label) {
+	// `key` ties a lane to a leaderboard row (the name), so the row's button
+	// and the lane's remove button stay in step.
+	function addLane(trace, label, key) {
 		var sum = Trace.summarize(trace);
 		var lane = {
-			trace: trace, sum: sum,
+			trace: trace, sum: sum, key: key || null,
 			origin: sum.startT == null ? (trace.events[0] ? trace.events[0].t : 0) : sum.startT,
 			cursor: 0, ready: false, live: { moves: 0, state: '' }
 		};
@@ -167,6 +169,8 @@
 		rebuildAxis();
 		drawAll();
 		updateLive(lane, toAligned(playT));
+		syncBoard();
+		return lane;
 	}
 
 	function setLaneEnd(lane) {
@@ -183,6 +187,7 @@
 		rebuildAxis();
 		drawAll();
 		updateScrub();
+		syncBoard();
 	}
 
 	function post(lane, msg) {
@@ -405,6 +410,191 @@
 		lanes.slice().forEach(removeLane);
 		note('');
 	});
+
+	// ---- grab from leaderboard -----------------------------------------------
+	// Pick a day (released days from the manifest, newest first), then type a
+	// name: the day's leaderboard narrows as you type, so you can see you have
+	// the right person, and clicking a row (or Enter) adds their replay as a
+	// lane. Other people's replays need this browser's pass for that day (from
+	// sending its own result); your own replay comes straight from this
+	// browser's recording, via "add mine".
+	//   ?d=YYYY-MM-DD            preselect that day and add your own replay
+	//   ?d=YYYY-MM-DD&with=ABC   ...and ABC's (the leaderboard's "compare")
+
+	var API = window.SokobandlAPI;
+	var params = new URLSearchParams(location.search);
+	var pad2 = function (n) { return String(n).padStart(2, '0'); };
+	var now = new Date();
+	var today = now.getFullYear() + '-' + pad2(now.getMonth() + 1) + '-' + pad2(now.getDate());
+	var MAX_LANES = 8;
+	var boards = {};          // date -> { ok, entries } (cached per page view)
+	var active = -1;          // highlighted suggestion, for arrow keys
+
+	var daySel = $('rpGrabDay'), nameIn = $('rpGrabName'), list = $('rpGrabList');
+	function grabNote(text) { $('rpGrabNote').textContent = text || ''; }
+	function shortDate(iso) {
+		return new Date(iso + 'T12:00:00').toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' });
+	}
+	function laneFor(key) { return lanes.filter(function (l) { return l.key === key; })[0] || null; }
+	function keyOf(date, name) { return date + '|' + name; }
+	function pass(date) { return API ? API.pass(date) : null; }
+	function myTrace(date) {
+		var t = Trace.load(date);
+		return t && t.events && t.events.length ? t : null;
+	}
+
+	function addMine(date) {
+		var t = myTrace(date);
+		if (!t || laneFor(keyOf(date, 'you'))) return;
+		var p = pass(date);
+		addLane(t, p ? p.name + ' (you)' : 'you', keyOf(date, 'you'));
+	}
+
+	function grab(date, name) {
+		var p = pass(date);
+		if (p && p.name === name) { addMine(date); return; }
+		if (laneFor(keyOf(date, name))) return;
+		if (!p) { grabNote('Send your own result for this day from the puzzle page to grab replays from it.'); return; }
+		if (lanes.length >= MAX_LANES) { grabNote('That’s ' + MAX_LANES + ' replays already. Remove one first.'); return; }
+		grabNote('loading ' + name + '…');
+		API.traces(date, [name]).then(function (r) {
+			if (!r.ok) {
+				grabNote(r.reason === 'no-pass'
+					? 'Send your own result for this day from the puzzle page to grab replays from it.'
+					: 'Couldn’t reach the leaderboard. Try again in a bit.');
+				return;
+			}
+			var t = r.traces[0];
+			if (!t) { grabNote('No replay for ' + name + ' on that day.'); return; }
+			if (!laneFor(keyOf(date, name))) addLane(t.trace, name, keyOf(date, name));
+			grabNote('');
+			nameIn.value = '';
+			render();
+		});
+	}
+
+	// The suggestion list for the chosen day and what's typed so far: names
+	// starting with it first, then names containing it.
+	function matches() {
+		var b = boards[daySel.value];
+		if (!b || !b.ok) return [];
+		var q = nameIn.value.trim().toUpperCase();
+		if (!q) return b.entries.slice();
+		var starts = b.entries.filter(function (e) { return e.name.indexOf(q) === 0; });
+		var contains = b.entries.filter(function (e) { return e.name.indexOf(q) > 0; });
+		return starts.concat(contains);
+	}
+
+	function render() {
+		var date = daySel.value;
+		var b = boards[date];
+		var p = pass(date);
+		var q = nameIn.value.trim().toUpperCase();
+		list.textContent = '';
+		// The suggestions only show while the name box is active; clicking
+		// away folds them up.
+		list.hidden = document.activeElement !== nameIn;
+		$('rpGrabMine').hidden = !myTrace(date) || !!laneFor(keyOf(date, 'you'));
+		if (!API) { grabNote('The leaderboard isn’t available here.'); return; }
+		if (!b) { grabNote('loading…'); return; }
+		if (!b.ok) { grabNote('The leaderboard isn’t reachable right now. Your own replay still works.'); return; }
+		if (!b.entries.length) { grabNote('No one has sent a result for this day yet.'); return; }
+
+		var rows = matches();
+		if (active >= rows.length) active = rows.length - 1;
+		rows.forEach(function (e, i) {
+			var mine = !!p && p.name === e.name;
+			var added = !!laneFor(keyOf(date, mine ? 'you' : e.name));
+			var li = el('li', 'sok-lbrow' + (mine ? ' is-me' : '') + (added ? ' is-added' : '') + (i === active ? ' is-active' : ''));
+			li.appendChild(el('span', 'sok-lbrow-rank', '#' + e.rank));
+			var nm = el('span', 'sok-lbrow-name');
+			var at = q ? e.name.indexOf(q) : -1;
+			if (at >= 0) {
+				nm.appendChild(document.createTextNode(e.name.slice(0, at)));
+				nm.appendChild(el('mark', null, e.name.slice(at, at + q.length)));
+				nm.appendChild(document.createTextNode(e.name.slice(at + q.length)));
+			} else nm.textContent = e.name;
+			if (mine) nm.appendChild(document.createTextNode(' (you)'));
+			li.appendChild(nm);
+			li.appendChild(el('span', 'sok-lbrow-time', fmt(e.timeMs)));
+			if (p) li.appendChild(el('span', 'sok-lbrow-btn', added ? 'added' : 'add'));
+			// mousedown keeps focus in the name box, so the list doesn't fold up
+			// before the click lands.
+			li.addEventListener('mousedown', function (ev) { ev.preventDefault(); });
+			if (p && !added) li.addEventListener('click', function () { grab(date, e.name); });
+			list.appendChild(li);
+		});
+		if (q && !rows.length) grabNote('No one called ' + q + ' on this day.');
+		else if (!p) grabNote('Send your own result for this day from the puzzle page to grab replays from it.');
+		else grabNote('');
+	}
+	// Lanes being added or removed (anywhere) refresh the "add / added" marks.
+	function syncBoard() { if (daySel.value) render(); }
+
+	function loadDay(date) {
+		active = -1;
+		var back = $('rpNav').querySelector('a');
+		if (back) back.href = '../?d=' + date;
+		render();
+		if (boards[date] || !API) return;
+		API.leaderboard(date).then(function (b) {
+			boards[date] = b.ok ? { ok: true, entries: b.entries } : { ok: false };
+			if (daySel.value === date) render();
+		});
+	}
+
+	daySel.addEventListener('change', function () { nameIn.value = ''; loadDay(daySel.value); });
+	nameIn.addEventListener('focus', render);
+	nameIn.addEventListener('blur', render);
+	nameIn.addEventListener('input', function () {
+		var v = this.value.replace(/[^a-z]/gi, '').toUpperCase().slice(0, 3);
+		if (v !== this.value) this.value = v;
+		active = v ? 0 : -1;
+		render();
+	});
+	nameIn.addEventListener('keydown', function (e) {
+		var rows = matches();
+		if (e.key === 'ArrowDown') { e.preventDefault(); active = Math.min(rows.length - 1, active + 1); render(); }
+		else if (e.key === 'ArrowUp') { e.preventDefault(); active = Math.max(0, active - 1); render(); }
+		else if (e.key === 'Enter') {
+			e.preventDefault();
+			var q = nameIn.value.trim().toUpperCase();
+			var exact = rows.filter(function (r) { return r.name === q; })[0];
+			var pick = exact || rows[active >= 0 ? active : 0];
+			if (pick) grab(daySel.value, pick.name);
+		}
+	});
+	$('rpGrabMine').addEventListener('click', function () { addMine(daySel.value); render(); });
+
+	fetch('../index.json', { cache: 'no-cache' })
+		.then(function (r) { return r.ok ? r.json() : { days: [] }; })
+		.catch(function () { return { days: [] }; })
+		.then(function (manifest) {
+			var days = (manifest.days || []).map(function (d) { return d.date; })
+				.filter(function (d) { return d <= today; });
+			var want = params.get('d');
+			if (want && /^\d{4}-\d{2}-\d{2}$/.test(want) && days.indexOf(want) < 0) days.push(want);
+			days.sort().reverse();
+			if (!days.length) days = [today];
+			days.forEach(function (d) {
+				var o = el('option', null, shortDate(d) + (d === today ? ' (today)' : '') + ' · ' + d);
+				o.value = d;
+				daySel.appendChild(o);
+			});
+			var start = want && days.indexOf(want) >= 0 ? want : days[0];
+			daySel.value = start;
+			document.title = 'sokobandl replay';
+
+			var nav = $('rpNav');
+			var back = el('a', null, '← back to the puzzle');
+			back.href = '../?d=' + start;
+			nav.appendChild(back);
+
+			if (want) addMine(start);
+			loadDay(start);
+			var withName = (params.get('with') || '').toUpperCase();
+			if (want && /^[A-Z]{3}$/.test(withName)) grab(start, withName);
+		});
 
 	// legend
 	var legend = el('div', 'sok-legend');

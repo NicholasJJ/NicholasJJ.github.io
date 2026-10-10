@@ -108,12 +108,42 @@
 
 /* ---------- lanes ---------- */
 
+/* The replays use the whole window width, not the page's text column:
+   four across, two on narrow screens (so a lane never gets much below
+   ~150px, where the boards stop being readable). The lanes are centred, so
+   one or two replays sit in the middle rather than hugging the left. */
 .sok-lanes {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-	gap: 1rem;
-	max-width: 80rem;
-	margin: 0 auto;
+	--lane-gap: 0.8rem;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: var(--lane-gap);
+	width: calc(100vw - 32px);
+	position: relative;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.sok-lanes > .sok-lane {
+	box-sizing: border-box;   /* padding inside the quarter, or four won't fit */
+	flex: 0 0 calc((100% - 3 * var(--lane-gap)) / 4);
+}
+
+@media (max-width: 680px) {
+	.sok-lanes {
+		--lane-gap: 0.5rem;
+		width: calc(100vw - 16px);
+	}
+	.sok-lanes > .sok-lane {
+		flex-basis: calc((100% - var(--lane-gap)) / 2);
+		padding: 0.5rem 0.45rem 0.45rem;
+	}
+	.sok-lane-head input {
+		width: 100%;
+	}
+	.sok-lane-meta {
+		text-align: left;
+	}
 }
 
 .sok-lane {
@@ -223,4 +253,127 @@
 
 @media (max-width: 768px) {
 	.sok-paste { flex-direction: column; }
+}
+
+/* ---------- grab from leaderboard ---------- */
+/* Suggestion rows reuse .sok-lbrow from assets/sokobandl.css. */
+
+.sok-grab {
+	max-width: 30rem;
+	margin: 0 auto 1.4rem;
+	padding: 0.9rem 1rem 0.8rem;
+	background: var(--sok-card);
+	border: 1px solid var(--sok-line);
+	border-radius: 16px;
+	text-align: left;
+}
+
+.sok-grab h2 {
+	margin: 0 0 0.6rem;
+	font-size: 1.05rem;
+}
+
+.sok-grab-row {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	margin-bottom: 0.5rem;
+}
+
+.sok-grab-row label {
+	width: 3.2em;
+	font-size: 0.88rem;
+	color: var(--sok-muted);
+}
+
+.sok-grab select,
+.sok-grab input {
+	font: inherit;
+	font-size: 0.95rem;
+	padding: 0.35rem 0.6rem;
+	border: 1px solid var(--sok-line);
+	border-radius: 10px;
+	background: #fff;
+	color: var(--sok-ink);
+}
+
+.sok-grab select {
+	flex: 1;
+	min-width: 0;
+}
+
+.sok-grab input {
+	width: 6.5em;
+	text-transform: uppercase;
+	letter-spacing: 0.3em;
+	font-weight: 700;
+}
+
+.sok-grab input::placeholder {
+	font-weight: 400;
+	opacity: 0.45;
+}
+
+.sok-grab input:focus,
+.sok-grab select:focus {
+	outline: none;
+	border-color: var(--sok-accent);
+}
+
+.sok-grab #rpGrabMine {
+	font-size: 0.8rem;
+	padding: 0.3rem 0.8rem;
+}
+
+.sok-grab-note {
+	margin: 0.2rem 0 0;
+	font-size: 0.85rem;
+	color: var(--sok-muted);
+}
+
+.sok-grab-note:empty {
+	display: none;
+}
+
+.sok-grab-list {
+	list-style: none;
+	margin: 0.3rem 0 0;
+	padding: 0;
+	max-height: 16rem;
+	overflow-y: auto;
+}
+
+.sok-grab-list .sok-lbrow {
+	cursor: pointer;
+}
+
+.sok-grab-list .sok-lbrow.is-active,
+.sok-grab-list .sok-lbrow:hover {
+	background: rgba(155, 80, 206, 0.08);
+	border-radius: 8px;
+}
+
+.sok-grab-list .sok-lbrow.is-added {
+	opacity: 0.55;
+	cursor: default;
+}
+
+.sok-grab-list mark {
+	background: none;
+	color: var(--sok-accent);
+}
+
+/* ---------- arbitrary trace files, tucked away ---------- */
+
+.sok-advanced {
+	max-width: 40rem;
+	margin: 2rem auto 0;
+	text-align: center;
+	color: var(--sok-muted);
+	font-size: 0.88rem;
+}
+
+.sok-advanced summary {
+	cursor: pointer;
+	margin-bottom: 0.8rem;
 }

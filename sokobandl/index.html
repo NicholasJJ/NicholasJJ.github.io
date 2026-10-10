@@ -14,6 +14,7 @@ stylesheets:
 scripts:
   - /assets/sokobandl-text.js
   - /assets/sokobandl-trace.js
+  - /assets/sokobandl-api.js
   - /assets/sokobandl.js
 ---
 {%- comment -%}
@@ -64,6 +65,13 @@ Routes: /sokobandl/            today's puzzle (or the nearest one)
 				<button type="button" id="sokShare" hidden>share</button>
 				<span class="sok-copied" id="sokCopied" aria-live="polite"></span>
 			</div>
+			<div class="sok-lb" id="sokLb" hidden>
+				<p class="sok-lb-line" id="sokLbLine" aria-live="polite"></p>
+				<div class="sok-result-actions">
+					<button type="button" id="sokSend" hidden>send to leaderboard</button>
+					<button type="button" class="sok-linkbtn" id="sokBoardFromResult">see the leaderboard</button>
+				</div>
+			</div>
 		</div>
 		<p class="sok-help">
 			<b>Arrows / WASD</b> move &middot; <b>Z</b> undo &middot; <b>R</b> restart &middot; swipe on the board to move.
@@ -98,6 +106,29 @@ Routes: /sokobandl/            today's puzzle (or the nearest one)
 			<button type="button" id="sokTutReset"><span class="sok-glyph">&#x21BB;</span> reset</button>
 		</div>
 		<p class="sok-tut-note" id="sokTutNote" aria-live="polite"></p>
+	</dialog>
+
+	<dialog class="sok-dialog sok-send" id="sokSendDlg" aria-labelledby="sokSendTitle">
+		<div class="sok-tut-head">
+			<h2 id="sokSendTitle">send to leaderboard</h2>
+			<button type="button" class="sok-dialog-close" id="sokSendClose" aria-label="close">&times;</button>
+		</div>
+		<form id="sokSendForm" autocomplete="off">
+			<p class="sok-send-help">Pick three letters. Names are claimed per day, first come, first served.</p>
+			<input type="text" id="sokSendName" maxlength="3" autocapitalize="characters" spellcheck="false" aria-label="three-letter name" placeholder="ABC">
+			<button type="submit" id="sokSendGo">send</button>
+			<p class="sok-send-msg" id="sokSendMsg" aria-live="polite"></p>
+		</form>
+	</dialog>
+
+	<dialog class="sok-dialog sok-lbdialog" id="sokBoardDlg" aria-labelledby="sokBoardTitle">
+		<div class="sok-tut-head">
+			<h2 id="sokBoardTitle">leaderboard</h2>
+			<button type="button" class="sok-dialog-close" id="sokBoardClose" aria-label="close">&times;</button>
+		</div>
+		<p class="sok-board-day" id="sokBoardDay"></p>
+		<p class="sok-board-note" id="sokBoardNote" aria-live="polite"></p>
+		<ol class="sok-board-list" id="sokBoardList"></ol>
 	</dialog>
 
 	<section class="sok-credits" id="sokCredits" aria-label="credits" hidden></section>

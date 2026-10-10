@@ -14,35 +14,45 @@ stylesheets:
   - /assets/sokobandl-replay.css
 scripts:
   - /assets/sokobandl-trace.js
+  - /assets/sokobandl-api.js
   - /assets/sokobandl-replay.js
 ---
 {%- comment -%}
-The trace visualizer. Drop in trace files (or paste copied traces) from
-several players and watch them solve the same day side by side: each lane is
-the day's sealed level page in an iframe, driven by the trace's moves over
-the recorded timeline. assets/sokobandl-replay.js does everything.
+Replays: one day's leaderboard (public), and side-by-side replays of how
+people solved that day's puzzle. Each lane is the day's sealed level page in
+an iframe, driven by a trace's moves over the recorded timeline.
+
+  /sokobandl/replay/?d=YYYY-MM-DD            that day, with your own replay
+  /sokobandl/replay/?d=YYYY-MM-DD&with=ABC   ...and ABC's (the leaderboard's "compare")
+
+Your own replay comes from this browser's recording. "Grab from leaderboard"
+picks a day and searches that day's names; other people's replays need your
+own result for that day to have been sent ("send yours to see theirs").
+Arbitrary trace files can still be loaded under "load trace files", for
+comparing across days. assets/sokobandl-replay.js does everything.
 {%- endcomment %}
 <div class="sok sok-replay">
 	<div class="sok-intro">
 		<h1><a href="../">sokobandl</a> <span class="sok-replay-sub">replay</span></h1>
-		<p class="sok-tagline">Load a few traces of the same day and watch them side by side.</p>
+		<p class="sok-tagline">See how people solved a puzzle, side by side.</p>
 	</div>
 
-	<div class="sok-loader" id="rpLoader">
-		<label class="sok-drop" id="rpDrop">
-			<input type="file" id="rpFiles" accept=".json,application/json,.txt" multiple hidden>
-			<span><b>Drop trace files here</b> or click to choose (.json from &ldquo;download trace&rdquo;)</span>
-		</label>
-		<div class="sok-paste">
-			<textarea id="rpPaste" rows="2" placeholder="…or paste a copied trace (sokobandl-trace:v1:…) and press add"></textarea>
-			<button type="button" id="rpAdd">add</button>
+	<nav class="sok-nav" id="rpNav" aria-label="back"></nav>
+
+	<section class="sok-grab" id="rpGrab" aria-labelledby="rpGrabTitle">
+		<h2 id="rpGrabTitle">grab from leaderboard</h2>
+		<div class="sok-grab-row">
+			<label for="rpGrabDay">day</label>
+			<select id="rpGrabDay"></select>
+			<button type="button" id="rpGrabMine" hidden>add mine</button>
 		</div>
-		<div class="sok-result-actions">
-			<button type="button" id="rpLocal">load my own traces from this browser</button>
-			<button type="button" id="rpClear" hidden>clear all</button>
-			<span class="sok-copied" id="rpNote" aria-live="polite"></span>
+		<div class="sok-grab-row">
+			<label for="rpGrabName">name</label>
+			<input type="text" id="rpGrabName" maxlength="3" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABC" aria-controls="rpGrabList">
 		</div>
-	</div>
+		<p class="sok-grab-note" id="rpGrabNote" aria-live="polite"></p>
+		<ol class="sok-grab-list" id="rpGrabList"></ol>
+	</section>
 
 	<div class="sok-transport" id="rpTransport" hidden>
 		<button type="button" id="rpPlay" title="play / pause (space)">&#x25B6; play</button>
@@ -64,4 +74,23 @@ the recorded timeline. assets/sokobandl-replay.js does everything.
 	</div>
 
 	<div class="sok-lanes" id="rpLanes"></div>
+
+	<details class="sok-advanced">
+		<summary>load trace files</summary>
+		<div class="sok-loader" id="rpLoader">
+			<label class="sok-drop" id="rpDrop">
+				<input type="file" id="rpFiles" accept=".json,application/json,.txt" multiple hidden>
+				<span><b>Drop trace files here</b> or click to choose (.json from &ldquo;download trace&rdquo;). Any day, any player.</span>
+			</label>
+			<div class="sok-paste">
+				<textarea id="rpPaste" rows="2" placeholder="…or paste a copied trace (sokobandl-trace:v1:…) and press add"></textarea>
+				<button type="button" id="rpAdd">add</button>
+			</div>
+			<div class="sok-result-actions">
+				<button type="button" id="rpLocal">load every trace in this browser</button>
+				<button type="button" id="rpClear" hidden>clear all</button>
+				<span class="sok-copied" id="rpNote" aria-live="polite"></span>
+			</div>
+		</div>
+	</details>
 </div>
