@@ -208,6 +208,11 @@ The puzzles are made elsewhere (the SteamedHams repo's `dailygen publish … --o
   requires `dir` on `move` events, which the generator's player must send
   (`$('move', {index, moves, dir})`); traces from pages built without it
   still show a timeline but a warning instead of a driven board.
+- **Level names are hidden**: the sealed pages' level bar shows each level's
+  internal name. `relabelLevelBar()` (in both `assets/sokobandl.js` and
+  `assets/sokobandl-replay.js`) rewrites those buttons from outside the frame
+  to "1. Tutorial" (numbered when there are several) and "N. Daily Puzzle",
+  on frame load and again on the page's `ready`. Change the wording there.
 - **Rewind**: holding the undo button, or resting two fingers anywhere on the
   shell outside the board, repeats undo. Touches *on* the board belong to the
   iframe's own document and cannot be seen by the shell, so two fingers on the

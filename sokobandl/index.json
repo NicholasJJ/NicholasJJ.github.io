@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "name": "sokobondl",
-  "generatedAt": "2026-10-05T06:44:20.9515380Z",
+  "generatedAt": "2026-10-18T22:11:29.4766310Z",
   "days": [
     {
       "date": "2026-09-28",
@@ -611,6 +611,194 @@
         }
       ],
       "publishedAt": "2026-10-05T06:44:20.9515380Z"
+    },
+    {
+      "date": "2026-10-26",
+      "file": "levels/2026-10-26.html",
+      "weekId": "W25",
+      "day": 0,
+      "title": "Stay Put",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 2,
+      "mechanics": [
+        "drift"
+      ],
+      "tutorials": [
+        "drift"
+      ],
+      "credits": [
+        {
+          "tag": "drift",
+          "title": "Earth\u2019s center is moving, and NASA just measured it",
+          "url": "https://www.sciencedaily.com/releases/2026/10/261005071520.htm",
+          "note": "NASA measured how the Earth\u2019s centre of mass shifts as its weight moves around; here the floor tips toward wherever the weight (you and the crates) sits."
+        }
+      ],
+      "publishedAt": "2026-10-18T22:11:29.4766310Z"
+    },
+    {
+      "date": "2026-10-27",
+      "file": "levels/2026-10-27.html",
+      "weekId": "W25",
+      "day": 1,
+      "title": "Seesaw",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 1,
+      "mechanics": [
+        "drift"
+      ],
+      "tutorials": [],
+      "credits": [
+        {
+          "tag": "drift",
+          "title": "Earth\u2019s center is moving, and NASA just measured it",
+          "url": "https://www.sciencedaily.com/releases/2026/10/261005071520.htm",
+          "note": "NASA measured how the Earth\u2019s centre of mass shifts as its weight moves around; here the floor tips toward wherever the weight (you and the crates) sits."
+        }
+      ],
+      "publishedAt": "2026-10-18T22:11:29.4766310Z"
+    },
+    {
+      "date": "2026-10-28",
+      "file": "levels/2026-10-28.html",
+      "weekId": "W25",
+      "day": 2,
+      "title": "Tiptoe",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 1,
+      "mechanics": [
+        "drift"
+      ],
+      "tutorials": [],
+      "credits": [
+        {
+          "tag": "drift",
+          "title": "Earth\u2019s center is moving, and NASA just measured it",
+          "url": "https://www.sciencedaily.com/releases/2026/10/261005071520.htm",
+          "note": "NASA measured how the Earth\u2019s centre of mass shifts as its weight moves around; here the floor tips toward wherever the weight (you and the crates) sits."
+        }
+      ],
+      "publishedAt": "2026-10-18T22:11:29.4766310Z"
+    },
+    {
+      "date": "2026-10-29",
+      "file": "levels/2026-10-29.html",
+      "weekId": "W25",
+      "day": 3,
+      "title": "Magnetic North",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 2,
+      "mechanics": [
+        "stick",
+        "drift"
+      ],
+      "tutorials": [
+        "stick"
+      ],
+      "credits": [
+        {
+          "tag": "drift",
+          "title": "Earth\u2019s center is moving, and NASA just measured it",
+          "url": "https://www.sciencedaily.com/releases/2026/10/261005071520.htm",
+          "note": "NASA measured how the Earth\u2019s centre of mass shifts as its weight moves around; here the floor tips toward wherever the weight (you and the crates) sits."
+        }
+      ],
+      "publishedAt": "2026-10-18T22:11:29.4766310Z"
+    },
+    {
+      "date": "2026-10-30",
+      "file": "levels/2026-10-30.html",
+      "weekId": "W25",
+      "day": 4,
+      "title": "Every Which Way",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 2,
+      "mechanics": [
+        "stick",
+        "drift",
+        "drift4"
+      ],
+      "tutorials": [
+        "drift4"
+      ],
+      "credits": [
+        {
+          "tag": "drift",
+          "title": "Earth\u2019s center is moving, and NASA just measured it",
+          "url": "https://www.sciencedaily.com/releases/2026/10/261005071520.htm",
+          "note": "NASA measured how the Earth\u2019s centre of mass shifts as its weight moves around; here the floor tips toward wherever the weight (you and the crates) sits."
+        }
+      ],
+      "publishedAt": "2026-10-18T22:11:29.4766310Z"
+    },
+    {
+      "date": "2026-10-31",
+      "file": "levels/2026-10-31.html",
+      "weekId": "W25",
+      "day": 5,
+      "title": "Pitfall",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 2,
+      "mechanics": [
+        "stick",
+        "drift",
+        "drift4",
+        "fall"
+      ],
+      "tutorials": [
+        "fall"
+      ],
+      "credits": [
+        {
+          "tag": "drift",
+          "title": "Earth\u2019s center is moving, and NASA just measured it",
+          "url": "https://www.sciencedaily.com/releases/2026/10/261005071520.htm",
+          "note": "NASA measured how the Earth\u2019s centre of mass shifts as its weight moves around; here the floor tips toward wherever the weight (you and the crates) sits."
+        }
+      ],
+      "publishedAt": "2026-10-18T22:11:29.4766310Z"
+    },
+    {
+      "date": "2026-11-01",
+      "file": "levels/2026-11-01.html",
+      "weekId": "W25",
+      "day": 6,
+      "title": "Fulcrum",
+      "w": 7,
+      "h": 6,
+      "boxes": 3,
+      "levels": 2,
+      "mechanics": [
+        "fight",
+        "stick",
+        "drift",
+        "drift4",
+        "fall"
+      ],
+      "tutorials": [
+        "fight"
+      ],
+      "credits": [
+        {
+          "tag": "drift",
+          "title": "Earth\u2019s center is moving, and NASA just measured it",
+          "url": "https://www.sciencedaily.com/releases/2026/10/261005071520.htm",
+          "note": "NASA measured how the Earth\u2019s centre of mass shifts as its weight moves around; here the floor tips toward wherever the weight (you and the crates) sits."
+        }
+      ],
+      "publishedAt": "2026-10-18T22:11:29.4766310Z"
     }
   ]
 }

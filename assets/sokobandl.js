@@ -93,6 +93,24 @@
 		return parts.join(', ');
 	}
 
+	// The level bar inside a puzzle page shows each level's internal name
+	// (handy for development, not meant for players). Relabel its buttons
+	// "1. Tutorial", "2. Daily Puzzle" and so on. Tutorial levels are always
+	// the first `tutorials` indices of a page. The page builds the buttons
+	// once and never rewrites their text, so doing this once per load is
+	// enough; it is idempotent, so calling it again is harmless.
+	function relabelLevelBar(doc, tutorials) {
+		try {
+			var bar = doc && doc.getElementById('levelbar');
+			if (!bar) return;
+			var buttons = bar.querySelectorAll('button');
+			buttons.forEach(function (b, i) {
+				var label = i < tutorials ? (tutorials > 1 ? 'Tutorial ' + (i + 1) : 'Tutorial') : 'Daily Puzzle';
+				b.textContent = (i + 1) + '. ' + label;
+			});
+		} catch (e) { /* cross-origin guard */ }
+	}
+
 	function dayLink(date) { return '?d=' + date; }
 	function shareLink(date) { return location.origin + location.pathname + dayLink(date); }
 
@@ -434,6 +452,7 @@
 		function record(m) {
 			switch (m.type) {
 				case 'ready':
+					relabelLevelBar(frame.contentDocument, m.levels.filter(function (l) { return l.tutorial; }).length);
 					if (recorder.trace) recorder.trace.levels = m.levels;
 					recorder.add('ready', { level: m.current });
 					// Recording is always on; the export buttons stay hidden unless
@@ -750,6 +769,7 @@
 				frame.contentWindow.focus();
 				lockTouches(frame.contentDocument);
 				watchInputs(frame.contentDocument);
+				relabelLevelBar(frame.contentDocument, Array.isArray(day.tutorials) ? day.tutorials.length : Math.max(0, (day.levels || 1) - 1));
 			} catch (e) { /* cross-origin guard */ }
 		});
 
