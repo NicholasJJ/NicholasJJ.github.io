@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "name": "sokobondl",
-  "generatedAt": "2026-10-18T22:11:29.4766310Z",
+  "generatedAt": "2026-10-19T19:54:35.0379260Z",
   "days": [
     {
       "date": "2026-09-28",
@@ -746,12 +746,13 @@
       "file": "levels/2026-10-31.html",
       "weekId": "W25",
       "day": 5,
-      "title": "Pitfall",
+      "title": "Trick or Treat",
       "w": 5,
       "h": 5,
       "boxes": 2,
       "levels": 2,
       "mechanics": [
+        "fight",
         "stick",
         "drift",
         "drift4",
@@ -768,7 +769,7 @@
           "note": "NASA measured how the Earth\u2019s centre of mass shifts as its weight moves around; here the floor tips toward wherever the weight (you and the crates) sits."
         }
       ],
-      "publishedAt": "2026-10-18T22:11:29.4766310Z"
+      "publishedAt": "2026-10-19T19:54:35.0379260Z"
     },
     {
       "date": "2026-11-01",
