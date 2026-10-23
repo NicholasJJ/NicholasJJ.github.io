@@ -114,6 +114,14 @@ The puzzles are made elsewhere (the SteamedHams repo's `dailygen publish … --o
 - **Routes** are query strings: `/sokobandl/` (today's puzzle, else the most
   recent one before today; before launch, a "first puzzle arrives on…" note),
   `?d=YYYY-MM-DD` (the share link) and `?archive`.
+- **Day nav**: "⇤ Mon" (start of week: the first released day with this day's
+  `weekId`, hidden on that day itself), "← Oct 20" (prev), archive,
+  leaderboard, "Oct 22 →" (next), and "today ⇥" (links to `./`, hidden when
+  this is the latest released day). Dates are short (`navDate()`, no year;
+  the full date is the hover title). Built in `showDay()`. Below 600px wide
+  the row splits: archive + leaderboard on one line, the day-changing links
+  on the next (`.sok-nav-page` / `.sok-nav-day` + a `.sok-nav-break` flex item). The replay page
+  is reached from the leaderboard popup's "watch replays" link.
 - **Gating**: the archive and the prev/next links only ever cover days whose
   date has arrived (local time). A direct `?d=` link to a later day still
   loads (the filename is guessable anyway), it just isn't listed or linked
@@ -185,7 +193,7 @@ The puzzles are made elsewhere (the SteamedHams repo's `dailygen publish … --o
   day page's "leaderboard" popup.
 - **Leaderboard popup**: the day page's nav has "leaderboard" (opens a
   `<dialog>` with that day's rank / name / time, open to anyone, solved or
-  not) and a separate "replay" link. Under the result, "see the
+  not, ending in a "watch replays" link to `replay/?d=<date>`). Under the result, "see the
   leaderboard" opens the same popup. With this browser's pass for the day,
   every other row gets "compare", linking to
   `replay/?d=<date>&with=<NAME>`.

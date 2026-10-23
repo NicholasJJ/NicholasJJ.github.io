@@ -42,6 +42,10 @@
 		var d = new Date(iso + 'T12:00:00');
 		return d.toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 	}
+	// "Oct 20": the day links' short form (the year is clear from context).
+	function navDate(iso) {
+		return new Date(iso + 'T12:00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+	}
 	function summary(day) {
 		var s = day.w + '×' + day.h + ', ' + day.boxes + (day.boxes === 1 ? ' crate' : ' crates');
 		if (day.mechanics && day.mechanics.length) s += ' · ' + day.mechanics.join(', ');
@@ -205,15 +209,36 @@
 				'New today: ' + day.tutorials.join(', ') + '. A short untimed tutorial comes first.'));
 		}
 
+		// The first released day of this day's week (weeks start on Monday;
+		// the manifest's weekId groups them). Offered when it isn't this day.
+		var weekStart = null;
+		listed.forEach(function (d) {
+			if (!weekStart && d.weekId && d.weekId === day.weekId) weekStart = d;
+		});
+
 		var nav = $('sokNav');
-		if (prev) { var p = el('a', null, '← ' + prev.date); p.href = dayLink(prev.date); nav.appendChild(p); }
+		if (weekStart && weekStart.date !== day.date) {
+			var ws = el('a', null, '⇤ Mon'); ws.href = dayLink(weekStart.date);
+			ws.title = 'start of the week: ' + prettyDate(weekStart.date); nav.appendChild(ws);
+		}
+		if (prev) { var p = el('a', null, '← ' + navDate(prev.date)); p.href = dayLink(prev.date); p.title = prettyDate(prev.date); nav.appendChild(p); }
 		var arch = el('a', null, 'archive'); arch.href = '?archive'; nav.appendChild(arch);
 		// The public leaderboard (rank, name, time) is open to anyone, solved or
 		// not; it opens as a popup (openBoard in runGame). Replays are their own page.
 		var board = el('a', null, 'leaderboard'); board.href = '#leaderboard'; board.id = 'sokBoardLink'; nav.appendChild(board);
-		var replay = el('a', null, 'replay'); replay.href = 'replay/?d=' + day.date; nav.appendChild(replay);
-		if (next) { var n = el('a', null, next.date + ' →'); n.href = dayLink(next.date); nav.appendChild(n); }
-		else if (!isLatest && latest) { var l = el('a', null, 'latest'); l.href = './'; nav.appendChild(l); }
+		if (next) { var n = el('a', null, navDate(next.date) + ' →'); n.href = dayLink(next.date); n.title = prettyDate(next.date); nav.appendChild(n); }
+		// Today's puzzle (the latest released one), whenever this isn't it.
+		if (!isLatest && latest) {
+			var l = el('a', null, 'today ⇥'); l.href = './'; l.title = prettyDate(latest.date); nav.appendChild(l);
+		}
+		// On phones the row splits in two (assets/sokobandl.css): archive and
+		// leaderboard on the first line, the links that change the day on the
+		// second. Tag them, and add the invisible line break the CSS uses.
+		[].forEach.call(nav.children, function (a) {
+			var h = a.getAttribute('href') || '';
+			a.classList.add(h.indexOf('?d=') === 0 || h === './' ? 'sok-nav-day' : 'sok-nav-page');
+		});
+		nav.appendChild(el('span', 'sok-nav-break'));
 
 		$('sokGame').hidden = false;
 		showCredits(day);
@@ -354,6 +379,7 @@
 		function openBoard() {
 			if (typeof boardDlg.showModal === 'function') boardDlg.showModal(); else boardDlg.setAttribute('open', '');
 			$('sokBoardDay').textContent = prettyDate(day.date);
+			$('sokBoardReplay').href = 'replay/?d=' + day.date;
 			var list = $('sokBoardList'), note = $('sokBoardNote');
 			list.textContent = '';
 			if (!API) { note.textContent = 'The leaderboard isn\u2019t available here.'; return; }
