@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "name": "sokobondl",
-  "generatedAt": "2026-10-19T19:54:35.0379260Z",
+  "generatedAt": "2026-10-28T03:43:38.8874540Z",
   "days": [
     {
       "date": "2026-09-28",
@@ -800,6 +800,184 @@
         }
       ],
       "publishedAt": "2026-10-18T22:11:29.4766310Z"
+    },
+    {
+      "date": "2026-11-02",
+      "file": "levels/2026-11-02.html",
+      "weekId": "W27",
+      "day": 0,
+      "title": "Far Bank",
+      "w": 5,
+      "h": 5,
+      "boxes": 3,
+      "levels": 2,
+      "mechanics": [
+        "plant"
+      ],
+      "tutorials": [
+        "plant"
+      ],
+      "credits": [
+        {
+          "tag": "plant",
+          "title": "One green shoot at a time: the women restoring mangrove forests in the oil-ravaged Niger Delta",
+          "url": "https://www.theguardian.com/global-development/2026/oct/02/one-green-shoot-at-a-time-the-women-restoring-mangrove-forests-in-the-oil-ravaged-niger-delta",
+          "note": "Women in the Niger Delta have planted over 150,000 mangrove saplings, turning open water back into shore; here a crate pushed into the water takes root and becomes ground you can walk on."
+        }
+      ],
+      "publishedAt": "2026-10-28T03:43:38.8874540Z"
+    },
+    {
+      "date": "2026-11-03",
+      "file": "levels/2026-11-03.html",
+      "weekId": "W27",
+      "day": 1,
+      "title": "Castaway",
+      "w": 5,
+      "h": 5,
+      "boxes": 3,
+      "levels": 1,
+      "mechanics": [
+        "plant"
+      ],
+      "tutorials": [],
+      "credits": [
+        {
+          "tag": "plant",
+          "title": "One green shoot at a time: the women restoring mangrove forests in the oil-ravaged Niger Delta",
+          "url": "https://www.theguardian.com/global-development/2026/oct/02/one-green-shoot-at-a-time-the-women-restoring-mangrove-forests-in-the-oil-ravaged-niger-delta",
+          "note": "Women in the Niger Delta have planted over 150,000 mangrove saplings, turning open water back into shore; here a crate pushed into the water takes root and becomes ground you can walk on."
+        }
+      ],
+      "publishedAt": "2026-10-28T03:43:38.8874540Z"
+    },
+    {
+      "date": "2026-11-04",
+      "file": "levels/2026-11-04.html",
+      "weekId": "W27",
+      "day": 2,
+      "title": "Wrong Sapling",
+      "w": 5,
+      "h": 5,
+      "boxes": 3,
+      "levels": 1,
+      "mechanics": [
+        "plant"
+      ],
+      "tutorials": [],
+      "credits": [
+        {
+          "tag": "plant",
+          "title": "One green shoot at a time: the women restoring mangrove forests in the oil-ravaged Niger Delta",
+          "url": "https://www.theguardian.com/global-development/2026/oct/02/one-green-shoot-at-a-time-the-women-restoring-mangrove-forests-in-the-oil-ravaged-niger-delta",
+          "note": "Women in the Niger Delta have planted over 150,000 mangrove saplings, turning open water back into shore; here a crate pushed into the water takes root and becomes ground you can walk on."
+        }
+      ],
+      "publishedAt": "2026-10-28T03:43:38.8874540Z"
+    },
+    {
+      "date": "2026-11-05",
+      "file": "levels/2026-11-05.html",
+      "weekId": "W27",
+      "day": 3,
+      "title": "Tandem",
+      "w": 5,
+      "h": 5,
+      "boxes": 3,
+      "levels": 2,
+      "mechanics": [
+        "stick",
+        "plant"
+      ],
+      "tutorials": [
+        "stick"
+      ],
+      "credits": [
+        {
+          "tag": "plant",
+          "title": "One green shoot at a time: the women restoring mangrove forests in the oil-ravaged Niger Delta",
+          "url": "https://www.theguardian.com/global-development/2026/oct/02/one-green-shoot-at-a-time-the-women-restoring-mangrove-forests-in-the-oil-ravaged-niger-delta",
+          "note": "Women in the Niger Delta have planted over 150,000 mangrove saplings, turning open water back into shore; here a crate pushed into the water takes root and becomes ground you can walk on."
+        }
+      ],
+      "publishedAt": "2026-10-28T03:43:38.8874540Z"
+    },
+    {
+      "date": "2026-11-06",
+      "file": "levels/2026-11-06.html",
+      "weekId": "W27",
+      "day": 4,
+      "title": "Crossing Paths",
+      "w": 5,
+      "h": 5,
+      "boxes": 3,
+      "levels": 1,
+      "mechanics": [
+        "stick",
+        "plant"
+      ],
+      "tutorials": [],
+      "credits": [
+        {
+          "tag": "plant",
+          "title": "One green shoot at a time: the women restoring mangrove forests in the oil-ravaged Niger Delta",
+          "url": "https://www.theguardian.com/global-development/2026/oct/02/one-green-shoot-at-a-time-the-women-restoring-mangrove-forests-in-the-oil-ravaged-niger-delta",
+          "note": "Women in the Niger Delta have planted over 150,000 mangrove saplings, turning open water back into shore; here a crate pushed into the water takes root and becomes ground you can walk on."
+        }
+      ],
+      "publishedAt": "2026-10-28T03:43:38.8874540Z"
+    },
+    {
+      "date": "2026-11-07",
+      "file": "levels/2026-11-07.html",
+      "weekId": "W27",
+      "day": 5,
+      "title": "First Bite",
+      "w": 7,
+      "h": 5,
+      "boxes": 5,
+      "levels": 2,
+      "mechanics": [
+        "plant",
+        "eat"
+      ],
+      "tutorials": [
+        "eat"
+      ],
+      "credits": [
+        {
+          "tag": "plant",
+          "title": "One green shoot at a time: the women restoring mangrove forests in the oil-ravaged Niger Delta",
+          "url": "https://www.theguardian.com/global-development/2026/oct/02/one-green-shoot-at-a-time-the-women-restoring-mangrove-forests-in-the-oil-ravaged-niger-delta",
+          "note": "Women in the Niger Delta have planted over 150,000 mangrove saplings, turning open water back into shore; here a crate pushed into the water takes root and becomes ground you can walk on."
+        }
+      ],
+      "publishedAt": "2026-10-28T03:43:38.8874540Z"
+    },
+    {
+      "date": "2026-11-08",
+      "file": "levels/2026-11-08.html",
+      "weekId": "W27",
+      "day": 6,
+      "title": "Delta",
+      "w": 7,
+      "h": 6,
+      "boxes": 6,
+      "levels": 1,
+      "mechanics": [
+        "plant",
+        "eat"
+      ],
+      "tutorials": [],
+      "credits": [
+        {
+          "tag": "plant",
+          "title": "One green shoot at a time: the women restoring mangrove forests in the oil-ravaged Niger Delta",
+          "url": "https://www.theguardian.com/global-development/2026/oct/02/one-green-shoot-at-a-time-the-women-restoring-mangrove-forests-in-the-oil-ravaged-niger-delta",
+          "note": "Women in the Niger Delta have planted over 150,000 mangrove saplings, turning open water back into shore; here a crate pushed into the water takes root and becomes ground you can walk on."
+        }
+      ],
+      "publishedAt": "2026-10-28T03:43:38.8874540Z"
     }
   ]
 }
