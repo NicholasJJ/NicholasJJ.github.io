@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "name": "sokobondl",
-  "generatedAt": "2026-10-28T03:43:38.8874540Z",
+  "generatedAt": "2026-11-01T21:29:43.1035060Z",
   "days": [
     {
       "date": "2026-09-28",
@@ -978,6 +978,182 @@
         }
       ],
       "publishedAt": "2026-10-28T03:43:38.8874540Z"
+    },
+    {
+      "date": "2026-11-09",
+      "file": "levels/2026-11-09.html",
+      "weekId": "W28",
+      "day": 0,
+      "title": "One Way Down",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 2,
+      "mechanics": [
+        "melt"
+      ],
+      "tutorials": [
+        "melt"
+      ],
+      "credits": [
+        {
+          "tag": "melt",
+          "title": "Nearly 20% of Switzerland\u0027s Glacier Ice Has Vanished in Just Five Years",
+          "url": "https://www.sciencedaily.com/releases/2026/10/261022081316.htm",
+          "note": "Swiss glaciers lost almost a fifth of their ice in five years; here thin ice holds you exactly once, then melts into open water behind you."
+        }
+      ],
+      "publishedAt": "2026-11-01T21:29:43.1035060Z"
+    },
+    {
+      "date": "2026-11-10",
+      "file": "levels/2026-11-10.html",
+      "weekId": "W28",
+      "day": 1,
+      "title": "Next Door",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 1,
+      "mechanics": [
+        "melt"
+      ],
+      "tutorials": [],
+      "credits": [
+        {
+          "tag": "melt",
+          "title": "Nearly 20% of Switzerland\u0027s Glacier Ice Has Vanished in Just Five Years",
+          "url": "https://www.sciencedaily.com/releases/2026/10/261022081316.htm",
+          "note": "Swiss glaciers lost almost a fifth of their ice in five years; here thin ice holds you exactly once, then melts into open water behind you."
+        }
+      ],
+      "publishedAt": "2026-11-01T21:29:43.1035060Z"
+    },
+    {
+      "date": "2026-11-11",
+      "file": "levels/2026-11-11.html",
+      "weekId": "W28",
+      "day": 2,
+      "title": "Not Yet",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 1,
+      "mechanics": [
+        "melt"
+      ],
+      "tutorials": [],
+      "credits": [
+        {
+          "tag": "melt",
+          "title": "Nearly 20% of Switzerland\u0027s Glacier Ice Has Vanished in Just Five Years",
+          "url": "https://www.sciencedaily.com/releases/2026/10/261022081316.htm",
+          "note": "Swiss glaciers lost almost a fifth of their ice in five years; here thin ice holds you exactly once, then melts into open water behind you."
+        }
+      ],
+      "publishedAt": "2026-11-01T21:29:43.1035060Z"
+    },
+    {
+      "date": "2026-11-12",
+      "file": "levels/2026-11-12.html",
+      "weekId": "W28",
+      "day": 3,
+      "title": "Stepping Stone",
+      "w": 5,
+      "h": 5,
+      "boxes": 3,
+      "levels": 2,
+      "mechanics": [
+        "plant",
+        "melt"
+      ],
+      "tutorials": [
+        "plant"
+      ],
+      "credits": [
+        {
+          "tag": "melt",
+          "title": "Nearly 20% of Switzerland\u0027s Glacier Ice Has Vanished in Just Five Years",
+          "url": "https://www.sciencedaily.com/releases/2026/10/261022081316.htm",
+          "note": "Swiss glaciers lost almost a fifth of their ice in five years; here thin ice holds you exactly once, then melts into open water behind you."
+        }
+      ],
+      "publishedAt": "2026-11-01T21:29:43.1035060Z"
+    },
+    {
+      "date": "2026-11-13",
+      "file": "levels/2026-11-13.html",
+      "weekId": "W28",
+      "day": 4,
+      "title": "Bridgework",
+      "w": 5,
+      "h": 5,
+      "boxes": 3,
+      "levels": 1,
+      "mechanics": [
+        "plant",
+        "melt"
+      ],
+      "tutorials": [],
+      "credits": [
+        {
+          "tag": "melt",
+          "title": "Nearly 20% of Switzerland\u0027s Glacier Ice Has Vanished in Just Five Years",
+          "url": "https://www.sciencedaily.com/releases/2026/10/261022081316.htm",
+          "note": "Swiss glaciers lost almost a fifth of their ice in five years; here thin ice holds you exactly once, then melts into open water behind you."
+        }
+      ],
+      "publishedAt": "2026-11-01T21:29:43.1035060Z"
+    },
+    {
+      "date": "2026-11-14",
+      "file": "levels/2026-11-14.html",
+      "weekId": "W28",
+      "day": 5,
+      "title": "Thaw",
+      "w": 6,
+      "h": 5,
+      "boxes": 4,
+      "levels": 1,
+      "mechanics": [
+        "plant",
+        "melt"
+      ],
+      "tutorials": [],
+      "credits": [
+        {
+          "tag": "melt",
+          "title": "Nearly 20% of Switzerland\u0027s Glacier Ice Has Vanished in Just Five Years",
+          "url": "https://www.sciencedaily.com/releases/2026/10/261022081316.htm",
+          "note": "Swiss glaciers lost almost a fifth of their ice in five years; here thin ice holds you exactly once, then melts into open water behind you."
+        }
+      ],
+      "publishedAt": "2026-11-01T21:29:43.1035060Z"
+    },
+    {
+      "date": "2026-11-15",
+      "file": "levels/2026-11-15.html",
+      "weekId": "W28",
+      "day": 6,
+      "title": "Breakup",
+      "w": 6,
+      "h": 5,
+      "boxes": 4,
+      "levels": 1,
+      "mechanics": [
+        "plant",
+        "melt"
+      ],
+      "tutorials": [],
+      "credits": [
+        {
+          "tag": "melt",
+          "title": "Nearly 20% of Switzerland\u0027s Glacier Ice Has Vanished in Just Five Years",
+          "url": "https://www.sciencedaily.com/releases/2026/10/261022081316.htm",
+          "note": "Swiss glaciers lost almost a fifth of their ice in five years; here thin ice holds you exactly once, then melts into open water behind you."
+        }
+      ],
+      "publishedAt": "2026-11-01T21:29:43.1035060Z"
     }
   ]
 }
