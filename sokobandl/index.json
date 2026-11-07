@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "name": "sokobondl",
-  "generatedAt": "2026-11-01T21:29:43.1035060Z",
+  "generatedAt": "2026-11-07T16:50:07.2647600Z",
   "days": [
     {
       "date": "2026-09-28",
@@ -1154,6 +1154,186 @@
         }
       ],
       "publishedAt": "2026-11-01T21:29:43.1035060Z"
+    },
+    {
+      "date": "2026-11-16",
+      "file": "levels/2026-11-16.html",
+      "weekId": "W29",
+      "day": 0,
+      "title": "Brass Door",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 2,
+      "mechanics": [
+        "screw"
+      ],
+      "tutorials": [
+        "screw"
+      ],
+      "credits": [
+        {
+          "tag": "screw",
+          "title": "Scientists Shrink Archimedes\u0027 Screw to the Size of a Single Molecule",
+          "url": "https://www.sciencedaily.com/releases/2026/10/261030002940.htm",
+          "note": "A spiral molecule between two gold electrodes spins like Archimedes\u0027 screw as electrons pass through it; here brass screws carry you, and your crates, straight through in the direction they turn."
+        }
+      ],
+      "publishedAt": "2026-11-07T16:50:07.2647600Z"
+    },
+    {
+      "date": "2026-11-17",
+      "file": "levels/2026-11-17.html",
+      "weekId": "W29",
+      "day": 1,
+      "title": "Two Threads",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 1,
+      "mechanics": [
+        "screw"
+      ],
+      "tutorials": [],
+      "credits": [
+        {
+          "tag": "screw",
+          "title": "Scientists Shrink Archimedes\u0027 Screw to the Size of a Single Molecule",
+          "url": "https://www.sciencedaily.com/releases/2026/10/261030002940.htm",
+          "note": "A spiral molecule between two gold electrodes spins like Archimedes\u0027 screw as electrons pass through it; here brass screws carry you, and your crates, straight through in the direction they turn."
+        }
+      ],
+      "publishedAt": "2026-11-07T16:50:07.2647600Z"
+    },
+    {
+      "date": "2026-11-18",
+      "file": "levels/2026-11-18.html",
+      "weekId": "W29",
+      "day": 2,
+      "title": "Unstuck",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 1,
+      "mechanics": [
+        "screw",
+        "screwpush"
+      ],
+      "tutorials": [],
+      "credits": [
+        {
+          "tag": "screw",
+          "title": "Scientists Shrink Archimedes\u0027 Screw to the Size of a Single Molecule",
+          "url": "https://www.sciencedaily.com/releases/2026/10/261030002940.htm",
+          "note": "A spiral molecule between two gold electrodes spins like Archimedes\u0027 screw as electrons pass through it; here brass screws carry you, and your crates, straight through in the direction they turn."
+        }
+      ],
+      "publishedAt": "2026-11-07T16:50:07.2647600Z"
+    },
+    {
+      "date": "2026-11-19",
+      "file": "levels/2026-11-19.html",
+      "weekId": "W29",
+      "day": 3,
+      "title": "Too Soon",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 1,
+      "mechanics": [
+        "screw",
+        "screwpush"
+      ],
+      "tutorials": [],
+      "credits": [
+        {
+          "tag": "screw",
+          "title": "Scientists Shrink Archimedes\u0027 Screw to the Size of a Single Molecule",
+          "url": "https://www.sciencedaily.com/releases/2026/10/261030002940.htm",
+          "note": "A spiral molecule between two gold electrodes spins like Archimedes\u0027 screw as electrons pass through it; here brass screws carry you, and your crates, straight through in the direction they turn."
+        }
+      ],
+      "publishedAt": "2026-11-07T16:50:07.2647600Z"
+    },
+    {
+      "date": "2026-11-20",
+      "file": "levels/2026-11-20.html",
+      "weekId": "W29",
+      "day": 4,
+      "title": "Water Screw",
+      "w": 5,
+      "h": 5,
+      "boxes": 3,
+      "levels": 2,
+      "mechanics": [
+        "plant",
+        "screw",
+        "screwpush"
+      ],
+      "tutorials": [
+        "plant"
+      ],
+      "credits": [
+        {
+          "tag": "screw",
+          "title": "Scientists Shrink Archimedes\u0027 Screw to the Size of a Single Molecule",
+          "url": "https://www.sciencedaily.com/releases/2026/10/261030002940.htm",
+          "note": "A spiral molecule between two gold electrodes spins like Archimedes\u0027 screw as electrons pass through it; here brass screws carry you, and your crates, straight through in the direction they turn."
+        }
+      ],
+      "publishedAt": "2026-11-07T16:50:07.2647600Z"
+    },
+    {
+      "date": "2026-11-21",
+      "file": "levels/2026-11-21.html",
+      "weekId": "W29",
+      "day": 5,
+      "title": "Eureka",
+      "w": 6,
+      "h": 5,
+      "boxes": 4,
+      "levels": 1,
+      "mechanics": [
+        "plant",
+        "screw",
+        "screwpush"
+      ],
+      "tutorials": [],
+      "credits": [
+        {
+          "tag": "screw",
+          "title": "Scientists Shrink Archimedes\u0027 Screw to the Size of a Single Molecule",
+          "url": "https://www.sciencedaily.com/releases/2026/10/261030002940.htm",
+          "note": "A spiral molecule between two gold electrodes spins like Archimedes\u0027 screw as electrons pass through it; here brass screws carry you, and your crates, straight through in the direction they turn."
+        }
+      ],
+      "publishedAt": "2026-11-07T16:50:07.2647600Z"
+    },
+    {
+      "date": "2026-11-22",
+      "file": "levels/2026-11-22.html",
+      "weekId": "W29",
+      "day": 6,
+      "title": "Syracuse",
+      "w": 6,
+      "h": 5,
+      "boxes": 4,
+      "levels": 1,
+      "mechanics": [
+        "plant",
+        "screw",
+        "screwpush"
+      ],
+      "tutorials": [],
+      "credits": [
+        {
+          "tag": "screw",
+          "title": "Scientists Shrink Archimedes\u0027 Screw to the Size of a Single Molecule",
+          "url": "https://www.sciencedaily.com/releases/2026/10/261030002940.htm",
+          "note": "A spiral molecule between two gold electrodes spins like Archimedes\u0027 screw as electrons pass through it; here brass screws carry you, and your crates, straight through in the direction they turn."
+        }
+      ],
+      "publishedAt": "2026-11-07T16:50:07.2647600Z"
     }
   ]
 }
