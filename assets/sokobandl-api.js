@@ -24,6 +24,9 @@
 	var PRODUCTION = 'https://sokobandl-api-three.vercel.app';
 	var LOCAL = 'http://localhost:3001';
 	var TIMEOUT = 8000;
+	// Sending a result uploads the whole trace, which for a long solve can be
+	// a few MB; give it longer than the quick reads on a slow phone connection.
+	var SUBMIT_TIMEOUT = 30000;
 	var LOCAL_KEY = 'sokobandl:api-local';
 	var mode = new URLSearchParams(location.search).get('api');
 	try {
@@ -47,9 +50,9 @@
 		if (document.body) showBadge(); else document.addEventListener('DOMContentLoaded', showBadge);
 	}
 
-	function request(method, path, body) {
+	function request(method, path, body, timeout) {
 		var ctrl = typeof AbortController === 'function' ? new AbortController() : null;
-		var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, TIMEOUT) : null;
+		var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, timeout || TIMEOUT) : null;
 		return fetch(base + path, {
 			method: method,
 			headers: body ? { 'Content-Type': 'application/json' } : undefined,
@@ -87,7 +90,7 @@
 		//   { ok: true, result, alreadySubmitted }       (and remembers the pass)
 		//   { ok: false, reason: 'taken' | 'invalid' | 'unreachable', message }
 		submit: function (date, name, trace) {
-			return request('POST', '/api/submit', { date: date, name: name, trace: trace }).then(function (r) {
+			return request('POST', '/api/submit', { date: date, name: name, trace: trace }, SUBMIT_TIMEOUT).then(function (r) {
 				if (r.ok && r.data && r.data.token) {
 					write('sokobandl:lb:' + date, { name: r.data.result.name, token: r.data.token, result: r.data.result });
 					write('sokobandl:lb-name', r.data.result.name);
