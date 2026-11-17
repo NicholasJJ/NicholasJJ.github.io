@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "name": "sokobondl",
-  "generatedAt": "2026-11-07T16:50:07.2647600Z",
+  "generatedAt": "2026-11-17T02:55:01.6036630Z",
   "days": [
     {
       "date": "2026-09-28",
@@ -1334,6 +1334,248 @@
         }
       ],
       "publishedAt": "2026-11-07T16:50:07.2647600Z"
+    },
+    {
+      "date": "2026-11-23",
+      "file": "levels/2026-11-23.html",
+      "weekId": "W30",
+      "day": 0,
+      "title": "Heat Haze",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 2,
+      "mechanics": [
+        "launch"
+      ],
+      "tutorials": [
+        "launch"
+      ],
+      "credits": [
+        {
+          "tag": "launch",
+          "title": "Superheated magma could fuel towering lava fountains",
+          "url": "https://www.sciencedaily.com/releases/2026/11/261111221811.htm",
+          "note": "Magma from La Palma\u0027s 2021 eruption stayed runny for hours, so its gas could fling it high into the air; here a vent flings your crate over whatever is next to it."
+        }
+      ],
+      "publishedAt": "2026-11-17T02:55:01.6036630Z"
+    },
+    {
+      "date": "2026-11-24",
+      "file": "levels/2026-11-24.html",
+      "weekId": "W30",
+      "day": 1,
+      "title": "Out of the Way",
+      "w": 5,
+      "h": 5,
+      "boxes": 2,
+      "levels": 1,
+      "mechanics": [
+        "launch"
+      ],
+      "tutorials": [],
+      "credits": [
+        {
+          "tag": "launch",
+          "title": "Superheated magma could fuel towering lava fountains",
+          "url": "https://www.sciencedaily.com/releases/2026/11/261111221811.htm",
+          "note": "Magma from La Palma\u0027s 2021 eruption stayed runny for hours, so its gas could fling it high into the air; here a vent flings your crate over whatever is next to it."
+        }
+      ],
+      "publishedAt": "2026-11-17T02:55:01.6036630Z"
+    },
+    {
+      "date": "2026-11-25",
+      "file": "levels/2026-11-25.html",
+      "weekId": "W30",
+      "day": 2,
+      "title": "Both Ways",
+      "w": 6,
+      "h": 5,
+      "boxes": 2,
+      "levels": 1,
+      "mechanics": [
+        "launch",
+        "vent0_up",
+        "vent0_down",
+        "vent0_left",
+        "vent0_right",
+        "vent1_up",
+        "vent1_down",
+        "vent1_left",
+        "vent1_right",
+        "vent2_up",
+        "vent2_down",
+        "vent2_left",
+        "vent2_right"
+      ],
+      "tutorials": [],
+      "credits": [
+        {
+          "tag": "launch",
+          "title": "Superheated magma could fuel towering lava fountains",
+          "url": "https://www.sciencedaily.com/releases/2026/11/261111221811.htm",
+          "note": "Magma from La Palma\u0027s 2021 eruption stayed runny for hours, so its gas could fling it high into the air; here a vent flings your crate over whatever is next to it."
+        }
+      ],
+      "publishedAt": "2026-11-17T02:55:01.6036630Z"
+    },
+    {
+      "date": "2026-11-26",
+      "file": "levels/2026-11-26.html",
+      "weekId": "W30",
+      "day": 3,
+      "title": "Last Gasp",
+      "w": 6,
+      "h": 5,
+      "boxes": 2,
+      "levels": 1,
+      "mechanics": [
+        "launch",
+        "vent0_up",
+        "vent0_down",
+        "vent0_left",
+        "vent0_right",
+        "vent1_up",
+        "vent1_down",
+        "vent1_left",
+        "vent1_right",
+        "vent2_up",
+        "vent2_down",
+        "vent2_left",
+        "vent2_right"
+      ],
+      "tutorials": [],
+      "credits": [
+        {
+          "tag": "launch",
+          "title": "Superheated magma could fuel towering lava fountains",
+          "url": "https://www.sciencedaily.com/releases/2026/11/261111221811.htm",
+          "note": "Magma from La Palma\u0027s 2021 eruption stayed runny for hours, so its gas could fling it high into the air; here a vent flings your crate over whatever is next to it."
+        }
+      ],
+      "publishedAt": "2026-11-17T02:55:01.6036630Z"
+    },
+    {
+      "date": "2026-11-27",
+      "file": "levels/2026-11-27.html",
+      "weekId": "W30",
+      "day": 4,
+      "title": "Trapdoor",
+      "w": 6,
+      "h": 5,
+      "boxes": 2,
+      "levels": 2,
+      "mechanics": [
+        "launch",
+        "vent0_up",
+        "vent0_down",
+        "vent0_left",
+        "vent0_right",
+        "vent1_up",
+        "vent1_down",
+        "vent1_left",
+        "vent1_right",
+        "vent2_up",
+        "vent2_down",
+        "vent2_left",
+        "vent2_right",
+        "fall"
+      ],
+      "tutorials": [
+        "fall"
+      ],
+      "credits": [
+        {
+          "tag": "launch",
+          "title": "Superheated magma could fuel towering lava fountains",
+          "url": "https://www.sciencedaily.com/releases/2026/11/261111221811.htm",
+          "note": "Magma from La Palma\u0027s 2021 eruption stayed runny for hours, so its gas could fling it high into the air; here a vent flings your crate over whatever is next to it."
+        }
+      ],
+      "publishedAt": "2026-11-17T02:55:01.6036630Z"
+    },
+    {
+      "date": "2026-11-28",
+      "file": "levels/2026-11-28.html",
+      "weekId": "W30",
+      "day": 5,
+      "title": "Fire and Ice",
+      "w": 6,
+      "h": 5,
+      "boxes": 3,
+      "levels": 2,
+      "mechanics": [
+        "slide",
+        "launch",
+        "vent0_up",
+        "vent0_down",
+        "vent0_left",
+        "vent0_right",
+        "vent1_up",
+        "vent1_down",
+        "vent1_left",
+        "vent1_right",
+        "vent2_up",
+        "vent2_down",
+        "vent2_left",
+        "vent2_right",
+        "fall"
+      ],
+      "tutorials": [
+        "slide"
+      ],
+      "credits": [
+        {
+          "tag": "launch",
+          "title": "Superheated magma could fuel towering lava fountains",
+          "url": "https://www.sciencedaily.com/releases/2026/11/261111221811.htm",
+          "note": "Magma from La Palma\u0027s 2021 eruption stayed runny for hours, so its gas could fling it high into the air; here a vent flings your crate over whatever is next to it."
+        }
+      ],
+      "publishedAt": "2026-11-17T02:55:01.6036630Z"
+    },
+    {
+      "date": "2026-11-29",
+      "file": "levels/2026-11-29.html",
+      "weekId": "W30",
+      "day": 6,
+      "title": "Eruption",
+      "w": 7,
+      "h": 6,
+      "boxes": 3,
+      "levels": 2,
+      "mechanics": [
+        "slide",
+        "fight",
+        "launch",
+        "vent0_up",
+        "vent0_down",
+        "vent0_left",
+        "vent0_right",
+        "vent1_up",
+        "vent1_down",
+        "vent1_left",
+        "vent1_right",
+        "vent2_up",
+        "vent2_down",
+        "vent2_left",
+        "vent2_right",
+        "fall"
+      ],
+      "tutorials": [
+        "fight"
+      ],
+      "credits": [
+        {
+          "tag": "launch",
+          "title": "Superheated magma could fuel towering lava fountains",
+          "url": "https://www.sciencedaily.com/releases/2026/11/261111221811.htm",
+          "note": "Magma from La Palma\u0027s 2021 eruption stayed runny for hours, so its gas could fling it high into the air; here a vent flings your crate over whatever is next to it."
+        }
+      ],
+      "publishedAt": "2026-11-17T02:55:01.6036630Z"
     }
   ]
 }
